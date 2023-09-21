@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: buni-gateway
+  profiles:
+    active: dev

@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: buni-user # 服务名称
+  profiles:
+    active: dev
