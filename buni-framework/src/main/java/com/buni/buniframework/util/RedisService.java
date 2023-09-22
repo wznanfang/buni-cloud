@@ -1,4 +1,4 @@
-package com.buni.buniframework.service;
+package com.buni.buniframework.util;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;

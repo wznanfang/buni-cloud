@@ -2,7 +2,7 @@ package com.buni.buniframework.config.rate;
 
 import com.buni.buniframework.enums.ResultEnum;
 import com.buni.buniframework.exception.CustomException;
-import com.buni.buniframework.service.RedisService;
+import com.buni.buniframework.util.RedisService;
 import jakarta.annotation.Resource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

@@ -1,4 +1,4 @@
-com.buni.buniframework.service.RedisService
+com.buni.buniframework.util.RedisService
 com.buni.buniframework.config.MyMetaObjectHandler
 com.buni.buniframework.config.RedisConfig
 com.buni.buniframework.config.MybatisPlusConfig

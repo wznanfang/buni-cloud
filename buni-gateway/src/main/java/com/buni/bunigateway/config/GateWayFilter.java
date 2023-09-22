@@ -6,7 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.buni.buniframework.util.Result;
 import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.enums.ResultEnum;
-import com.buni.buniframework.service.RedisService;
+import com.buni.buniframework.util.RedisService;
 import com.buni.bunigateway.constant.PublicUrlConstant;
 import com.buni.bunigateway.constant.TokenConstants;
 import com.buni.usercommon.entity.User;

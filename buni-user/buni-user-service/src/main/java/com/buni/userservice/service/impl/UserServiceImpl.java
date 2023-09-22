@@ -11,7 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.exception.CustomException;
-import com.buni.buniframework.service.RedisService;
+import com.buni.buniframework.util.RedisService;
 import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.UserErrorEnum;
 import com.buni.usercommon.vo.LoginVO;
@@ -29,8 +29,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author Administrator
