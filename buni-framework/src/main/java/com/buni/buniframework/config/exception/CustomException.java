@@ -1,4 +1,4 @@
-package com.buni.buniframework.exception;
+package com.buni.buniframework.config.exception;
 
 import lombok.Data;
 

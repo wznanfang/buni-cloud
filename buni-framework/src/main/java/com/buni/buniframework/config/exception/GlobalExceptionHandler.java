@@ -1,4 +1,4 @@
-package com.buni.buniframework.exception;
+package com.buni.buniframework.config.exception;
 
 import com.buni.buniframework.util.Result;
 import lombok.extern.slf4j.Slf4j;

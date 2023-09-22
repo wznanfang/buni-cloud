@@ -1,4 +1,4 @@
-package com.buni.buniframework.filter;
+package com.buni.buniframework.config.filter;
 
 import cn.hutool.core.util.ObjUtil;
 import com.buni.buniframework.constant.CommonConstant;

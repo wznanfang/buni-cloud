@@ -1,8 +1,8 @@
 package com.buni.buniframework.config.rateLimit;
 
 import com.buni.buniframework.enums.ResultEnum;
-import com.buni.buniframework.exception.CustomException;
-import com.buni.buniframework.util.RedisService;
+import com.buni.buniframework.config.exception.CustomException;
+import com.buni.buniframework.config.redis.RedisService;
 import jakarta.annotation.Resource;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

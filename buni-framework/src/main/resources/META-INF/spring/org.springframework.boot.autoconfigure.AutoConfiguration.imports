@@ -1,8 +1,8 @@
-com.buni.buniframework.util.RedisService
-com.buni.buniframework.config.MyMetaObjectHandler
-com.buni.buniframework.config.RedisConfig
-com.buni.buniframework.config.MybatisPlusConfig
-com.buni.buniframework.filter.AccessControlFilter
-com.buni.buniframework.exception.GlobalExceptionHandler
+com.buni.buniframework.config.redis.RedisService
+com.buni.buniframework.config.mybatisPlus.MyMetaObjectHandler
+com.buni.buniframework.config.redis.RedisConfig
+com.buni.buniframework.config.mybatisPlus.MybatisPlusConfig
+com.buni.buniframework.config.filter.AccessControlFilter
+com.buni.buniframework.config.exception.GlobalExceptionHandler
 com.buni.buniframework.config.executor.ExecutorConfig
 com.buni.buniframework.config.rateLimit.RateLimiter

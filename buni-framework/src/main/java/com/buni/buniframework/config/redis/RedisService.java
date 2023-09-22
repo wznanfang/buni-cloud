@@ -1,4 +1,4 @@
-package com.buni.buniframework.util;
+package com.buni.buniframework.config.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;

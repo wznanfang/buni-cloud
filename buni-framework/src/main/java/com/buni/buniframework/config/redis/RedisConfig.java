@@ -1,4 +1,4 @@
-package com.buni.buniframework.config;
+package com.buni.buniframework.config.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

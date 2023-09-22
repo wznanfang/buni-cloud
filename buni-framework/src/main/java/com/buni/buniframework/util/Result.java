@@ -1,7 +1,7 @@
 package com.buni.buniframework.util;
 
 import com.buni.buniframework.enums.ResultEnum;
-import com.buni.buniframework.exception.CustomException;
+import com.buni.buniframework.config.exception.CustomException;
 import lombok.Data;
 
 
