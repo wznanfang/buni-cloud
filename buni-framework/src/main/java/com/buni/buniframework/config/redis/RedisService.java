@@ -27,8 +27,8 @@ public class RedisService {
      * @param key  键
      * @param time 时间(秒)
      */
-    public void setKeyTime(String key, long time) {
-        redisTemplate.expire(key, time, TimeUnit.SECONDS);
+    public void setKeyTime(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
     }
 
     /**

@@ -10,6 +10,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author zp.wei
@@ -38,7 +39,7 @@ public class RateLimiter {
         }
         redisService.setRemoveRangeByScore(key, 0L, currentTime - seconds);
         redisService.setAdd(key, currentTime, currentTime);
-        redisService.setKeyTime(key, seconds + 1);
+        redisService.setKeyTime(key, seconds + 1, TimeUnit.SECONDS);
         return joinPoint.proceed();
     }
 
