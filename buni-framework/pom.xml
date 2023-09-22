@@ -20,7 +20,6 @@
         <mybatis-plus-version>3.5.3</mybatis-plus-version>
         <hutool-version>5.8.21</hutool-version>
         <aspectj-version>1.9.20.1</aspectj-version>
-        <redisson-version>3.23.4</redisson-version>
     </properties>
 
     <dependencies>
@@ -81,11 +80,6 @@
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson</artifactId>
-            <version>${redisson-version}</version>
         </dependency>
     </dependencies>
 
