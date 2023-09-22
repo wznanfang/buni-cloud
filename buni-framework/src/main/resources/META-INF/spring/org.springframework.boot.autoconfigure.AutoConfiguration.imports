@@ -5,4 +5,4 @@ com.buni.buniframework.config.MybatisPlusConfig
 com.buni.buniframework.filter.AccessControlFilter
 com.buni.buniframework.exception.GlobalExceptionHandler
 com.buni.buniframework.config.executor.ExecutorConfig
-com.buni.buniframework.config.rate.RateLimiter
+com.buni.buniframework.config.rateLimit.RateLimiter

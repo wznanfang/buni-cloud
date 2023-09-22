@@ -1,4 +1,4 @@
-package com.buni.buniframework.config.rate;
+package com.buni.buniframework.config.rateLimit;
 
 import com.buni.buniframework.enums.ResultEnum;
 import com.buni.buniframework.exception.CustomException;
