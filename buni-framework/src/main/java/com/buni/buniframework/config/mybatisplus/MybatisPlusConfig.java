@@ -1,4 +1,4 @@
-package com.buni.buniframework.config.mybatisPlus;
+package com.buni.buniframework.config.mybatisplus;
 
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;

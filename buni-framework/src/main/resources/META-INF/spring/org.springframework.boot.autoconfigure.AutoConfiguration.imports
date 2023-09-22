@@ -1,7 +1,7 @@
 com.buni.buniframework.config.redis.RedisService
-com.buni.buniframework.config.mybatisPlus.MyMetaObjectHandler
+com.buni.buniframework.config.mybatisplus.MyMetaObjectHandler
 com.buni.buniframework.config.redis.RedisConfig
-com.buni.buniframework.config.mybatisPlus.MybatisPlusConfig
+com.buni.buniframework.config.mybatisplus.MybatisPlusConfig
 com.buni.buniframework.config.filter.AccessControlFilter
 com.buni.buniframework.config.exception.GlobalExceptionHandler
 com.buni.buniframework.config.executor.ExecutorConfig
