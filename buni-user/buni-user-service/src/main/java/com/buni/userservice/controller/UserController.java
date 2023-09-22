@@ -37,6 +37,17 @@ public class UserController {
 
 
     /**
+     * 退出登录
+     *
+     * @return
+     */
+    @PostMapping("/loginOut")
+    public Result<Boolean> loginOut() {
+        return Result.ok(userService.loginOut());
+    }
+
+
+    /**
      * 新增用户
      *
      * @param addVO 用户信息

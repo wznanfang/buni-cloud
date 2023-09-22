@@ -94,7 +94,7 @@ public class RedisService {
      * @param key
      */
     public void delAllByKey(String key) {
-        Set<String> keys = redisTemplate.keys(key + ":*");
+        Set<String> keys = redisTemplate.keys(key + "*");
         if (CollUtil.isNotEmpty(keys)) {
             redisTemplate.delete(keys);
         }

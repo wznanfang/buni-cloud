@@ -26,6 +26,13 @@ public interface UserService extends IService<User> {
     UserLoginVO login(LoginVO loginVO);
 
     /**
+     * 退出登录
+     *
+     * @return
+     */
+    Boolean loginOut();
+
+    /**
      * 新增
      *
      * @param addVO

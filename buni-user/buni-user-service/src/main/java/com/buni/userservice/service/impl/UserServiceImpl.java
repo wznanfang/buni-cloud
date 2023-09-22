@@ -9,9 +9,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.config.exception.CustomException;
 import com.buni.buniframework.config.redis.RedisService;
+import com.buni.buniframework.constant.CommonConstant;
+import com.buni.buniframework.util.HeaderUtil;
 import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.UserErrorEnum;
 import com.buni.usercommon.vo.LoginVO;
@@ -55,7 +56,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BeanUtils.copyProperties(user, userLoginVO);
         String token = RandomUtil.randomString(32);
         TokenVO tokenVO = new TokenVO();
-        tokenVO.setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME);
+        tokenVO.setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
         tokenVO.setToken(token);
         userLoginVO.setTokenVO(tokenVO);
         redisService.setOneHour(User.TOKEN_REDIS_KEY + token, userLoginVO);
@@ -68,6 +69,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new CustomException(UserErrorEnum.USER_NOT_EXISTS.getCode(), UserErrorEnum.USER_NOT_EXISTS.getMessage());
         }
         return user;
+    }
+
+
+    /**
+     * 退出登录
+     *
+     * @return true/false
+     */
+    @Override
+    public Boolean loginOut() {
+        redisService.delAllByKey(User.TOKEN_REDIS_KEY + HeaderUtil.getToken());
+        return true;
     }
 
 

@@ -3,12 +3,11 @@ package com.buni.bunigateway.config;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
-import com.buni.buniframework.util.Result;
+import com.buni.buniframework.config.redis.RedisService;
 import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.enums.ResultEnum;
-import com.buni.buniframework.config.redis.RedisService;
+import com.buni.buniframework.util.Result;
 import com.buni.bunigateway.constant.PublicUrlConstant;
-import com.buni.bunigateway.constant.TokenConstants;
 import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.vo.UserLoginVO;
@@ -73,14 +72,16 @@ public class GateWayFilter implements GlobalFilter {
 
 
             }
+            //将用户信息存入请求头中
+            request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
+            request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
             //给token重新生成过期时间，进行有效期延长
-            userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME);
-            redisService.setOneHour(tokenKey, userLoginVO);
+            userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
         }
         //给请求头中加相应的设置，避免绕过网关直接请求对应的服务
-        ServerHttpRequest httpRequest = request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();
+        request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();
         //结束处理
-        return chain.filter(exchange.mutate().request(httpRequest).build());
+        return chain.filter(exchange.mutate().request(request).build());
     }
 
 
@@ -93,8 +94,8 @@ public class GateWayFilter implements GlobalFilter {
             token = Objects.requireNonNull(request.getHeaders().get(CommonConstant.AUTHORIZATION)).get(0);
         }
         // 如果前端设置了令牌前缀，则裁剪掉前缀
-        if (ObjUtil.isNotEmpty(token) && token.startsWith(TokenConstants.PREFIX)) {
-            token = StrUtil.subAfter(token, TokenConstants.PREFIX, true);
+        if (ObjUtil.isNotEmpty(token) && token.startsWith(CommonConstant.PREFIX)) {
+            token = StrUtil.subAfter(token, CommonConstant.PREFIX, true);
         }
         return token;
     }

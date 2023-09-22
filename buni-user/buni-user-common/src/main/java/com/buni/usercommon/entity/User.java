@@ -32,6 +32,7 @@ public class User implements Serializable {
      */
     public static final String REDIS_KEY = "user:";
     public static final String TOKEN_REDIS_KEY = "token:";
+    public static final String REFRESH_TOKEN_REDIS_KEY = "refreshToken:";
 
     /**
      * id

@@ -10,9 +10,14 @@ import lombok.Data;
 public class CommonConstant {
 
     /**
-     * token过期时间
+     * token过期时间(毫秒)
      */
-    public static final Long EXPIRE_TIME = 1800 * 1000L;
+    public static final Long EXPIRE_TIME_MS = 1800 * 1000L;
+
+    /**
+     * refreshToken 过期时间(秒)
+     */
+    public static final Long EXPIRE_TIME_S = 86400L;
 
     /**
      * 空字符串
@@ -20,13 +25,33 @@ public class CommonConstant {
     public static final String EMPTY_STR = "";
 
     /**
+     * 冒号
+     */
+    public static final String COLON = ":";
+
+    /**
      * token
      */
-    public static final String AUTHORIZATION = "authorization";
+    public static final String AUTHORIZATION = "Authorization";
+
+    /**
+     * token前缀
+     */
+    public static final String PREFIX = "bearer ";
 
     /**
      * 网关层添加header
      */
     public static final String GATEWAY_KEY = "gateway_key";
+
+    /**
+     * 用户id
+     */
+    public static final String USER_ID = "user_id";
+
+    /**
+     * 用户名字
+     */
+    public static final String USER_NAME = "username";
 
 }
