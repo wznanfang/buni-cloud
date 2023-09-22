@@ -54,7 +54,7 @@ public class GateWayFilter implements GlobalFilter {
         String requestPath = request.getURI().getPath();
         if (!publicUrlConstant.getPublicUrl().contains(requestPath)) {
             String token = getToken(request);
-            String tokenKey = User.TOKEN_REDIS_KEY + token;
+            String tokenKey = CommonConstant.TOKEN_REDIS_KEY + token;
             //从redis中获取当前登录用户的信息
             UserLoginVO userLoginVO = (UserLoginVO) redisService.get(tokenKey);
             //校验token，如果token正确则放行
@@ -72,11 +72,11 @@ public class GateWayFilter implements GlobalFilter {
 
 
             }
+            //给token重新生成过期时间，进行有效期延长
+            userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
             //将用户信息存入请求头中
             request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
             request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
-            //给token重新生成过期时间，进行有效期延长
-            userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
         }
         //给请求头中加相应的设置，避免绕过网关直接请求对应的服务
         request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();

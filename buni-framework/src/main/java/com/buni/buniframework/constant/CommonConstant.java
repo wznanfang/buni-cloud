@@ -15,9 +15,9 @@ public class CommonConstant {
     public static final Long EXPIRE_TIME_MS = 1800 * 1000L;
 
     /**
-     * refreshToken 过期时间(秒)
+     * token前缀
      */
-    public static final Long EXPIRE_TIME_S = 86400L;
+    public static final String TOKEN_REDIS_KEY = "token:";
 
     /**
      * 空字符串

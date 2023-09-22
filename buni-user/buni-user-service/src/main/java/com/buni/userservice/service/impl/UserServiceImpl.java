@@ -59,7 +59,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         tokenVO.setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
         tokenVO.setToken(token);
         userLoginVO.setTokenVO(tokenVO);
-        redisService.setOneHour(User.TOKEN_REDIS_KEY + token, userLoginVO);
+        redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + token, userLoginVO);
         return userLoginVO;
     }
 
@@ -79,7 +79,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Boolean loginOut() {
-        redisService.delAllByKey(User.TOKEN_REDIS_KEY + HeaderUtil.getToken());
+        redisService.delAllByKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
         return true;
     }
 
@@ -123,7 +123,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             User user = getUser(id);
             userInfoVO = new UserInfoVO();
             BeanUtils.copyProperties(user, userInfoVO);
-            redisService.set(User.REDIS_KEY, userInfoVO);
+            redisService.setOneDay(User.REDIS_KEY, userInfoVO);
         }
         return userInfoVO;
     }

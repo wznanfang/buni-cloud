@@ -25,11 +25,17 @@ public class RedisService {
      * 指定 key 的过期时间
      *
      * @param key  键
-     * @param time 时间(秒)
+     * @param time 时间
      */
     public void setKeyTime(String key, long time, TimeUnit timeUnit) {
         redisTemplate.expire(key, time, timeUnit);
     }
+
+
+    public void set(String key, Object val, Long time, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, val, time, timeUnit);
+    }
+
 
     /**
      * 存储数据并设置过期时间
@@ -38,7 +44,7 @@ public class RedisService {
      * @param val
      */
     public void setOneHour(String key, Object val) {
-        redisTemplate.opsForValue().set(key, val, 1, TimeUnit.HOURS);
+        set(key, val, 1L, TimeUnit.HOURS);
     }
 
 
@@ -48,8 +54,8 @@ public class RedisService {
      * @param key
      * @param val
      */
-    public void set(String key, Object val) {
-        redisTemplate.opsForValue().set(key, val, 1, TimeUnit.DAYS);
+    public void setOneDay(String key, Object val) {
+        set(key, val, 1L, TimeUnit.DAYS);
     }
 
 
