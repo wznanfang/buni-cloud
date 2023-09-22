@@ -60,6 +60,12 @@ public class UserController {
     }
 
 
+    /**
+     * 分页查询
+     *
+     * @param pageVO 查询条件
+     * @return
+     */
     @GetMapping("/page")
     public Result<IPage<UserInfoVO>> page(PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));

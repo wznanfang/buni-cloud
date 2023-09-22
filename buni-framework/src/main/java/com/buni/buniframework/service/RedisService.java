@@ -89,7 +89,7 @@ public class RedisService {
 
 
     /**
-     * 删除key值相同的缓存
+     * 删除key值前缀匹配相同的缓存
      *
      * @param key
      */
@@ -344,6 +344,55 @@ public class RedisService {
      */
     public Object hashGet(String key, String hashKey) {
         return redisTemplate.opsForHash().get(key, hashKey);
+    }
+
+
+    /**
+     * 存储set类型数据
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long setAdd(String key, Set<Object> value) {
+        return redisTemplate.opsForZSet().add(key, value);
+    }
+
+
+    /**
+     * @param key
+     * @param currentTime
+     * @param score
+     * @return
+     */
+    public Boolean setAdd(String key, Long currentTime, Long score) {
+        return redisTemplate.opsForZSet().add(key, currentTime, score);
+    }
+
+
+    /**
+     * 获取范围内的缓存量
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public Long setCount(String key, Long min, Long max) {
+        return redisTemplate.opsForZSet().count(key, min, max);
+    }
+
+
+    /**
+     * 移除范围内的缓存数据
+     *
+     * @param key
+     * @param min
+     * @param max
+     * @return
+     */
+    public Long setRemoveRangeByScore(String key, Long min, Long max) {
+        return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
     }
 
 

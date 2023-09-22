@@ -6,8 +6,8 @@ package com.buni.usercommon.enums;
  */
 public enum UserErrorEnum {
 
-    USER_NOT_EXISTS(100001, "用户信息不存在"),
-    USER_EXISTS(100002, "用户名已存在"),
+    USER_NOT_EXISTS(300001, "用户信息不存在"),
+    USER_EXISTS(300002, "用户名已存在"),
     ;
 
     private final Integer code;
