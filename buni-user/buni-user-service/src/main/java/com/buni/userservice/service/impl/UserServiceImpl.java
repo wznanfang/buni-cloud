@@ -13,12 +13,14 @@ import com.buni.buniframework.config.exception.CustomException;
 import com.buni.buniframework.config.redis.RedisService;
 import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.util.HeaderUtil;
+import com.buni.usercommon.dto.AuthDTO;
 import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.UserErrorEnum;
 import com.buni.usercommon.vo.LoginVO;
 import com.buni.usercommon.vo.TokenVO;
 import com.buni.usercommon.vo.UserLoginVO;
 import com.buni.userservice.mapper.UserMapper;
+import com.buni.userservice.service.AuthService;
 import com.buni.userservice.service.UserService;
 import com.buni.userservice.vo.user.AddVO;
 import com.buni.userservice.vo.user.PageVO;
@@ -42,6 +44,7 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     private RedisService redisService;
+    private AuthService authService;
 
     /**
      * 登录
@@ -60,6 +63,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         tokenVO.setToken(token);
         userLoginVO.setTokenVO(tokenVO);
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + token, userLoginVO);
+        //记录到用户鉴权信息
+        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(token).build();
+        authService.saveOrUpdate(authDTO);
         return userLoginVO;
     }
 

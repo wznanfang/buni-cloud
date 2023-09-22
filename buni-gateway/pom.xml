@@ -41,8 +41,6 @@
             <version>${gateway-version}</version>
         </dependency>
 
-
-
     </dependencies>
 
 </project>

@@ -15,9 +15,11 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class ExecutorConfig {
 
+    public final static String EXECUTOR_NAME = "threadPoolExecutor";
+
     private final static Integer PROCESSORS = Runtime.getRuntime().availableProcessors();
 
-    @Bean
+    @Bean(EXECUTOR_NAME)
     public ThreadPoolExecutor threadPoolExecutor() {
         ThreadFactory threadFactory = new NamedThreadFactory("不逆");
         return new ThreadPoolExecutor(PROCESSORS, PROCESSORS * 2, 60, TimeUnit.SECONDS,

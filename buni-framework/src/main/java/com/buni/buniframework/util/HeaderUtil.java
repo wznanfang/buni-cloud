@@ -46,6 +46,12 @@ public class HeaderUtil {
     }
 
 
+    public static String getIdentity() {
+        HttpServletRequest request = getHttpServletRequest();
+        return request.getHeader("User-Agent");
+    }
+
+
     public static String getIp() {
         HttpServletRequest request = getHttpServletRequest();
         String ip = request.getHeader("x-forwarded-for");
