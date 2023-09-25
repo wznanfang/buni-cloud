@@ -2,6 +2,7 @@ package com.buni.usercommon.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.buni.usercommon.enums.AuthTypeEnum;
 import lombok.*;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -72,7 +73,7 @@ public class Authority implements Serializable {
     /**
      * 0：模块，1：菜单，2：按钮
      */
-    private Integer type;
+    private AuthTypeEnum type;
 
     /**
      * 标识码

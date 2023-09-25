@@ -1,5 +1,6 @@
 package com.buni.usercommon.vo.role;
 
+import com.buni.usercommon.enums.AuthTypeEnum;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -30,7 +31,7 @@ public class AuthorityDTO {
     /**
      * 0：模块，1：菜单，2：按钮
      */
-    private Integer type;
+    private AuthTypeEnum type;
 
     /**
      * 标识码
