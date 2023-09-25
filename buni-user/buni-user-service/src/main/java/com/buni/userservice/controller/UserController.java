@@ -2,8 +2,8 @@ package com.buni.userservice.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.buniframework.util.Result;
-import com.buni.usercommon.vo.LoginVO;
-import com.buni.usercommon.vo.UserLoginVO;
+import com.buni.usercommon.vo.login.LoginVO;
+import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.userservice.service.UserService;
 import com.buni.userservice.vo.user.AddVO;
 import com.buni.userservice.vo.user.PageVO;

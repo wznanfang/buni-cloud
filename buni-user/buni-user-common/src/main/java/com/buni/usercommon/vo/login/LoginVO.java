@@ -1,4 +1,4 @@
-package com.buni.usercommon.vo;
+package com.buni.usercommon.vo.login;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

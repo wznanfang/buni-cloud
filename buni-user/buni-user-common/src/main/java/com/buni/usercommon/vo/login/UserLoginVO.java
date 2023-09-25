@@ -1,4 +1,4 @@
-package com.buni.usercommon.vo;
+package com.buni.usercommon.vo.login;
 
 import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.enums.SexEnum;

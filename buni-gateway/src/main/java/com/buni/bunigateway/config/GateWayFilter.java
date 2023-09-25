@@ -1,15 +1,19 @@
 package com.buni.bunigateway.config;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
 import com.buni.buniframework.config.redis.RedisService;
 import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.enums.ResultEnum;
 import com.buni.buniframework.util.Result;
 import com.buni.bunigateway.constant.PublicUrlConstant;
+import com.buni.usercommon.entity.Authority;
 import com.buni.usercommon.enums.BooleanEnum;
-import com.buni.usercommon.vo.UserLoginVO;
+import com.buni.usercommon.vo.login.UserLoginVO;
+import com.buni.usercommon.vo.role.AuthorityDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
@@ -25,7 +29,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 /**
  * @author zp.wei
@@ -50,8 +56,9 @@ public class GateWayFilter implements GlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest(); //请求
         //获取请求路径，判断是否是公共接口
-        String requestPath = request.getURI().getPath();
-        if (!publicUrlConstant.getPublicUrl().contains(requestPath)) {
+        //针对路径进行处理
+        String path = getPath(request);
+        if (!publicUrlConstant.getPublicUrl().contains(path)) {
             String token = getToken(request);
             String tokenKey = CommonConstant.TOKEN_REDIS_KEY + token;
             //从redis中获取当前登录用户的信息
@@ -67,9 +74,12 @@ public class GateWayFilter implements GlobalFilter {
             }
             //校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
             if (userLoginVO.getIsAdmin().equals(BooleanEnum.NO)) {
-                //todo 校验是否有对应的接口权限
-
-
+                //校验是否有对应的接口权限
+                List<AuthorityDTO> authorityList = (List<AuthorityDTO>) redisService.get(Authority.REDIS_KEY + userLoginVO.getId());
+                List<String> urls = authorityList.stream().map(AuthorityDTO::getUrl).toList();
+                if (CollUtil.isEmpty(urls) || !urls.contains(path)) {
+                    return returnMsg(exchange, ResultEnum.ACCESS_DENIED);
+                }
             }
             //给token重新生成过期时间，进行有效期延长
             userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
@@ -86,6 +96,9 @@ public class GateWayFilter implements GlobalFilter {
 
     /**
      * 获取请求token
+     *
+     * @param request
+     * @return
      */
     private String getToken(ServerHttpRequest request) {
         String token = CommonConstant.EMPTY_STR;
@@ -97,6 +110,25 @@ public class GateWayFilter implements GlobalFilter {
             token = StrUtil.subAfter(token, CommonConstant.PREFIX, true);
         }
         return token;
+    }
+
+    /**
+     * 获取请求的path
+     *
+     * @param request
+     * @return
+     */
+    private String getPath(ServerHttpRequest request) {
+        String path;
+        String requestPath = request.getURI().getPath();
+        String method = String.valueOf(request.getMethod());
+        String pathSuffix = ReUtil.get("/(\\d+)$", requestPath, 1);
+        if (ObjUtil.isNotEmpty(pathSuffix)) {
+            path = ReUtil.replaceFirst(Pattern.compile("/(\\d+)$"), requestPath, "/{id}/" + method);
+        } else {
+            path = requestPath + "/" + method;
+        }
+        return path;
     }
 
 

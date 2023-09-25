@@ -45,5 +45,5 @@ spring:
 
 buni:
   public-url:
-    - /v1/login
-    - /v1/register
+    - /v1/login/POST
+    - /v1/register/POST
