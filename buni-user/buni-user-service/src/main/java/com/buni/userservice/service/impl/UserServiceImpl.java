@@ -77,8 +77,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + token, userLoginVO);
         //todo 查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
         List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
-        List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
-        if(CollUtil.isNotEmpty(roleIds)){
+        if(CollUtil.isNotEmpty(userRoles)){
+            List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
             List<RoleAuthorityDTO> roleAuthorityList = roleAuthorityService.findByRoleIds(roleIds);
             List<Long> authorityIds = roleAuthorityList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
             List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
