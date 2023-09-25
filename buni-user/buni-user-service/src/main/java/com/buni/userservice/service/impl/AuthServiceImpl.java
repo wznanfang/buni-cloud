@@ -50,7 +50,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
             redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + auth.getToken());
         } else {
             BeanUtils.copyProperties(authDTO, newAuth);
-            super.save(auth);
+            super.save(newAuth);
         }
     }
 

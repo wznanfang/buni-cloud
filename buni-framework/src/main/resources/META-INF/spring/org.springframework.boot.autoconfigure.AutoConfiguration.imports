@@ -6,3 +6,4 @@ com.buni.buniframework.config.filter.AccessControlFilter
 com.buni.buniframework.config.exception.GlobalExceptionHandler
 com.buni.buniframework.config.executor.ExecutorConfig
 com.buni.buniframework.config.rateLimit.RateLimiter
+com.buni.buniframework.config.bean.SpringContextHolder

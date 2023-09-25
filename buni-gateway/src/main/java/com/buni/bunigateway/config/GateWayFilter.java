@@ -8,7 +8,6 @@ import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.enums.ResultEnum;
 import com.buni.buniframework.util.Result;
 import com.buni.bunigateway.constant.PublicUrlConstant;
-import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.vo.UserLoginVO;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -101,6 +100,13 @@ public class GateWayFilter implements GlobalFilter {
     }
 
 
+    /**
+     * 异常返回
+     *
+     * @param exchange
+     * @param resultEnum
+     * @return
+     */
     public Mono<Void> returnMsg(ServerWebExchange exchange, ResultEnum resultEnum) {
         ServerHttpResponse response = exchange.getResponse();
         Result<Object> result = Result.error(resultEnum);

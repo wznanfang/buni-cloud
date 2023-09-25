@@ -1,7 +1,15 @@
 package com.buni.usercommon.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+
+import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author zp.wei
@@ -13,23 +21,40 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SysLog {
-
+public class SysLog implements Serializable {
 
     /**
-     * 描述
+     * redis缓存KEY
      */
-    private String description;
+    public static final String REDIS_KEY = "sys_log:";
+
+    /**
+     * id
+     */
+    @NotNull(message = "[id]不能为空")
+    @TableId(type = IdType.ASSIGN_ID)
+    private Long id;
+
+    /**
+     * 创建时间
+     */
+    @TableField(fill = FieldFill.INSERT, value = "create_time")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime createTime;
+
+    /**
+     * 修改时间
+     */
+    @TableField(fill = FieldFill.INSERT_UPDATE, value = "update_time")
+    @JsonDeserialize(using = LocalDateTimeDeserializer.class)
+    @JsonSerialize(using = LocalDateTimeSerializer.class)
+    private LocalDateTime updateTime;
 
     /**
      * 用户名
      */
     private String username;
-
-    /**
-     * 消耗时间
-     */
-    private Long spendTime;
 
     /**
      * url
@@ -47,14 +72,24 @@ public class SysLog {
     private String method;
 
     /**
+     * 请求参数
+     */
+    private String parameter;
+
+    /**
      * IP地址
      */
     private String ip;
 
     /**
-     * 请求参数
+     * 消耗时间
      */
-    private String parameter;
+    private Long spendTime;
+
+    /**
+     * 描述
+     */
+    private String description;
 
 
 }
