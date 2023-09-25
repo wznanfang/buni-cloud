@@ -76,8 +76,7 @@ public class GateWayFilter implements GlobalFilter {
             if (userLoginVO.getIsAdmin().equals(BooleanEnum.NO)) {
                 //校验是否有对应的接口权限
                 List<AuthorityDTO> authorityList = (List<AuthorityDTO>) redisService.get(Authority.REDIS_KEY + userLoginVO.getId());
-                List<String> urls = authorityList.stream().map(AuthorityDTO::getUrl).toList();
-                if (CollUtil.isEmpty(urls) || !urls.contains(path)) {
+                if (CollUtil.isEmpty(authorityList) || authorityList.stream().map(AuthorityDTO::getUrl).noneMatch(path::equals)) {
                     return returnMsg(exchange, ResultEnum.ACCESS_DENIED);
                 }
             }

@@ -4,6 +4,7 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.crypto.SmUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -23,6 +24,7 @@ import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.usercommon.vo.role.AuthorityDTO;
 import com.buni.usercommon.vo.role.RoleAuthorityDTO;
 import com.buni.usercommon.vo.role.UserRoleDTO;
+import com.buni.userservice.constant.UserConstant;
 import com.buni.userservice.mapper.UserMapper;
 import com.buni.userservice.service.*;
 import com.buni.userservice.vo.user.AddVO;
@@ -46,6 +48,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    private UserConstant userConstant;
     private RedisService redisService;
     private AuthService authService;
     private UserRoleService userRoleService;
@@ -61,6 +64,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserLoginVO login(LoginVO loginVO) {
         User user = findByUsername(loginVO.getUsername());
+        if (ObjUtil.isEmpty(user) || !SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
+            throw new CustomException(UserErrorEnum.USER_PASSWORD_ERROR.getCode(), UserErrorEnum.USER_PASSWORD_ERROR.getMessage());
+        }
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(user, userLoginVO);
         String token = RandomUtil.randomString(32);
@@ -72,10 +78,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //todo 查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
         List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
         List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
-        List<RoleAuthorityDTO> roleAuthorityList = roleAuthorityService.findByRoleIds(roleIds);
-        List<Long> authorityIds = roleAuthorityList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
-        List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
-        redisService.setOneHour(Authority.REDIS_KEY + user.getId(), authorityList);
+        if(CollUtil.isNotEmpty(roleIds)){
+            List<RoleAuthorityDTO> roleAuthorityList = roleAuthorityService.findByRoleIds(roleIds);
+            List<Long> authorityIds = roleAuthorityList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
+            List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
+            redisService.setOneHour(Authority.REDIS_KEY + user.getId(), authorityList);
+        }
         //记录到用户鉴权信息
         AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(token).build();
         authService.saveOrUpdate(authDTO);
@@ -83,11 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     public User findByUsername(String username) {
-        User user = super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
-        if (ObjUtil.isEmpty(user)) {
-            throw new CustomException(UserErrorEnum.USER_NOT_EXISTS.getCode(), UserErrorEnum.USER_NOT_EXISTS.getMessage());
-        }
-        return user;
+        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
     }
 
 
@@ -117,6 +121,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User user = new User();
         BeanUtils.copyProperties(addVO, user);
+        user.setPassword(SmUtil.sm3(userConstant.getSalt() + addVO.getPassword()));
         return super.save(user);
     }
 
