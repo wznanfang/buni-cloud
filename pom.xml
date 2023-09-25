@@ -12,7 +12,7 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.0.2</version>
     </parent>
-    <description>buni</description>
+    <description>buni-cloud</description>
     <modules>
         <module>buni-framework</module>
         <module>buni-gateway</module>
