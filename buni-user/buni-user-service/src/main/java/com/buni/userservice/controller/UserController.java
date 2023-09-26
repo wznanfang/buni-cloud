@@ -2,6 +2,7 @@ package com.buni.userservice.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.buniframework.util.Result;
+import com.buni.buniuserapi.log.SysLogRecord;
 import com.buni.usercommon.vo.login.LoginVO;
 import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.userservice.service.UserService;
@@ -30,6 +31,7 @@ public class UserController {
      * @param loginVO 用户登录信息
      * @return 令牌
      */
+    @SysLogRecord(description = "用户登录")
     @PostMapping("/login")
     public Result<UserLoginVO> login(@RequestBody @Validated LoginVO loginVO) {
         return Result.ok(userService.login(loginVO));
@@ -65,6 +67,7 @@ public class UserController {
      * @param id 用户id
      * @return
      */
+    @SysLogRecord(description = "查询用户详情")
     @GetMapping("/findById/{id}")
     public Result<UserInfoVO> register(@PathVariable Long id) {
         return Result.ok(userService.findById(id));

@@ -9,6 +9,9 @@ import lombok.Data;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+
 /**
  * 获取用户的信息
  *
@@ -22,38 +25,38 @@ public class HeaderUtil {
     private RedisService redisService;
 
 
-    private static HttpServletRequest getHttpServletRequest() {
+    public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return servletRequestAttributes.getRequest();
     }
 
 
     public static String getToken() {
-        HttpServletRequest request = getHttpServletRequest();
+        HttpServletRequest request = getRequest();
         return StrUtil.subAfter(request.getHeader(CommonConstant.AUTHORIZATION), CommonConstant.PREFIX, true);
     }
 
 
     public static String getUserId() {
-        HttpServletRequest request = getHttpServletRequest();
-        return request.getHeader(CommonConstant.USER_ID);
+        HttpServletRequest request = getRequest();
+        return URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
     }
 
 
     public static String getUserName() {
-        HttpServletRequest request = getHttpServletRequest();
-        return request.getHeader(CommonConstant.USER_NAME);
+        HttpServletRequest request = getRequest();
+        return URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
     }
 
 
     public static String getIdentity() {
-        HttpServletRequest request = getHttpServletRequest();
-        return request.getHeader("User-Agent");
+        HttpServletRequest request = getRequest();
+        return request.getHeader(CommonConstant.USER_AGENT);
     }
 
 
     public static String getIp() {
-        HttpServletRequest request = getHttpServletRequest();
+        HttpServletRequest request = getRequest();
         String ip = request.getHeader("x-forwarded-for");
         if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip

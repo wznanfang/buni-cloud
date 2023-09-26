@@ -29,6 +29,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -83,8 +86,10 @@ public class GateWayFilter implements GlobalFilter {
             //给token重新生成过期时间，进行有效期延长
             userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
             //将用户信息存入请求头中
-            request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
-            request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
+//            request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
+//            request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
+            request.mutate().header(CommonConstant.USER_ID, URLEncoder.encode(String.valueOf(userLoginVO.getId()), StandardCharsets.UTF_8)).build();
+            request.mutate().header(CommonConstant.USER_NAME, URLEncoder.encode(userLoginVO.getUsername(), StandardCharsets.UTF_8)).build();
         }
         //给请求头中加相应的设置，避免绕过网关直接请求对应的服务
         request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();

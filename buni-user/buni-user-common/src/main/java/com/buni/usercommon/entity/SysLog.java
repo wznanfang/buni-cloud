@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
  * @author zp.wei
  * @date 2022/2/25 15:27
  */
-@TableName(value = "sysLog")
+@TableName(value = "sys_log")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
@@ -80,11 +80,6 @@ public class SysLog implements Serializable {
      * IP地址
      */
     private String ip;
-
-    /**
-     * 消耗时间
-     */
-    private Long spendTime;
 
     /**
      * 描述

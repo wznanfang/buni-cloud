@@ -1,6 +1,7 @@
 package com.buni.buniframework.constant;
 
 import lombok.Data;
+import org.aspectj.weaver.loadtime.Agent;
 
 /**
  * @author zp.wei
@@ -53,5 +54,10 @@ public class CommonConstant {
      * 用户名字
      */
     public static final String USER_NAME = "username";
+
+    /**
+     * 客户端标识
+     */
+    public static final String USER_AGENT = "User-Agent";
 
 }

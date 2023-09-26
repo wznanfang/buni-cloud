@@ -25,7 +25,7 @@
 
         <dependency>
             <groupId>com.buni</groupId>
-            <artifactId>buni-user-api</artifactId>
+            <artifactId>buni-user-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
