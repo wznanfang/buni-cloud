@@ -1,6 +1,7 @@
 package com.buni.userservice.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.util.Result;
 import com.buni.buniuserapi.log.SysLogRecord;
 import com.buni.usercommon.vo.login.LoginVO;
@@ -43,6 +44,7 @@ public class UserController {
      *
      * @return
      */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "退出登录")
     @PostMapping("/loginOut")
     public Result<Boolean> loginOut() {
         return Result.ok(userService.loginOut());
@@ -55,6 +57,7 @@ public class UserController {
      * @param addVO 用户信息
      * @return true/false
      */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "注册用户")
     @PostMapping("/register")
     public Result<Boolean> register(@RequestBody @Validated AddVO addVO) {
         return Result.ok(userService.save(addVO));
@@ -67,7 +70,7 @@ public class UserController {
      * @param id 用户id
      * @return
      */
-    @SysLogRecord(description = "查询用户详情")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "查询用户详情")
     @GetMapping("/findById/{id}")
     public Result<UserInfoVO> register(@PathVariable Long id) {
         return Result.ok(userService.findById(id));
@@ -80,6 +83,7 @@ public class UserController {
      * @param pageVO 查询条件
      * @return
      */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
     @GetMapping("/page")
     public Result<IPage<UserInfoVO>> page(PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));

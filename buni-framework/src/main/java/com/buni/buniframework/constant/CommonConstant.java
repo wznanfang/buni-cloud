@@ -1,7 +1,6 @@
 package com.buni.buniframework.constant;
 
 import lombok.Data;
-import org.aspectj.weaver.loadtime.Agent;
 
 /**
  * @author zp.wei
@@ -31,6 +30,16 @@ public class CommonConstant {
     public static final String COLON = ":";
 
     /**
+     * 逗号
+     */
+    public static final String COMMA = ",";
+
+    /**
+     * 分隔符
+     */
+    public static final String SLASH = "/";
+
+    /**
      * token
      */
     public static final String AUTHORIZATION = "Authorization";
@@ -56,8 +65,18 @@ public class CommonConstant {
     public static final String USER_NAME = "username";
 
     /**
+     * url
+     */
+    public static final String URL = "url";
+
+    /**
      * 客户端标识
      */
     public static final String USER_AGENT = "User-Agent";
+
+    /**
+     * 日志前缀标识
+     */
+    public static final String USER_MODEL = "【用户模块】-";
 
 }

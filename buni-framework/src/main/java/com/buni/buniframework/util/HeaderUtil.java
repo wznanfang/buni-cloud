@@ -1,5 +1,6 @@
 package com.buni.buniframework.util;
 
+import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.StrUtil;
 import com.buni.buniframework.config.redis.RedisService;
 import com.buni.buniframework.constant.CommonConstant;
@@ -39,13 +40,14 @@ public class HeaderUtil {
 
     public static String getUserId() {
         HttpServletRequest request = getRequest();
-        return URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? "" : URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
+
     }
 
 
     public static String getUserName() {
         HttpServletRequest request = getRequest();
-        return URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? "" : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
     }
 
 

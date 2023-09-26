@@ -5,6 +5,7 @@ import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.ReUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.buni.buniframework.config.redis.RedisService;
 import com.buni.buniframework.constant.CommonConstant;
 import com.buni.buniframework.enums.ResultEnum;
@@ -15,6 +16,7 @@ import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.usercommon.vo.role.AuthorityDTO;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,12 +31,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.StreamSupport;
 
 /**
  * @author zp.wei
@@ -78,16 +82,14 @@ public class GateWayFilter implements GlobalFilter {
             //校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
             if (userLoginVO.getIsAdmin().equals(BooleanEnum.NO)) {
                 //校验是否有对应的接口权限
-                List<AuthorityDTO> authorityList = (List<AuthorityDTO>) redisService.get(Authority.REDIS_KEY + userLoginVO.getId());
-                if (CollUtil.isEmpty(authorityList) || authorityList.stream().map(AuthorityDTO::getUrl).noneMatch(path::equals)) {
+                List<String> urls = getUrls(userLoginVO.getId());
+                if (CollUtil.isEmpty(urls) || !urls.contains(path)) {
                     return returnMsg(exchange, ResultEnum.ACCESS_DENIED);
                 }
             }
             //给token重新生成过期时间，进行有效期延长
             userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
             //将用户信息存入请求头中
-//            request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
-//            request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
             request.mutate().header(CommonConstant.USER_ID, URLEncoder.encode(String.valueOf(userLoginVO.getId()), StandardCharsets.UTF_8)).build();
             request.mutate().header(CommonConstant.USER_NAME, URLEncoder.encode(userLoginVO.getUsername(), StandardCharsets.UTF_8)).build();
         }
@@ -117,6 +119,30 @@ public class GateWayFilter implements GlobalFilter {
     }
 
     /**
+     * 获取接口权限
+     *
+     * @param userId
+     * @return
+     */
+    private List<String> getUrls(Long userId) {
+        List<String> urlList = new ArrayList<>();
+        List<AuthorityDTO> authorityList = (List<AuthorityDTO>) redisService.get(Authority.REDIS_KEY + userId);
+        if (CollUtil.isNotEmpty(authorityList)) {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                JsonNode jsonNode = mapper.readTree(JSONUtil.toJsonStr(authorityList));
+                // 提取每个对象的 url 值并分割成数组
+                String[] urls = StreamSupport.stream(jsonNode.spliterator(), false).map(node -> node.get(CommonConstant.URL).asText())
+                        .flatMap(url -> Arrays.stream(url.split(CommonConstant.COMMA))).map(String::trim).toArray(String[]::new);
+                urlList = List.of(urls);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return urlList;
+    }
+
+    /**
      * 获取请求的path
      *
      * @param request
@@ -130,7 +156,7 @@ public class GateWayFilter implements GlobalFilter {
         if (ObjUtil.isNotEmpty(pathSuffix)) {
             path = ReUtil.replaceFirst(Pattern.compile("/(\\d+)$"), requestPath, "/{id}/" + method);
         } else {
-            path = requestPath + "/" + method;
+            path = requestPath + CommonConstant.SLASH + method;
         }
         return path;
     }

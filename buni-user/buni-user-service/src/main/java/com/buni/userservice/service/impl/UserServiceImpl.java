@@ -77,7 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + token, userLoginVO);
         //查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
         List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
-        if(CollUtil.isNotEmpty(userRoles)){
+        if (CollUtil.isNotEmpty(userRoles)) {
             List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
             List<RoleAuthorityDTO> roleAuthorityList = roleAuthorityService.findByRoleIds(roleIds);
             List<Long> authorityIds = roleAuthorityList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
@@ -102,7 +102,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Boolean loginOut() {
-        redisService.delAllByKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
+        String userId = HeaderUtil.getUserId();
+        redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
+        redisService.deleteKey(Authority.REDIS_KEY + userId);
         return true;
     }
 
@@ -142,12 +144,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public UserInfoVO findById(Long id) {
-        UserInfoVO userInfoVO = (UserInfoVO) redisService.get(User.REDIS_KEY);
+        UserInfoVO userInfoVO = (UserInfoVO) redisService.get(User.REDIS_KEY + id);
         if (ObjUtil.isEmpty(userInfoVO)) {
             User user = getUser(id);
             userInfoVO = new UserInfoVO();
             BeanUtils.copyProperties(user, userInfoVO);
-            redisService.setOneDay(User.REDIS_KEY, userInfoVO);
+            redisService.setOneDay(User.REDIS_KEY + user.getId(), userInfoVO);
         }
         return userInfoVO;
     }
