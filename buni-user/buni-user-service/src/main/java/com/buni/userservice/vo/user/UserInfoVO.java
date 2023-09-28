@@ -1,5 +1,6 @@
 package com.buni.userservice.vo.user;
 
+import com.buni.buniframework.util.StringSerializer;
 import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.enums.SexEnum;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -20,6 +21,7 @@ public class UserInfoVO {
     /**
      * id
      */
+    @JsonSerialize(using = StringSerializer.class)
     private Long id;
 
     /**

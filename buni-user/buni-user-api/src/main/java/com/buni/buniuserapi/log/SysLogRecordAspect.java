@@ -1,8 +1,10 @@
 package com.buni.buniuserapi.log;
 
+import cn.hutool.json.JSONUtil;
 import com.buni.buniframework.util.HeaderUtil;
 import com.buni.buniuserapi.service.SysLogApiService;
 import com.buni.usercommon.entity.SysLog;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,8 @@ public class SysLogRecordAspect {
 
     @Resource
     private SysLogApiService sysLogApiService;
+    @Resource
+    private ObjectMapper objectMapper;
 
 
     @Pointcut("@annotation(com.buni.buniuserapi.log.SysLogRecord)")
@@ -47,7 +51,7 @@ public class SysLogRecordAspect {
             sysLog.setUrl(String.valueOf(request.getRequestURL()));
             sysLog.setUrlPath(request.getServletPath());
             sysLog.setMethod(request.getMethod());
-            sysLog.setParameter(Arrays.toString(joinPoint.getArgs()));
+            sysLog.setParameter(objectMapper.writeValueAsString(joinPoint.getArgs()[0]));
             sysLog.setIp(HeaderUtil.getIp());
             sysLog.setDescription(sysLogRecord.description());
             sysLogApiService.save(sysLog);

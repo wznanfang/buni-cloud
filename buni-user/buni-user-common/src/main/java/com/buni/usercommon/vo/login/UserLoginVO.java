@@ -1,7 +1,9 @@
 package com.buni.usercommon.vo.login;
 
+import com.buni.buniframework.util.StringSerializer;
 import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.enums.SexEnum;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -17,6 +19,7 @@ public class UserLoginVO implements Serializable {
     /**
      * id
      */
+    @JsonSerialize(using = StringSerializer.class)
     private Long id;
 
     /**
