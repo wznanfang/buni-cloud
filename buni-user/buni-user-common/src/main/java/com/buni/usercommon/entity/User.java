@@ -84,6 +84,11 @@ public class User implements Serializable {
     private SexEnum sex;
 
     /**
+     * 电话
+     */
+    private String tel;
+
+    /**
      * 是否是超级管理员(0:否，1：是)
      */
     private BooleanEnum isAdmin;

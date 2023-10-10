@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 25/09/2023 15:28:31
+ Date: 10/10/2023 16:29:49
 */
 
 SET NAMES utf8mb4;
@@ -35,7 +35,9 @@ CREATE TABLE `auth`  (
 -- ----------------------------
 -- Records of auth
 -- ----------------------------
-INSERT INTO `auth` VALUES (1706122677032734721, '2023-09-25 09:45:19', '2023-09-25 15:26:54', 1704017394743595009, 'PostmanRuntime/7.33.0', 'tks9yhGn5VQ7m7Fnof1D71eesyGVmVqG', 1);
+INSERT INTO `auth` VALUES (1706122677032734721, '2023-09-25 09:45:19', '2023-09-25 15:47:11', 1704017394743595009, 'PostmanRuntime/7.33.0', 'tQb05z4RUBVwUnOfCnHO22v1UTuVf0Aa', 1);
+INSERT INTO `auth` VALUES (1706233227360305153, '2023-09-25 17:04:36', '2023-09-25 17:04:36', 1706232888619925506, 'PostmanRuntime/7.33.0', 'AIJwxo2GEBgxzwpSl1Xke8Cpsc9BgzKc', 1);
+INSERT INTO `auth` VALUES (1706233990895599617, '2023-09-25 17:07:38', '2023-09-28 16:27:55', 1, 'PostmanRuntime/7.33.0', 'HhNIfTrsdXo4ixGUHmhxtqREP0FYSueb', 1);
 
 -- ----------------------------
 -- Table structure for authority
@@ -57,7 +59,7 @@ CREATE TABLE `authority`  (
 -- ----------------------------
 -- Records of authority
 -- ----------------------------
-INSERT INTO `authority` VALUES (1, '2023-09-25 14:23:04', '2023-09-25 14:23:06', '根据id查询用户信息', 0, 2, 'user-details', 1, '/v1/findById/{id}/GET');
+INSERT INTO `authority` VALUES (1, '2023-09-25 14:23:04', '2023-09-25 14:23:06', '根据id查询用户信息', 0, 2, 'user-details', 1, '/v1/findById/{id}/GET,/v1/page/GET');
 
 -- ----------------------------
 -- Table structure for role
@@ -103,18 +105,20 @@ CREATE TABLE `sys_log`  (
   `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
   `update_time` datetime NULL DEFAULT NULL COMMENT '修改时间',
   `username` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '用户名',
-  `spendTime` bigint(20) NULL DEFAULT NULL,
   `url` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `urlPath` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `url_path` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `method` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   `ip` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
-  `parameter` varchar(2550) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `parameter` varchar(2000) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
+  `description` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '系统日志' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of sys_log
 -- ----------------------------
+INSERT INTO `sys_log` VALUES (1707311156597075970, '2023-09-28 16:27:55', '2023-09-28 16:27:55', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '127.0.0.1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1707311186900922369, '2023-09-28 16:28:02', '2023-09-28 16:28:02', '不逆', 'http://192.168.7.110:10001/v1/findById/1', '/v1/findById/1', 'GET', '127.0.0.1', '1', '【用户模块】-查询用户详情');
 
 -- ----------------------------
 -- Table structure for user
@@ -129,6 +133,7 @@ CREATE TABLE `user`  (
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名字',
   `age` tinyint(4) NULL DEFAULT NULL COMMENT '年龄',
   `sex` tinyint(4) NULL DEFAULT NULL COMMENT '性别',
+  `tel` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '电话',
   `is_admin` tinyint(4) NULL DEFAULT 0 COMMENT '是否是超级管理员(0:否，1：是)',
   `is_delete` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除(0:否，1：是)',
   PRIMARY KEY (`id`) USING BTREE
@@ -137,7 +142,7 @@ CREATE TABLE `user`  (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1704017394743595009, '2023-09-19 14:19:42', '2023-09-19 14:19:42', '不逆', '123456', '不逆', 18, 1, 0, 0);
+INSERT INTO `user` VALUES (1, '2023-09-26 10:25:43', '2023-09-26 10:25:43', '不逆', '2499b16d3cb8b6d49e3e76dcd072a1afc68c7706123c423426f450a27f71d4f8', '不逆', 18, 1, NULL, 0, 0);
 
 -- ----------------------------
 -- Table structure for user_role
@@ -155,6 +160,6 @@ CREATE TABLE `user_role`  (
 -- ----------------------------
 -- Records of user_role
 -- ----------------------------
-INSERT INTO `user_role` VALUES (1, '2023-09-25 14:22:42', '2023-09-25 14:22:45', 1704017394743595009, 1);
+INSERT INTO `user_role` VALUES (1, '2023-09-25 14:22:42', '2023-09-25 14:22:45', 1, 1);
 
 SET FOREIGN_KEY_CHECKS = 1;

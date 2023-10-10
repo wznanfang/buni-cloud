@@ -1,6 +1,8 @@
 package com.buni.userservice.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.Validator;
+import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -75,7 +77,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         tokenVO.setToken(token);
         userLoginVO.setTokenVO(tokenVO);
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + token, userLoginVO);
-        //查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
+        // 查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
         List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
         if (CollUtil.isNotEmpty(userRoles)) {
             List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
@@ -84,7 +86,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
             redisService.setOneHour(Authority.REDIS_KEY + user.getId(), authorityList);
         }
-        //记录到用户鉴权信息
+        // 记录到用户鉴权信息
         AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(token).build();
         authService.saveOrUpdate(authDTO);
         return userLoginVO;
@@ -117,7 +119,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public boolean save(AddVO addVO) {
-        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).last("LIMIT 1"));
+        if (!Validator.isMobile(addVO.getTel())) {
+            throw new CustomException(UserErrorEnum.PHONE_ERROR.getCode(), UserErrorEnum.PHONE_ERROR.getMessage());
+        }
+        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
         if (count > 0) {
             throw new CustomException(UserErrorEnum.USER_EXISTS.getCode(), UserErrorEnum.USER_EXISTS.getMessage());
         }
@@ -149,6 +154,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             User user = getUser(id);
             userInfoVO = new UserInfoVO();
             BeanUtils.copyProperties(user, userInfoVO);
+            userInfoVO.setTel(DesensitizedUtil.mobilePhone(userInfoVO.getTel()));
             redisService.setOneDay(User.REDIS_KEY + user.getId(), userInfoVO);
         }
         return userInfoVO;

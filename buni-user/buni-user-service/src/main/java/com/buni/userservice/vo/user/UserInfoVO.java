@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -57,6 +58,11 @@ public class UserInfoVO {
      * 性别
      */
     private SexEnum sex;
+
+    /**
+     * 电话
+     */
+    private String tel;
 
     /**
      * 是否是超级管理员(0:否，1：是)
