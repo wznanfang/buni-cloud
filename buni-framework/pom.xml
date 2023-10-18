@@ -17,7 +17,7 @@
         <nacos-version>2022.0.0.0-RC2</nacos-version>
         <bootstrap-version>4.0.2</bootstrap-version>
         <mysql-version>8.0.33</mysql-version>
-        <mybatis-plus-version>3.5.3</mybatis-plus-version>
+        <mybatis-plus-version>3.5.3.2</mybatis-plus-version>
         <hutool-version>5.8.21</hutool-version>
         <aspectj-version>1.9.20.1</aspectj-version>
     </properties>
