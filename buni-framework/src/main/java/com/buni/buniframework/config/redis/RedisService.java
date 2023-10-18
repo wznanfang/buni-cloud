@@ -90,7 +90,7 @@ public class RedisService {
         if (ObjUtil.isEmpty(key)) {
             return 0L;
         }
-        return redisTemplate.delete(Arrays.asList(key));
+        return redisTemplate.delete(Collections.singletonList(key));
     }
 
 

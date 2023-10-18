@@ -55,9 +55,9 @@ public class GateWayFilter implements GlobalFilter {
 
 
     /**
-     * @param exchange
-     * @param chain
-     * @return
+     * @param exchange 请求上下文
+     * @param chain   过滤器链
+     * @return reactor.core.publisher.Mono<java.lang.Void>
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
@@ -104,8 +104,8 @@ public class GateWayFilter implements GlobalFilter {
     /**
      * 获取请求token
      *
-     * @param request
-     * @return
+     * @param request 请求
+     * @return token
      */
     private String getToken(ServerHttpRequest request) {
         String token = CommonConstant.EMPTY_STR;
@@ -122,8 +122,8 @@ public class GateWayFilter implements GlobalFilter {
     /**
      * 获取接口权限
      *
-     * @param userId
-     * @return
+     * @param userId 用户id
+     * @return 权限列表
      */
     private List<String> getUrls(Long userId) {
         List<String> urlList = new ArrayList<>();
@@ -146,8 +146,8 @@ public class GateWayFilter implements GlobalFilter {
     /**
      * 获取请求的path
      *
-     * @param request
-     * @return
+     * @param request 请求
+     * @return path
      */
     private String getPath(ServerHttpRequest request) {
         String path;
@@ -155,7 +155,7 @@ public class GateWayFilter implements GlobalFilter {
         String method = String.valueOf(request.getMethod());
         String pathSuffix = ReUtil.get("/(\\d+)$", requestPath, 1);
         if (ObjUtil.isNotEmpty(pathSuffix)) {
-            path = ReUtil.replaceFirst(Pattern.compile("/(\\d+)$"), requestPath, "/{id}/" + method);
+            path = ReUtil.replaceFirst(Pattern.compile("/(\\d+)$"), requestPath, "/{}/" + method);
         } else {
             path = requestPath + CommonConstant.SLASH + method;
         }
@@ -166,9 +166,9 @@ public class GateWayFilter implements GlobalFilter {
     /**
      * 异常返回
      *
-     * @param exchange
-     * @param resultEnum
-     * @return
+     * @param exchange 请求上下文
+     * @param resultEnum 异常枚举
+     * @return reactor.core.publisher.Mono<java.lang.Void>
      */
     public Mono<Void> returnMsg(ServerWebExchange exchange, ResultEnum resultEnum) {
         ServerHttpResponse response = exchange.getResponse();
