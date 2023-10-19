@@ -26,37 +26,66 @@ public class HeaderUtil {
     private RedisService redisService;
 
 
+    /**
+     * 获取请求体
+     *
+     * @return {@link HttpServletRequest}
+     */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         return servletRequestAttributes.getRequest();
     }
 
 
+    /**
+     * 获取用户token
+     *
+     * @return {@link String}
+     */
     public static String getToken() {
         HttpServletRequest request = getRequest();
         return StrUtil.subAfter(request.getHeader(CommonConstant.AUTHORIZATION), CommonConstant.PREFIX, true);
     }
 
 
+    /**
+     * 获取用户id
+     *
+     * @return {@link String}
+     */
     public static String getUserId() {
         HttpServletRequest request = getRequest();
         return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? "" : URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
-
     }
 
 
+    /**
+     * 获取用户名
+     *
+     * @return {@link String}
+     */
     public static String getUserName() {
         HttpServletRequest request = getRequest();
         return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? "" : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
     }
 
 
+    /**
+     * 获取客户端标识
+     *
+     * @return {@link String}
+     */
     public static String getIdentity() {
         HttpServletRequest request = getRequest();
         return request.getHeader(CommonConstant.USER_AGENT);
     }
 
 
+    /**
+     * 获取用户ip
+     *
+     * @return {@link String}
+     */
     public static String getIp() {
         HttpServletRequest request = getRequest();
         String ip = request.getHeader("x-forwarded-for");

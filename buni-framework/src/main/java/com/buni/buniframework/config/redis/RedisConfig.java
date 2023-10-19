@@ -13,9 +13,15 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 @Configuration
 public class RedisConfig {
 
+    /**
+     * 配置redisTemplate
+     *
+     * @param factory {@link LettuceConnectionFactory}
+     * @return {@link RedisTemplate}<{@link String}, {@link Object}>
+     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory factory) {
-        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
         // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
         redisTemplate.setKeySerializer(RedisSerializer.string());

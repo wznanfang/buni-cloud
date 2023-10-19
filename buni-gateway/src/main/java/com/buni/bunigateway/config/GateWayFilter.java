@@ -61,7 +61,7 @@ public class GateWayFilter implements GlobalFilter {
      */
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
-        ServerHttpRequest request = exchange.getRequest(); //请求
+        ServerHttpRequest request = exchange.getRequest();
         //获取请求路径，判断是否是公共接口
         //针对路径进行处理
         String path = getPath(request);

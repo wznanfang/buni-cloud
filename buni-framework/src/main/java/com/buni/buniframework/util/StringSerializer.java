@@ -14,12 +14,20 @@ import java.io.IOException;
  */
 public class StringSerializer extends JsonSerializer<Long> {
 
+
+    /**
+     * 将long型数据转为string
+     *
+     * @param value       long型数据
+     * @param gen         JsonGenerator
+     * @param serializers SerializerProvider
+     * @throws IOException IOException
+     */
     @Override
     public void serialize(Long value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (value != null) {
             gen.writeString(String.valueOf(value));
         }
-
     }
 
 }

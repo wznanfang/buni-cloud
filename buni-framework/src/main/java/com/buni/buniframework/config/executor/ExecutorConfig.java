@@ -21,7 +21,7 @@ public class ExecutorConfig {
 
     @Bean(EXECUTOR_NAME)
     public ThreadPoolExecutor threadPoolExecutor() {
-        ThreadFactory threadFactory = new NamedThreadFactory("不逆");
+        ThreadFactory threadFactory = new NamedThreadFactory("buni-cloud");
         return new ThreadPoolExecutor(PROCESSORS, PROCESSORS * 2, 60, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }

@@ -74,9 +74,4 @@ public class CommonConstant {
      */
     public static final String USER_AGENT = "User-Agent";
 
-    /**
-     * 日志前缀标识
-     */
-    public static final String USER_MODEL = "【用户模块】-";
-
 }

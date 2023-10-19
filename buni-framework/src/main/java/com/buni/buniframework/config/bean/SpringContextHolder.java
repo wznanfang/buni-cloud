@@ -11,14 +11,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class SpringContextHolder implements ApplicationContextAware {
+
+
+    /**
+     * 上下文对象实例
+     */
     private static ApplicationContext applicationContext;
 
 
     /**
      * 实现ApplicationContextAware接口的回调方法，设置上下文环境
      *
-     * @param applicationContext
-     * @throws BeansException
+     * @param applicationContext spring上下文
      */
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
@@ -28,23 +32,41 @@ public class SpringContextHolder implements ApplicationContextAware {
     /**
      * 获得spring上下文
      *
-     * @return
+     * @return {@link ApplicationContext}
      */
     public static ApplicationContext getApplicationContext() {
         return applicationContext;
     }
 
-    //通过class获取Bean.
+    /**
+     * 通过class获取Bean
+     *
+     * @param clazz bean类型
+     * @return {@link T}
+     */
     public static <T> T getBean(Class<T> clazz) {
         return getApplicationContext().getBean(clazz);
     }
 
-    //通过name获取 Bean.
+
+    /**
+     * 通过name获取 Bean
+     *
+     * @param name
+     * @return {@link Object}
+     */
     public static Object getBean(String name) {
         return getApplicationContext().getBean(name);
     }
 
-    //通过name,以及Clazz返回指定的Bean
+
+    /**
+     * 通过name,以及Clazz返回指定的Bean
+     *
+     * @param name  bean名称
+     * @param clazz bean类型
+     * @return {@link T}
+     */
     public static <T> T getBean(String name, Class<T> clazz) {
         return getApplicationContext().getBean(name, clazz);
     }
