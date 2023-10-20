@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 10/10/2023 16:29:49
+ Date: 20/10/2023 16:25:00
 */
 
 SET NAMES utf8mb4;
@@ -134,15 +134,16 @@ CREATE TABLE `user`  (
   `age` tinyint(4) NULL DEFAULT NULL COMMENT '年龄',
   `sex` tinyint(4) NULL DEFAULT NULL COMMENT '性别',
   `tel` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '电话',
-  `is_admin` tinyint(4) NULL DEFAULT 0 COMMENT '是否是超级管理员(0:否，1：是)',
-  `is_delete` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除(0:否，1：是)',
+  `admin` tinyint(4) NULL DEFAULT 0 COMMENT '是否是超级管理员(0:否，1：是)',
+  `enable` tinyint(4) NULL DEFAULT 1 COMMENT '是否启用(0:否，1：是)',
+  `delete` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除(0:否，1：是)',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES (1, '2023-09-26 10:25:43', '2023-09-26 10:25:43', '不逆', '2499b16d3cb8b6d49e3e76dcd072a1afc68c7706123c423426f450a27f71d4f8', '不逆', 18, 1, NULL, 0, 0);
+INSERT INTO `user` VALUES (1, '2023-09-26 10:25:43', '2023-09-26 10:25:43', '不逆', '2499b16d3cb8b6d49e3e76dcd072a1afc68c7706123c423426f450a27f71d4f8', '不逆', 18, 1, '1', 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for user_role
