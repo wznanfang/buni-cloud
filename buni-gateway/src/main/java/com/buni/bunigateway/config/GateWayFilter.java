@@ -80,7 +80,7 @@ public class GateWayFilter implements GlobalFilter {
                 return returnMsg(exchange, ResultEnum.INVALID_TOKEN);
             }
             //校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
-            if (userLoginVO.getIsAdmin().equals(BooleanEnum.NO)) {
+            if (userLoginVO.getAdmin().equals(BooleanEnum.NO)) {
                 //校验是否有对应的接口权限
                 List<String> urls = getUrls(userLoginVO.getId());
                 if (CollUtil.isEmpty(urls) || !urls.contains(path)) {

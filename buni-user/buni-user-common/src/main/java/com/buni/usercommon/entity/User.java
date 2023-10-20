@@ -91,12 +91,17 @@ public class User implements Serializable {
     /**
      * 是否是超级管理员(0:否，1：是)
      */
-    private BooleanEnum isAdmin;
+    private BooleanEnum admin;
+
+    /**
+     * 是否启用(0:否，1：是)
+     */
+    private BooleanEnum enable;
 
     /**
      * 是否删除(0:否，1：是)
      */
-    private BooleanEnum isDelete;
+    private BooleanEnum delete;
 
 
 }

@@ -3,13 +3,9 @@ package com.buni.userservice.controller;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.buniframework.util.Result;
 import com.buni.buniuserapi.log.SysLogRecord;
-import com.buni.usercommon.vo.login.LoginVO;
-import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.userservice.constant.CommonConstant;
 import com.buni.userservice.service.UserService;
-import com.buni.userservice.vo.user.AddVO;
-import com.buni.userservice.vo.user.PageVO;
-import com.buni.userservice.vo.user.UserInfoVO;
+import com.buni.userservice.vo.user.*;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,31 +23,6 @@ public class UserController {
 
 
     /**
-     * 用户登录
-     *
-     * @param loginVO 用户登录信息
-     * @return 令牌
-     */
-    @SysLogRecord(description = "用户登录")
-    @PostMapping("/login")
-    public Result<UserLoginVO> login(@RequestBody @Validated LoginVO loginVO) {
-        return Result.ok(userService.login(loginVO));
-    }
-
-
-    /**
-     * 退出登录
-     *
-     * @return
-     */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "退出登录")
-    @PostMapping("/loginOut")
-    public Result<Boolean> loginOut() {
-        return Result.ok(userService.loginOut());
-    }
-
-
-    /**
      * 新增用户
      *
      * @param addVO 用户信息
@@ -65,14 +36,53 @@ public class UserController {
 
 
     /**
+     * 根据id编辑用户基本信息
+     *
+     * @param updateVO 用户信息
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "编辑用户基本信息")
+    @PutMapping("/update")
+    public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
+        return Result.ok(userService.update(updateVO));
+    }
+
+
+    /**
+     * 根据id 启用/禁用用户
+     *
+     * @param enableVO 启用/禁用信息
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "启用/禁用用户")
+    @PutMapping("/forbidden")
+    public Result<Boolean> forbidden(@RequestBody @Validated EnableVO enableVO) {
+        return Result.ok(userService.enable(enableVO));
+    }
+
+
+    /**
+     * 根据id删除用户
+     *
+     * @param id 用户id
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "删除用户")
+    @DeleteMapping("/delete/{id}")
+    public Result<Boolean> delete(@PathVariable Long id) {
+        return Result.ok(userService.delete(id));
+    }
+
+
+    /**
      * 根据id查询用户信息
      *
      * @param id 用户id
-     * @return
+     * @return 用户信息
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "查询用户详情")
     @GetMapping("/findById/{id}")
-    public Result<UserInfoVO> register(@PathVariable Long id) {
+    public Result<UserInfoVO> findById(@PathVariable Long id) {
         return Result.ok(userService.findById(id));
     }
 
@@ -81,7 +91,7 @@ public class UserController {
      * 分页查询
      *
      * @param pageVO 查询条件
-     * @return
+     * @return 用户信息
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
     @GetMapping("/page")

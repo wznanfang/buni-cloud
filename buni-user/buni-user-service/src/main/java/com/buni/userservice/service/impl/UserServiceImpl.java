@@ -19,6 +19,7 @@ import com.buni.buniframework.util.HeaderUtil;
 import com.buni.usercommon.dto.AuthDTO;
 import com.buni.usercommon.entity.Authority;
 import com.buni.usercommon.entity.User;
+import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.enums.UserErrorEnum;
 import com.buni.usercommon.vo.login.LoginVO;
 import com.buni.usercommon.vo.login.TokenVO;
@@ -29,9 +30,7 @@ import com.buni.usercommon.vo.role.UserRoleDTO;
 import com.buni.userservice.constant.UserConstant;
 import com.buni.userservice.mapper.UserMapper;
 import com.buni.userservice.service.*;
-import com.buni.userservice.vo.user.AddVO;
-import com.buni.userservice.vo.user.PageVO;
-import com.buni.userservice.vo.user.UserInfoVO;
+import com.buni.userservice.vo.user.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -69,6 +68,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (ObjUtil.isEmpty(user) || !SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
             throw new CustomException(UserErrorEnum.USER_PASSWORD_ERROR.getCode(), UserErrorEnum.USER_PASSWORD_ERROR.getMessage());
         }
+        if (user.getEnable().equals(BooleanEnum.NO)) {
+            throw new CustomException(UserErrorEnum.USER_FORBIDDEN.getCode(), UserErrorEnum.USER_FORBIDDEN.getMessage());
+        }
+        if (user.getDelete().equals(BooleanEnum.YES)) {
+            throw new CustomException(UserErrorEnum.USER_NOT_EXISTS.getCode(), UserErrorEnum.USER_NOT_EXISTS.getMessage());
+        }
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(user, userLoginVO);
         String token = RandomUtil.randomString(32);
@@ -93,7 +98,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
     public User findByUsername(String username) {
-        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username));
+        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDelete, BooleanEnum.NO));
     }
 
 
@@ -122,7 +127,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!Validator.isMobile(addVO.getTel())) {
             throw new CustomException(UserErrorEnum.PHONE_ERROR.getCode(), UserErrorEnum.PHONE_ERROR.getMessage());
         }
-        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
+        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getDelete, BooleanEnum.NO).eq(User::getUsername, addVO.getUsername())
+                .or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
         if (count > 0) {
             throw new CustomException(UserErrorEnum.USER_EXISTS.getCode(), UserErrorEnum.USER_EXISTS.getMessage());
         }
@@ -140,6 +146,59 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         return user;
     }
+
+
+    /**
+     * 编辑用户基本信息
+     *
+     * @param updateVO 用户信息
+     * @return true/false
+     */
+    @Override
+    public boolean update(UpdateVO updateVO) {
+        getUser(updateVO.getId());
+        User updateUser = new User();
+        BeanUtils.copyProperties(updateVO, updateUser);
+        super.updateById(updateUser);
+        redisService.deleteKey(User.REDIS_KEY + updateVO.getId());
+        return true;
+    }
+
+
+    /**
+     * 根据id 禁用用户
+     *
+     * @param enableVO 启用/禁用信息
+     * @return true/false
+     */
+    @Override
+    public boolean enable(EnableVO enableVO) {
+        getUser(enableVO.getId());
+        User forbiddenUser = new User();
+        BeanUtils.copyProperties(enableVO, forbiddenUser);
+        super.updateById(forbiddenUser);
+        redisService.deleteKey(User.REDIS_KEY + enableVO.getId());
+        return true;
+    }
+
+
+    /**
+     * 根据id删除用户
+     *
+     * @param id 用户id
+     * @return true/false
+     */
+    @Override
+    public boolean delete(Long id) {
+        getUser(id);
+        User deleteUser = new User();
+        deleteUser.setId(id);
+        deleteUser.setDelete(BooleanEnum.YES);
+        super.updateById(deleteUser);
+        redisService.deleteKey(User.REDIS_KEY + id);
+        return true;
+    }
+
 
     /**
      * 根据id查询用户基本信息
@@ -171,6 +230,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public IPage<UserInfoVO> findPage(PageVO pageVO) {
         IPage<User> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(User::getDelete, BooleanEnum.NO);
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), User::getUsername, pageVO.getUsername());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
         IPage<User> infoPage = super.page(ipage, queryWrapper);
