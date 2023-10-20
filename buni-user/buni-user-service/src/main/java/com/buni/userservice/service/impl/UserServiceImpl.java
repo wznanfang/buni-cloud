@@ -60,8 +60,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 登录
      *
-     * @param loginVO
-     * @return
+     * @param loginVO 登录信息
+     * @return {@link UserLoginVO}
      */
     @Override
     public UserLoginVO login(LoginVO loginVO) {
@@ -114,7 +114,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 新增
      *
-     * @param addVO
+     * @param addVO 新增信息
      * @return true/false
      */
     @Override
@@ -144,7 +144,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 根据id查询用户基本信息
      *
-     * @param id
+     * @param id 用户id
      * @return {@link UserInfoVO}
      */
     @Override
@@ -164,7 +164,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * 分页查询用户信息
      *
-     * @param pageVO
+     * @param pageVO 分页信息
      * @return {@link Page}<{@link UserInfoVO}>
      */
     @Override

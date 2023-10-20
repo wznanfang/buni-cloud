@@ -33,20 +33,19 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
     /**
      * 保存用户登录鉴权信息
      *
-     * @param authDTO
-     * @return
+     * @param authDTO 鉴权信息
      */
     @Async(value = ExecutorConfig.EXECUTOR_NAME)
     @Override
     public void saveOrUpdate(AuthDTO authDTO) {
-        //判断该平台是否已经有对应的鉴权信息
+        // 判断该平台是否已经有对应的鉴权信息
         Auth auth = super.getOne(Wrappers.<Auth>lambdaQuery().eq(Auth::getUserId, authDTO.getUserId()).eq(Auth::getClientIdentity, authDTO.getClientIdentity()));
         Auth newAuth = new Auth();
         if (ObjUtil.isNotEmpty(auth)) {
             newAuth.setId(auth.getId());
             newAuth.setToken(authDTO.getToken());
             super.updateById(newAuth);
-            //移除redis中的旧token
+            // 移除redis中的旧token
             redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + auth.getToken());
         } else {
             BeanUtils.copyProperties(authDTO, newAuth);

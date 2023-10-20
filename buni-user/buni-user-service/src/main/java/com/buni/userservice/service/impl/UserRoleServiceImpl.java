@@ -30,7 +30,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     /**
      * 查询用户角色列表
      *
-     * @param userId
+     * @param userId 用户id
      * @return {@link List}<{@link UserRoleDTO}>
      */
     @Override

@@ -30,7 +30,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     /**
      * 查询roleAuthority
      *
-     * @param roleIds
+     * @param roleIds 角色id集合
      * @return {@link List}<{@link RoleAuthorityDTO}>
      */
     @Override
@@ -43,7 +43,6 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
                 BeanUtil.copyProperties(roleAuthority, roleAuthorityDto);
                 roleAuthorityDtoS.add(roleAuthorityDto);
             });
-
         }
         return roleAuthorityDtoS;
     }

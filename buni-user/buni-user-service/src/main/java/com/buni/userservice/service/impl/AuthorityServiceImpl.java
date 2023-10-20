@@ -29,7 +29,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     /**
      * 根据id查询权限
      *
-     * @param ids
+     * @param ids 权限id集合
      * @return {@link List}<{@link AuthorityDTO}>
      */
     @Override
