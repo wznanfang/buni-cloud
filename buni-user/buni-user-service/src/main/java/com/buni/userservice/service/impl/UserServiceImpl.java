@@ -35,6 +35,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -189,12 +190,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return true/false
      */
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(Long id) {
         getUser(id);
         User deleteUser = new User();
         deleteUser.setId(id);
         deleteUser.setDelete(BooleanEnum.YES);
         super.updateById(deleteUser);
+        List<Long> roleIds = userRoleService.deleteByUserId(id);
+        roleAuthorityService.deleteByRoleIds(roleIds);
         redisService.deleteKey(User.REDIS_KEY + id);
         return true;
     }

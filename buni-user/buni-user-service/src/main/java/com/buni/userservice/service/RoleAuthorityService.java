@@ -24,4 +24,12 @@ public interface RoleAuthorityService extends IService<RoleAuthority> {
     List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds);
 
 
+    /**
+     * 根据角色id删除角色权限
+     *
+     * @param roleIds 角色id集合
+     */
+    void deleteByRoleIds(List<Long> roleIds);
+
+
 }

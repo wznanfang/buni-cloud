@@ -22,4 +22,13 @@ public interface UserRoleService extends IService<UserRole> {
      */
     List<UserRoleDTO> findByUserId(Long userId);
 
+
+    /**
+     * 根据用户id删除用户角色
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link Long}>
+     */
+    List<Long> deleteByUserId(Long userId);
+
 }

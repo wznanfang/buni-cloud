@@ -48,4 +48,23 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
 
+    /**
+     * 根据用户id删除用户角色
+     *
+     * @param userId 用户id
+     * @return {@link List}<{@link Long}>
+     */
+    @Override
+    public List<Long> deleteByUserId(Long userId) {
+        List<Long> roleIds = new ArrayList<>();
+        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
+        if (CollUtil.isEmpty(list)) {
+            return roleIds;
+        }
+        roleIds = list.stream().map(UserRole::getId).toList();
+        super.removeBatchByIds(roleIds);
+        return roleIds;
+    }
+
+
 }
