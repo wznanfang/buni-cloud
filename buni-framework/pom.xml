@@ -19,7 +19,6 @@
         <mysql-version>8.0.33</mysql-version>
         <mybatis-plus-version>3.5.3.2</mybatis-plus-version>
         <hutool-version>5.8.21</hutool-version>
-        <aspectj-version>1.9.20.1</aspectj-version>
     </properties>
 
     <dependencies>
@@ -61,10 +60,9 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
         </dependency>
-        <!--暂时引入，后续更改去除-->
         <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
         <dependency>
             <groupId>com.baomidou</groupId>
@@ -79,7 +77,6 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>${aspectj-version}</version>
         </dependency>
     </dependencies>
 
