@@ -18,6 +18,7 @@
         <bootstrap-version>4.0.2</bootstrap-version>
         <mysql-version>8.0.33</mysql-version>
         <mybatis-plus-version>3.5.3.2</mybatis-plus-version>
+        <openfeign-version>4.0.4</openfeign-version>
         <hutool-version>5.8.21</hutool-version>
     </properties>
 
@@ -68,6 +69,11 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${openfeign-version}</version>
         </dependency>
         <dependency>
             <groupId>cn.hutool</groupId>
