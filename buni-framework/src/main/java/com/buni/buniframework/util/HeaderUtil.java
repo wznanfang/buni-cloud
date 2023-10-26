@@ -89,28 +89,28 @@ public class HeaderUtil {
     public static String getIp() {
         HttpServletRequest request = getRequest();
         String ip = request.getHeader("x-forwarded-for");
-        if (ip != null && ip.length() != 0 && !"unknown".equalsIgnoreCase(ip)) {
+        if (StrUtil.isNotEmpty(ip) && !CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
             if (ip.contains(",")) {
                 ip = ip.split(",")[0];
             }
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
+        if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(CommonConstant.PROXY_CLIENT_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
+        if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(CommonConstant.WL_PROXY_CLIENT_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
+        if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(CommonConstant.HTTP_CLIENT_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
+        if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(CommonConstant.HTTP_X_FORWARDED_FOR);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Real-IP");
+        if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
+            ip = request.getHeader(CommonConstant.X_REAL_IP);
         }
-        if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+        if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
         return ip;

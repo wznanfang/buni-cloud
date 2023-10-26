@@ -2,6 +2,8 @@ package com.buni.buniframework.constant;
 
 import lombok.Data;
 
+import java.io.File;
+
 /**
  * @author zp.wei
  * @date 2023/9/19 17:48
@@ -37,7 +39,7 @@ public class CommonConstant {
     /**
      * 分隔符
      */
-    public static final String SLASH = "/";
+    public static final String SLASH = File.separator;
 
     /**
      * token
@@ -73,5 +75,15 @@ public class CommonConstant {
      * 客户端标识
      */
     public static final String USER_AGENT = "User-Agent";
+
+    /**
+     * IP地址相关常量
+     */
+    public static final String UNKNOWN = "unknown";
+    public static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
+    public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
+    public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
+    public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
+    public static final String X_REAL_IP = "X-Real-IP";
 
 }
