@@ -150,14 +150,12 @@ public class GateWayFilter implements GlobalFilter {
      * @return path
      */
     private String getPath(ServerHttpRequest request) {
-        String path;
         String requestPath = request.getURI().getPath();
         String method = String.valueOf(request.getMethod());
         String pathSuffix = ReUtil.get("/(\\d+)$", requestPath, 1);
+        String path = requestPath + CommonConstant.SLASH + method;
         if (ObjUtil.isNotEmpty(pathSuffix)) {
             path = ReUtil.replaceFirst(Pattern.compile("/(\\d+)$"), requestPath, "/{}/" + method);
-        } else {
-            path = requestPath + CommonConstant.SLASH + method;
         }
         return path;
     }
