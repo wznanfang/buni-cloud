@@ -2,14 +2,25 @@ package com.buni.userservice.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.ObjectUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.buni.buniframework.config.exception.CustomException;
+import com.buni.buniframework.config.redis.RedisService;
 import com.buni.usercommon.entity.Authority;
+import com.buni.usercommon.enums.UserErrorEnum;
 import com.buni.usercommon.vo.role.AuthorityDTO;
 import com.buni.userservice.mapper.AuthorityMapper;
 import com.buni.userservice.service.AuthorityService;
+import com.buni.userservice.service.RoleService;
+import com.buni.userservice.vo.authority.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,6 +35,118 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority> implements AuthorityService {
+
+    private RedisService redisService;
+    private RoleService roleService;
+
+
+    /**
+     * 新增权限
+     *
+     * @param addVO 权限信息
+     * @return true/false
+     */
+    @Override
+    public boolean save(AddVO addVO) {
+        Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().eq(Authority::getCode, addVO.getCode()).or().eq(Authority::getUrl, addVO.getUrl()));
+        if (ObjUtil.isNotEmpty(authority)) {
+            throw new CustomException(UserErrorEnum.AUTHORITY_EXISTS.getCode(), UserErrorEnum.AUTHORITY_EXISTS.getMessage());
+        }
+        Authority addAuthority = new Authority();
+        BeanUtils.copyProperties(addVO, addAuthority);
+        super.save(addAuthority);
+        return true;
+    }
+
+
+    /**
+     * 根据ID修改权限
+     *
+     * @param updateVO 权限数据
+     * @return true/false
+     */
+    @Override
+    public boolean update(UpdateVO updateVO) {
+        Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().ne(Authority::getId, updateVO.getId()).eq(Authority::getCode, updateVO.getCode())
+                .or().eq(Authority::getUrl, updateVO.getUrl()));
+        if (ObjUtil.isNotEmpty(authority)) {
+            throw new CustomException(UserErrorEnum.AUTHORITY_EXISTS.getCode(), UserErrorEnum.AUTHORITY_EXISTS.getMessage());
+        }
+        Authority updateAuthority = new Authority();
+        BeanUtils.copyProperties(updateVO, updateAuthority);
+        super.updateById(updateAuthority);
+        // todo 更新角色权限表，剔除拥有该权限的用户缓存
+
+        redisService.deleteKey(Authority.REDIS_KEY + updateVO.getId());
+        return true;
+    }
+
+
+    /**
+     * 根据ID删除权限
+     *
+     * @param id 权限id
+     * @return true/false
+     */
+    @Override
+    public boolean delete(Long id) {
+        Authority authority = getAuthority(id);
+        super.removeById(authority);
+        // todo 更新角色权限表，剔除拥有该权限的用户缓存
+
+        redisService.deleteKey(Authority.REDIS_KEY + id);
+        return true;
+    }
+
+
+    private Authority getAuthority(Long id) {
+        Authority authority = super.getById(id);
+        if (ObjUtil.isEmpty(authority)) {
+            throw new CustomException(UserErrorEnum.AUTHORITY_NOT_EXISTS.getCode(), UserErrorEnum.AUTHORITY_NOT_EXISTS.getMessage());
+        }
+        return authority;
+    }
+
+
+    @Override
+    public AuthorityInfoVO findById(Long id) {
+        AuthorityInfoVO infoVO = (AuthorityInfoVO) redisService.get(Authority.REDIS_KEY + id);
+        if (ObjUtil.isEmpty(infoVO)) {
+            Authority authority = getAuthority(id);
+            infoVO = new AuthorityInfoVO();
+            BeanUtils.copyProperties(authority, infoVO);
+            redisService.setOneHour(Authority.REDIS_KEY + id, infoVO);
+        }
+        return infoVO;
+    }
+
+
+    /**
+     * 分页查询用户信息
+     *
+     * @param pageVO 分页条件
+     * @return IPage<UserInfoVO>
+     */
+    @Override
+    public IPage<AuthorityGetVO> findPage(PageVO pageVO) {
+        IPage<Authority> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
+        QueryWrapper<Authority> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Authority::getName, pageVO.getName());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), Authority::getType, pageVO.getType());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getCode()), Authority::getCode, pageVO.getCode());
+        IPage<Authority> infoPage = super.page(ipage, queryWrapper);
+        IPage<AuthorityGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
+        List<AuthorityGetVO> list = new ArrayList<>();
+        if (CollUtil.isNotEmpty(infoPage.getRecords())) {
+            infoPage.getRecords().forEach(user -> {
+                AuthorityGetVO getVO = new AuthorityGetVO();
+                BeanUtils.copyProperties(user, getVO);
+                list.add(getVO);
+            });
+        }
+        resultPage.setRecords(list);
+        return resultPage;
+    }
 
 
     /**

@@ -54,7 +54,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      * @param roleIds 角色id集合
      */
     @Override
-    public void deleteByRoleId(List<Long> roleIds) {
+    public void deleteByRoleIds(List<Long> roleIds) {
         super.remove(Wrappers.<RoleAuthority>lambdaQuery().in(RoleAuthority::getRoleId, roleIds));
     }
 

@@ -79,7 +79,7 @@ public interface UserService extends IService<User> {
      * @param pageVO 分页条件
      * @return IPage<UserInfoVO>
      */
-    IPage<UserInfoVO> findPage(PageVO pageVO);
+    IPage<UserGetVO> findPage(PageVO pageVO);
 
 
 }

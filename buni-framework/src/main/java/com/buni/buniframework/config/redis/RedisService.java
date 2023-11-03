@@ -32,6 +32,13 @@ public class RedisService {
     }
 
 
+    /**
+     * 存储缓存
+     * @param key key
+     * @param val value
+     * @param time 缓存时间
+     * @param timeUnit 时间单位
+     */
     public void set(String key, Object val, Long time, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, val, time, timeUnit);
     }

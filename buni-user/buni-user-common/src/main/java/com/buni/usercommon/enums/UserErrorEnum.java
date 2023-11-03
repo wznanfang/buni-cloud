@@ -11,6 +11,8 @@ public enum UserErrorEnum {
     USER_NOT_EXISTS(300003, "用户信息不存在"),
     USER_FORBIDDEN(300004, "用户已被禁用"),
     PHONE_ERROR(300005, "电话号码不正确"),
+    AUTHORITY_EXISTS(300006, "权限已存在"),
+    AUTHORITY_NOT_EXISTS(300007, "权限不存在"),
     ;
 
     private final Integer code;

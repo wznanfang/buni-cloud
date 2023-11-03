@@ -95,7 +95,7 @@ public class UserController {
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
     @GetMapping("/page")
-    public Result<IPage<UserInfoVO>> page(PageVO pageVO) {
+    public Result<IPage<UserGetVO>> page(PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));
     }
 

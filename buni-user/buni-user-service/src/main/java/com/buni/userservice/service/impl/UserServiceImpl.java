@@ -231,20 +231,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * @return {@link Page}<{@link UserInfoVO}>
      */
     @Override
-    public IPage<UserInfoVO> findPage(PageVO pageVO) {
+    public IPage<UserGetVO> findPage(PageVO pageVO) {
         IPage<User> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.lambda().eq(User::getDelete, BooleanEnum.NO);
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), User::getUsername, pageVO.getUsername());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
         IPage<User> infoPage = super.page(ipage, queryWrapper);
-        IPage<UserInfoVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
-        List<UserInfoVO> list = new ArrayList<>();
+        IPage<UserGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
+        List<UserGetVO> list = new ArrayList<>();
         if (CollUtil.isNotEmpty(infoPage.getRecords())) {
             infoPage.getRecords().forEach(user -> {
-                UserInfoVO userInfo = new UserInfoVO();
-                BeanUtils.copyProperties(user, userInfo);
-                list.add(userInfo);
+                UserGetVO getVO = new UserGetVO();
+                BeanUtils.copyProperties(user, getVO);
+                list.add(getVO);
             });
         }
         resultPage.setRecords(list);
