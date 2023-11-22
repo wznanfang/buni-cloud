@@ -15,6 +15,11 @@ public class UserRoleDTO {
     private Long id;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 角色id
      */
     private Long roleId;

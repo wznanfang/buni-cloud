@@ -1,10 +1,15 @@
 package com.buni.userservice.controller;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.buni.buniframework.util.Result;
+import com.buni.buniuserapi.log.SysLogRecord;
+import com.buni.userservice.constant.CommonConstant;
 import com.buni.userservice.service.RoleService;
+import com.buni.userservice.vo.role.*;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Administrator
@@ -18,6 +23,69 @@ public class RoleController {
 
     private final RoleService roleService;
 
+
+    /**
+     * 新增角色
+     *
+     * @param addVO 权限信息
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
+    @PostMapping("/authority")
+    public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
+        return Result.ok(roleService.save(addVO));
+    }
+
+
+    /**
+     * 修改权限
+     *
+     * @param updateVO 权限信息
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
+    @PutMapping("/authority")
+    public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
+        return Result.ok(roleService.update(updateVO));
+    }
+
+
+    /**
+     * 删除权限
+     *
+     * @param id 权限信息id
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "删除权限")
+    @DeleteMapping("/authority/{id:\\d+}")
+    public Result<Boolean> delete(@PathVariable Long id) {
+        return Result.ok(roleService.delete(id));
+    }
+
+
+    /**
+     * 根据id查询权限
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping("/authority/{id:\\d+}")
+    public Result<RoleInfoVO> findById(@PathVariable Long id) {
+        return Result.ok(roleService.findById(id));
+    }
+
+
+    /**
+     * 分页查询
+     *
+     * @param pageVO 查询条件
+     * @return 用户信息
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
+    @GetMapping("/page")
+    public Result<IPage<RoleGetVO>> page(PageVO pageVO) {
+        return Result.ok(roleService.findPage(pageVO));
+    }
 
 
 }

@@ -83,7 +83,10 @@ public class GateWayFilter implements GlobalFilter {
             if (userLoginVO.getAdmin().equals(BooleanEnum.NO)) {
                 //校验是否有对应的接口权限
                 List<String> urls = getUrls(userLoginVO.getId());
-                if (CollUtil.isEmpty(urls) || !urls.contains(path)) {
+                if (CollUtil.isEmpty(urls)) {
+                    return returnMsg(exchange, ResultEnum.INVALID_TOKEN);
+                }
+                if (!urls.contains(path)) {
                     return returnMsg(exchange, ResultEnum.ACCESS_DENIED);
                 }
             }

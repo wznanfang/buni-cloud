@@ -20,7 +20,7 @@ import com.buni.usercommon.dto.AuthDTO;
 import com.buni.usercommon.entity.Authority;
 import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.BooleanEnum;
-import com.buni.usercommon.enums.UserErrorEnum;
+import com.buni.usercommon.enums.ErrorEnum;
 import com.buni.usercommon.vo.login.LoginVO;
 import com.buni.usercommon.vo.login.TokenVO;
 import com.buni.usercommon.vo.login.UserLoginVO;
@@ -67,13 +67,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserLoginVO login(LoginVO loginVO) {
         User user = findByUsername(loginVO.getUsername());
         if (ObjUtil.isEmpty(user) || !SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
-            throw new CustomException(UserErrorEnum.USER_PASSWORD_ERROR.getCode(), UserErrorEnum.USER_PASSWORD_ERROR.getMessage());
+            throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
         }
         if (user.getEnable().equals(BooleanEnum.NO)) {
-            throw new CustomException(UserErrorEnum.USER_FORBIDDEN.getCode(), UserErrorEnum.USER_FORBIDDEN.getMessage());
+            throw new CustomException(ErrorEnum.USER_FORBIDDEN.getCode(), ErrorEnum.USER_FORBIDDEN.getMessage());
         }
         if (user.getDelete().equals(BooleanEnum.YES)) {
-            throw new CustomException(UserErrorEnum.USER_NOT_EXISTS.getCode(), UserErrorEnum.USER_NOT_EXISTS.getMessage());
+            throw new CustomException(ErrorEnum.USER_NOT_EXISTS.getCode(), ErrorEnum.USER_NOT_EXISTS.getMessage());
         }
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(user, userLoginVO);
@@ -126,12 +126,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean save(AddVO addVO) {
         if (!Validator.isMobile(addVO.getTel())) {
-            throw new CustomException(UserErrorEnum.PHONE_ERROR.getCode(), UserErrorEnum.PHONE_ERROR.getMessage());
+            throw new CustomException(ErrorEnum.PHONE_ERROR.getCode(), ErrorEnum.PHONE_ERROR.getMessage());
         }
         long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getDelete, BooleanEnum.NO).eq(User::getUsername, addVO.getUsername())
                 .or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
         if (count > 0) {
-            throw new CustomException(UserErrorEnum.USER_EXISTS.getCode(), UserErrorEnum.USER_EXISTS.getMessage());
+            throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
         User user = new User();
         BeanUtils.copyProperties(addVO, user);
@@ -143,7 +143,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private User getUser(Long id) {
         User user = super.getById(id);
         if (ObjUtil.isEmpty(user)) {
-            throw new CustomException(UserErrorEnum.USER_NOT_EXISTS.getCode(), UserErrorEnum.USER_NOT_EXISTS.getMessage());
+            throw new CustomException(ErrorEnum.USER_NOT_EXISTS.getCode(), ErrorEnum.USER_NOT_EXISTS.getMessage());
         }
         return user;
     }

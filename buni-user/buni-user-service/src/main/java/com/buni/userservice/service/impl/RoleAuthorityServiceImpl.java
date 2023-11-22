@@ -36,6 +36,11 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     @Override
     public List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds) {
         List<RoleAuthority> roleAuthorityList = super.list(Wrappers.<RoleAuthority>lambdaQuery().in(RoleAuthority::getRoleId, roleIds));
+        return getRoleAuthorityDTOS(roleAuthorityList);
+    }
+
+
+    private static List<RoleAuthorityDTO> getRoleAuthorityDTOS(List<RoleAuthority> roleAuthorityList) {
         List<RoleAuthorityDTO> roleAuthorityDtoS = new ArrayList<>();
         if (CollUtil.isNotEmpty(roleAuthorityList)) {
             roleAuthorityList.forEach(roleAuthority -> {
@@ -45,6 +50,19 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
             });
         }
         return roleAuthorityDtoS;
+    }
+
+
+    /**
+     * 查询roleAuthority
+     *
+     * @param authorityId 权限id
+     * @return {@link List}<{@link RoleAuthorityDTO}>
+     */
+    @Override
+    public List<RoleAuthorityDTO> findByAuthorityId(Long authorityId) {
+        List<RoleAuthority> roleAuthorityList = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getAuthorityId, authorityId));
+        return getRoleAuthorityDTOS(roleAuthorityList);
     }
 
 

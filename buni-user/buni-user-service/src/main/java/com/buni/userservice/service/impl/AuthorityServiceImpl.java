@@ -12,11 +12,14 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.buniframework.config.exception.CustomException;
 import com.buni.buniframework.config.redis.RedisService;
 import com.buni.usercommon.entity.Authority;
-import com.buni.usercommon.enums.UserErrorEnum;
+import com.buni.usercommon.enums.ErrorEnum;
 import com.buni.usercommon.vo.role.AuthorityDTO;
+import com.buni.usercommon.vo.role.RoleAuthorityDTO;
+import com.buni.usercommon.vo.role.UserRoleDTO;
 import com.buni.userservice.mapper.AuthorityMapper;
 import com.buni.userservice.service.AuthorityService;
-import com.buni.userservice.service.RoleService;
+import com.buni.userservice.service.RoleAuthorityService;
+import com.buni.userservice.service.UserRoleService;
 import com.buni.userservice.vo.authority.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +40,8 @@ import java.util.List;
 public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority> implements AuthorityService {
 
     private RedisService redisService;
-    private RoleService roleService;
+    private RoleAuthorityService roleAuthorityService;
+    private UserRoleService userRoleService;
 
 
     /**
@@ -50,7 +54,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     public boolean save(AddVO addVO) {
         Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().eq(Authority::getCode, addVO.getCode()).or().eq(Authority::getUrl, addVO.getUrl()));
         if (ObjUtil.isNotEmpty(authority)) {
-            throw new CustomException(UserErrorEnum.AUTHORITY_EXISTS.getCode(), UserErrorEnum.AUTHORITY_EXISTS.getMessage());
+            throw new CustomException(ErrorEnum.AUTHORITY_EXISTS.getCode(), ErrorEnum.AUTHORITY_EXISTS.getMessage());
         }
         Authority addAuthority = new Authority();
         BeanUtils.copyProperties(addVO, addAuthority);
@@ -70,15 +74,29 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
         Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().ne(Authority::getId, updateVO.getId()).eq(Authority::getCode, updateVO.getCode())
                 .or().eq(Authority::getUrl, updateVO.getUrl()));
         if (ObjUtil.isNotEmpty(authority)) {
-            throw new CustomException(UserErrorEnum.AUTHORITY_EXISTS.getCode(), UserErrorEnum.AUTHORITY_EXISTS.getMessage());
+            throw new CustomException(ErrorEnum.AUTHORITY_EXISTS.getCode(), ErrorEnum.AUTHORITY_EXISTS.getMessage());
         }
         Authority updateAuthority = new Authority();
         BeanUtils.copyProperties(updateVO, updateAuthority);
         super.updateById(updateAuthority);
-        // todo 更新角色权限表，剔除拥有该权限的用户缓存
-
+        // 更新角色权限表，剔除拥有该权限的用户缓存
+        updateAuthority(updateVO.getId());
         redisService.deleteKey(Authority.REDIS_KEY + updateVO.getId());
         return true;
+    }
+
+
+    private void updateAuthority(Long id) {
+        List<RoleAuthorityDTO> roleAuthorityDtoS = roleAuthorityService.findByAuthorityId(id);
+        if (CollUtil.isNotEmpty(roleAuthorityDtoS)) {
+            List<Long> roleIds = roleAuthorityDtoS.stream().map(RoleAuthorityDTO::getRoleId).distinct().toList();
+            List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(roleIds);
+            List<String> keys = new ArrayList<>();
+            if (CollUtil.isNotEmpty(userRoleDtoS)) {
+                userRoleDtoS.forEach(userRole -> keys.add(Authority.REDIS_KEY + userRole.getUserId()));
+            }
+            redisService.delAllByKeys(keys);
+        }
     }
 
 
@@ -92,8 +110,8 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     public boolean delete(Long id) {
         Authority authority = getAuthority(id);
         super.removeById(authority);
-        // todo 更新角色权限表，剔除拥有该权限的用户缓存
-
+        // 更新角色权限表，剔除拥有该权限的用户缓存
+        updateAuthority(id);
         redisService.deleteKey(Authority.REDIS_KEY + id);
         return true;
     }
@@ -102,7 +120,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     private Authority getAuthority(Long id) {
         Authority authority = super.getById(id);
         if (ObjUtil.isEmpty(authority)) {
-            throw new CustomException(UserErrorEnum.AUTHORITY_NOT_EXISTS.getCode(), UserErrorEnum.AUTHORITY_NOT_EXISTS.getMessage());
+            throw new CustomException(ErrorEnum.AUTHORITY_NOT_EXISTS.getCode(), ErrorEnum.AUTHORITY_NOT_EXISTS.getMessage());
         }
         return authority;
     }
@@ -138,9 +156,9 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
         IPage<AuthorityGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
         List<AuthorityGetVO> list = new ArrayList<>();
         if (CollUtil.isNotEmpty(infoPage.getRecords())) {
-            infoPage.getRecords().forEach(user -> {
+            infoPage.getRecords().forEach(authority -> {
                 AuthorityGetVO getVO = new AuthorityGetVO();
-                BeanUtils.copyProperties(user, getVO);
+                BeanUtils.copyProperties(authority, getVO);
                 list.add(getVO);
             });
         }

@@ -36,6 +36,11 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Override
     public List<UserRoleDTO> findByUserId(Long userId) {
         List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
+        return getUserRoleDtoS(list);
+    }
+
+
+    private static List<UserRoleDTO> getUserRoleDtoS(List<UserRole> list) {
         List<UserRoleDTO> userRoleDtoS = new ArrayList<>();
         if (CollUtil.isNotEmpty(list)) {
             list.forEach(userRole -> {
@@ -45,6 +50,19 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
             });
         }
         return userRoleDtoS;
+    }
+
+
+    /**
+     * 查询用户角色列表
+     *
+     * @param roleIds 角色id集合
+     * @return {@link List}<{@link UserRoleDTO}>
+     */
+    @Override
+    public List<UserRoleDTO> findByRoleIds(List<Long> roleIds) {
+        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().in(UserRole::getRoleId, roleIds));
+        return getUserRoleDtoS(list);
     }
 
 

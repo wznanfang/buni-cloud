@@ -23,6 +23,13 @@ public interface RoleAuthorityService extends IService<RoleAuthority> {
      */
     List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds);
 
+    /**
+     * 查询roleAuthority
+     *
+     * @param authorityId 权限id
+     * @return {@link List}<{@link RoleAuthorityDTO}>
+     */
+    List<RoleAuthorityDTO> findByAuthorityId(Long authorityId);
 
     /**
      * 根据角色id删除角色权限
@@ -30,6 +37,8 @@ public interface RoleAuthorityService extends IService<RoleAuthority> {
      * @param roleIds 角色id集合
      */
     void deleteByRoleIds(List<Long> roleIds);
+
+
 
 
 }

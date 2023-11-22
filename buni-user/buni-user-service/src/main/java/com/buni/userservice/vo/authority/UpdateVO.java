@@ -29,12 +29,6 @@ public class UpdateVO implements Serializable {
 	private String name;
 
 	/**
-	 * 父级id
-	 */
-	@NotNull(message = "父级id不能为空")
-	private Long parentId;
-
-	/**
 	 * 0：模块，1：菜单，2：按钮
 	 */
 	@NotNull(message = "权限类型不能为空")
