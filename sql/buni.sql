@@ -11,7 +11,7 @@
  Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 20/10/2023 16:25:00
+ Date: 28/12/2023 11:06:24
 */
 
 SET NAMES utf8mb4;
@@ -38,6 +38,7 @@ CREATE TABLE `auth`  (
 INSERT INTO `auth` VALUES (1706122677032734721, '2023-09-25 09:45:19', '2023-09-25 15:47:11', 1704017394743595009, 'PostmanRuntime/7.33.0', 'tQb05z4RUBVwUnOfCnHO22v1UTuVf0Aa', 1);
 INSERT INTO `auth` VALUES (1706233227360305153, '2023-09-25 17:04:36', '2023-09-25 17:04:36', 1706232888619925506, 'PostmanRuntime/7.33.0', 'AIJwxo2GEBgxzwpSl1Xke8Cpsc9BgzKc', 1);
 INSERT INTO `auth` VALUES (1706233990895599617, '2023-09-25 17:07:38', '2023-09-28 16:27:55', 1, 'PostmanRuntime/7.33.0', 'HhNIfTrsdXo4ixGUHmhxtqREP0FYSueb', 1);
+INSERT INTO `auth` VALUES (1740200067123892225, '2023-12-28 10:36:42', '2023-12-28 11:03:51', 1, 'Apifox/1.0.0 (https://apifox.com)', '6uw3gZ5sAE7V48lmqLELKm63eJ4sYs8D', 1);
 
 -- ----------------------------
 -- Table structure for authority
@@ -54,12 +55,13 @@ CREATE TABLE `authority`  (
   `sort` tinyint(4) NULL DEFAULT NULL COMMENT '序号',
   `url` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '接口url',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '角色' ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '权限' ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of authority
 -- ----------------------------
-INSERT INTO `authority` VALUES (1, '2023-09-25 14:23:04', '2023-09-25 14:23:06', '根据id查询用户信息', 0, 2, 'user-details', 1, '/v1/findById/{id}/GET,/v1/page/GET');
+INSERT INTO `authority` VALUES (1, '2023-12-28 10:49:30', '2023-12-28 10:49:33', '用户退出', 0, 2, 'login', 1, '/v1/loginOut/POST');
+INSERT INTO `authority` VALUES (2, '2023-09-25 14:23:04', '2023-09-25 14:23:06', '根据id查询用户信息', 0, 2, 'user-details', 1, '/v1/findById/{id}/GET,/v1/user/GET');
 
 -- ----------------------------
 -- Table structure for role
@@ -95,6 +97,7 @@ CREATE TABLE `role_authority`  (
 -- Records of role_authority
 -- ----------------------------
 INSERT INTO `role_authority` VALUES (1, '2023-09-25 14:24:10', '2023-09-25 14:24:12', 1, 1);
+INSERT INTO `role_authority` VALUES (2, '2023-12-28 10:49:59', '2023-12-28 10:50:01', 1, 2);
 
 -- ----------------------------
 -- Table structure for sys_log
@@ -119,6 +122,23 @@ CREATE TABLE `sys_log`  (
 -- ----------------------------
 INSERT INTO `sys_log` VALUES (1707311156597075970, '2023-09-28 16:27:55', '2023-09-28 16:27:55', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '127.0.0.1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
 INSERT INTO `sys_log` VALUES (1707311186900922369, '2023-09-28 16:28:02', '2023-09-28 16:28:02', '不逆', 'http://192.168.7.110:10001/v1/findById/1', '/v1/findById/1', 'GET', '127.0.0.1', '1', '【用户模块】-查询用户详情');
+INSERT INTO `sys_log` VALUES (1740200067123892226, '2023-12-28 10:36:42', '2023-12-28 10:36:42', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740200211890180097, '2023-12-28 10:37:17', '2023-12-28 10:37:17', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740200232823951362, '2023-12-28 10:37:22', '2023-12-28 10:37:22', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740200453549199361, '2023-12-28 10:38:14', '2023-12-28 10:38:14', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740201143268937730, '2023-12-28 10:40:59', '2023-12-28 10:40:59', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740201420000727042, '2023-12-28 10:42:05', '2023-12-28 10:42:05', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740203693716267009, '2023-12-28 10:51:07', '2023-12-28 10:51:07', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740204186526015489, '2023-12-28 10:53:04', '2023-12-28 10:53:04', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740204217945546753, '2023-12-28 10:53:12', '2023-12-28 10:53:12', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740204635635310594, '2023-12-28 10:54:51', '2023-12-28 10:54:51', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740205189618982913, '2023-12-28 10:57:03', '2023-12-28 10:57:03', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740205533988118530, '2023-12-28 10:58:25', '2023-12-28 10:58:25', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740205688820850690, '2023-12-28 10:59:02', '2023-12-28 10:59:02', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740206001602682881, '2023-12-28 11:00:17', '2023-12-28 11:00:17', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740206149833580546, '2023-12-28 11:00:52', '2023-12-28 11:00:52', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740206901582864385, '2023-12-28 11:03:51', '2023-12-28 11:03:51', '', 'http://192.168.7.110:10001/v1/login', '/v1/login', 'POST', '0:0:0:0:0:0:0:1', '{\"username\":\"不逆\",\"password\":\"123456\"}', '用户登录');
+INSERT INTO `sys_log` VALUES (1740206981069119489, '2023-12-28 11:04:10', '2023-12-28 11:04:10', '不逆', 'http://192.168.7.110:10001/v1/loginOut', '/v1/loginOut', 'POST', '0:0:0:0:0:0:0:1', NULL, '【用户模块】-退出登录');
 
 -- ----------------------------
 -- Table structure for user
@@ -136,7 +156,7 @@ CREATE TABLE `user`  (
   `tel` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '电话',
   `admin` tinyint(4) NULL DEFAULT 0 COMMENT '是否是超级管理员(0:否，1：是)',
   `enable` tinyint(4) NULL DEFAULT 1 COMMENT '是否启用(0:否，1：是)',
-  `delete` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除(0:否，1：是)',
+  `deleted` tinyint(4) NULL DEFAULT 0 COMMENT '是否删除(0:否，1：是)',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '用户' ROW_FORMAT = Dynamic;
 
