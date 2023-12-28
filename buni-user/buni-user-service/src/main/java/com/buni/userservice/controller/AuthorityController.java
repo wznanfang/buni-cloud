@@ -81,7 +81,7 @@ public class AuthorityController {
      * @return 用户信息
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
-    @GetMapping("/page")
+    @GetMapping("/authority")
     public Result<IPage<AuthorityGetVO>> page(PageVO pageVO) {
         return Result.ok(authorityService.findPage(pageVO));
     }

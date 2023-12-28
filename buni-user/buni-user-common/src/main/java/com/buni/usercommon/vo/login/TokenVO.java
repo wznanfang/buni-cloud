@@ -23,7 +23,7 @@ public class TokenVO {
     /**
      * token前缀
      */
-    private String prefix = "bearer";
+    private String prefix;
 
 
 }

@@ -1,6 +1,5 @@
 package com.buni.userservice.controller;
 
-
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.buniframework.util.Result;
 import com.buni.buniuserapi.log.SysLogRecord;
@@ -31,7 +30,7 @@ public class RoleController {
      * @return true/false
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
-    @PostMapping("/authority")
+    @PostMapping("/role")
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(roleService.save(addVO));
     }
@@ -44,7 +43,7 @@ public class RoleController {
      * @return true/false
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
-    @PutMapping("/authority")
+    @PutMapping("/role")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(roleService.update(updateVO));
     }
@@ -57,7 +56,7 @@ public class RoleController {
      * @return true/false
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除权限")
-    @DeleteMapping("/authority/{id:\\d+}")
+    @DeleteMapping("/role/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(roleService.delete(id));
     }
@@ -69,7 +68,7 @@ public class RoleController {
      * @param id
      * @return
      */
-    @GetMapping("/authority/{id:\\d+}")
+    @GetMapping("/role/{id:\\d+}")
     public Result<RoleInfoVO> findById(@PathVariable Long id) {
         return Result.ok(roleService.findById(id));
     }
@@ -82,7 +81,7 @@ public class RoleController {
      * @return 用户信息
      */
     @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
-    @GetMapping("/page")
+    @GetMapping("/role")
     public Result<IPage<RoleGetVO>> page(PageVO pageVO) {
         return Result.ok(roleService.findPage(pageVO));
     }

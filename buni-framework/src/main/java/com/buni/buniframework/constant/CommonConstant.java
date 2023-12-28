@@ -37,9 +37,14 @@ public class CommonConstant {
     public static final String COMMA = ",";
 
     /**
-     * 分隔符
+     * 斜杠
      */
     public static final String SLASH = File.separator;
+
+    /**
+     * 正斜杠
+     */
+    public static final String FORWARD_SLASH = "/";
 
     /**
      * token
@@ -75,6 +80,13 @@ public class CommonConstant {
      * 客户端标识
      */
     public static final String USER_AGENT = "User-Agent";
+
+
+    /**
+     * 普通常量
+     */
+    public static final Integer ZERO = 0;
+    public static final Integer ONE = 1;
 
     /**
      * IP地址相关常量

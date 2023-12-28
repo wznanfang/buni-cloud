@@ -19,11 +19,11 @@ public class GlobalExceptionHandler {
     /**
      * 全局自定义异常处理
      *
-     * @param exception
-     * @return
+     * @param exception 错误信息
+     * @return Result
      */
     @ExceptionHandler(value = {CustomException.class})
-    public Result myExceptionHandler(CustomException exception) {
+    public Result<CustomException> myExceptionHandler(CustomException exception) {
         log.error("----------错误信息:", exception);
         return Result.error(exception);
     }

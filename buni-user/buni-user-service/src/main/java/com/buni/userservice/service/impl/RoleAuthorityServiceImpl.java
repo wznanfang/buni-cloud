@@ -36,11 +36,11 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     @Override
     public List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds) {
         List<RoleAuthority> roleAuthorityList = super.list(Wrappers.<RoleAuthority>lambdaQuery().in(RoleAuthority::getRoleId, roleIds));
-        return getRoleAuthorityDTOS(roleAuthorityList);
+        return getRoleAuthorityDtoS(roleAuthorityList);
     }
 
 
-    private static List<RoleAuthorityDTO> getRoleAuthorityDTOS(List<RoleAuthority> roleAuthorityList) {
+    private static List<RoleAuthorityDTO> getRoleAuthorityDtoS(List<RoleAuthority> roleAuthorityList) {
         List<RoleAuthorityDTO> roleAuthorityDtoS = new ArrayList<>();
         if (CollUtil.isNotEmpty(roleAuthorityList)) {
             roleAuthorityList.forEach(roleAuthority -> {
@@ -61,8 +61,8 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      */
     @Override
     public List<RoleAuthorityDTO> findByAuthorityId(Long authorityId) {
-        List<RoleAuthority> roleAuthorityList = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getAuthorityId, authorityId));
-        return getRoleAuthorityDTOS(roleAuthorityList);
+        List<RoleAuthority> roleAuthList = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getAuthorityId, authorityId));
+        return getRoleAuthorityDtoS(roleAuthList);
     }
 
 

@@ -140,7 +140,7 @@ public class GateWayFilter implements GlobalFilter {
                         .flatMap(url -> Arrays.stream(url.split(CommonConstant.COMMA))).map(String::trim).toArray(String[]::new);
                 urlList = List.of(urls);
             } catch (Exception e) {
-                e.printStackTrace();
+                log.error("接口权限获取失败{}", e.getMessage());
             }
         }
         return urlList;
@@ -155,8 +155,8 @@ public class GateWayFilter implements GlobalFilter {
     private String getPath(ServerHttpRequest request) {
         String requestPath = request.getURI().getPath();
         String method = String.valueOf(request.getMethod());
-        String pathSuffix = ReUtil.get("/(\\d+)$", requestPath, 1);
-        String path = requestPath + CommonConstant.SLASH + method;
+        String pathSuffix = ReUtil.get("/(\\d+)$", requestPath, CommonConstant.ONE);
+        String path = requestPath + CommonConstant.FORWARD_SLASH + method;
         if (ObjUtil.isNotEmpty(pathSuffix)) {
             path = ReUtil.replaceFirst(Pattern.compile("/(\\d+)$"), requestPath, "/{}/" + method);
         }
@@ -174,12 +174,12 @@ public class GateWayFilter implements GlobalFilter {
     public Mono<Void> returnMsg(ServerWebExchange exchange, ResultEnum resultEnum) {
         ServerHttpResponse response = exchange.getResponse();
         Result<Object> result = Result.error(resultEnum);
-        byte[] data = new byte[0];
+        byte[] data = new byte[CommonConstant.ZERO];
         try {
             ObjectMapper objectMapper = new ObjectMapper();
             data = objectMapper.writeValueAsBytes(result);
         } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            log.error("json转换失败{}", e.getMessage());
         }
         DataBuffer buffer = response.bufferFactory().wrap(data);
         response.setStatusCode(HttpStatusCode.valueOf(resultEnum.getCode()));

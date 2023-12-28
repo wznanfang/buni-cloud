@@ -70,6 +70,6 @@ public class UserInfoVO {
     /**
      * 是否删除(0:否，1：是)
      */
-    private BooleanEnum isDelete;
+    private BooleanEnum deleted;
 
 }

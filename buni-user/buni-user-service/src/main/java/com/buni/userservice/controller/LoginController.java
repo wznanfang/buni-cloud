@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/v1")
-public class AuthController {
+public class LoginController {
 
     @Resource
     private UserService userService;
@@ -31,7 +31,7 @@ public class AuthController {
      * @param loginVO 用户登录信息
      * @return 令牌
      */
-    @SysLogRecord(description = "用户登录")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "用户登录")
     @PostMapping("/login")
     public Result<UserLoginVO> login(@RequestBody @Validated LoginVO loginVO) {
         return Result.ok(userService.login(loginVO));

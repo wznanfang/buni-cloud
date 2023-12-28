@@ -5,7 +5,6 @@ import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SmUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -30,6 +29,7 @@ import com.buni.usercommon.vo.role.UserRoleDTO;
 import com.buni.userservice.constant.UserConstant;
 import com.buni.userservice.mapper.UserMapper;
 import com.buni.userservice.service.*;
+import com.buni.userservice.util.TokenUtil;
 import com.buni.userservice.vo.user.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +57,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RoleAuthorityService roleAuthorityService;
     private AuthorityService authorityService;
 
+
     /**
      * 登录
      *
@@ -66,40 +67,38 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserLoginVO login(LoginVO loginVO) {
         User user = findByUsername(loginVO.getUsername());
-        if (ObjUtil.isEmpty(user) || !SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
-            throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
+        if (ObjUtil.isEmpty(user) || user.getDeleted().equals(BooleanEnum.YES)) {
+            throw new CustomException(ErrorEnum.USER_NOT_EXISTS.getCode(), ErrorEnum.USER_NOT_EXISTS.getMessage());
         }
         if (user.getEnable().equals(BooleanEnum.NO)) {
             throw new CustomException(ErrorEnum.USER_FORBIDDEN.getCode(), ErrorEnum.USER_FORBIDDEN.getMessage());
         }
-        if (user.getDelete().equals(BooleanEnum.YES)) {
-            throw new CustomException(ErrorEnum.USER_NOT_EXISTS.getCode(), ErrorEnum.USER_NOT_EXISTS.getMessage());
+        if (!SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
+            throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
         }
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(user, userLoginVO);
-        String token = RandomUtil.randomString(32);
-        TokenVO tokenVO = new TokenVO();
-        tokenVO.setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
-        tokenVO.setToken(token);
+        // 获取token
+        TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);
-        redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + token, userLoginVO);
+        redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
         // 查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
         List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
         if (CollUtil.isNotEmpty(userRoles)) {
             List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
-            List<RoleAuthorityDTO> roleAuthorityList = roleAuthorityService.findByRoleIds(roleIds);
-            List<Long> authorityIds = roleAuthorityList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
+            List<RoleAuthorityDTO> roleAuthList = roleAuthorityService.findByRoleIds(roleIds);
+            List<Long> authorityIds = roleAuthList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
             List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
             redisService.setOneHour(Authority.REDIS_KEY + user.getId(), authorityList);
         }
         // 记录到用户鉴权信息
-        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(token).build();
+        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
         authService.saveOrUpdate(authDTO);
         return userLoginVO;
     }
 
     public User findByUsername(String username) {
-        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDelete, BooleanEnum.NO));
+        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDeleted, BooleanEnum.NO));
     }
 
 
@@ -128,8 +127,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!Validator.isMobile(addVO.getTel())) {
             throw new CustomException(ErrorEnum.PHONE_ERROR.getCode(), ErrorEnum.PHONE_ERROR.getMessage());
         }
-        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getDelete, BooleanEnum.NO).eq(User::getUsername, addVO.getUsername())
-                .or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
+        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
         if (count > 0) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
@@ -195,7 +193,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         getUser(id);
         User deleteUser = new User();
         deleteUser.setId(id);
-        deleteUser.setDelete(BooleanEnum.YES);
+        deleteUser.setDeleted(BooleanEnum.YES);
         super.updateById(deleteUser);
         List<Long> roleIds = userRoleService.deleteByUserId(id);
         roleAuthorityService.deleteByRoleIds(roleIds);
@@ -234,7 +232,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public IPage<UserGetVO> findPage(PageVO pageVO) {
         IPage<User> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(User::getDelete, BooleanEnum.NO);
+        queryWrapper.lambda().eq(User::getDeleted, BooleanEnum.NO);
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), User::getUsername, pageVO.getUsername());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
         IPage<User> infoPage = super.page(ipage, queryWrapper);
