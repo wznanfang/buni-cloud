@@ -41,7 +41,7 @@ public class UserController {
      * @param updateVO 用户信息
      * @return true/false
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "编辑用户基本信息")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "编辑用户")
     @PutMapping("/update")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(userService.update(updateVO));
@@ -80,7 +80,6 @@ public class UserController {
      * @param id 用户id
      * @return 用户信息
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "查询用户详情")
     @GetMapping("/findById/{id}")
     public Result<UserInfoVO> findById(@PathVariable Long id) {
         return Result.ok(userService.findById(id));
@@ -93,7 +92,6 @@ public class UserController {
      * @param pageVO 查询条件
      * @return 用户信息
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
     @GetMapping("/user")
     public Result<IPage<UserGetVO>> page(PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));

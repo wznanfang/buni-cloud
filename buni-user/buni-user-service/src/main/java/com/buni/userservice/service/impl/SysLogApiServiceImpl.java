@@ -21,8 +21,14 @@ public class SysLogApiServiceImpl implements SysLogApiService {
     private SysLogService sysLogService;
 
 
+    /**
+     * 保存日志
+     * @param sysLog 日志实体
+     */
     @Override
     public void save(SysLog sysLog) {
         sysLogService.save(sysLog);
     }
+
+
 }

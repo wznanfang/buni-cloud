@@ -29,7 +29,7 @@ public class RoleController {
      * @param addVO 权限信息
      * @return true/false
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "新增角色")
     @PostMapping("/role")
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(roleService.save(addVO));
@@ -42,7 +42,7 @@ public class RoleController {
      * @param updateVO 权限信息
      * @return true/false
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "修改角色")
     @PutMapping("/role")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(roleService.update(updateVO));
@@ -55,7 +55,7 @@ public class RoleController {
      * @param id 权限信息id
      * @return true/false
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "删除权限")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "删除角色")
     @DeleteMapping("/role/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(roleService.delete(id));
@@ -80,7 +80,6 @@ public class RoleController {
      * @param pageVO 查询条件
      * @return 用户信息
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "分页查询")
     @GetMapping("/role")
     public Result<IPage<RoleGetVO>> page(PageVO pageVO) {
         return Result.ok(roleService.findPage(pageVO));
