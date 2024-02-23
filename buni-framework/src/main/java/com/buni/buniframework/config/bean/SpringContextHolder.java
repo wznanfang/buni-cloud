@@ -1,6 +1,6 @@
 package com.buni.buniframework.config.bean;
 
-import org.springframework.beans.BeansException;
+import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
@@ -15,7 +15,12 @@ public class SpringContextHolder implements ApplicationContextAware {
 
     /**
      * 上下文对象实例
+     * -- GETTER --
+     *  获得spring上下文
+     *
+     * @return {@link ApplicationContext}
      */
+    @Getter
     private static ApplicationContext applicationContext;
 
 
@@ -27,15 +32,6 @@ public class SpringContextHolder implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         SpringContextHolder.applicationContext = applicationContext;
-    }
-
-    /**
-     * 获得spring上下文
-     *
-     * @return {@link ApplicationContext}
-     */
-    public static ApplicationContext getApplicationContext() {
-        return applicationContext;
     }
 
     /**
