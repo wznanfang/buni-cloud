@@ -54,7 +54,7 @@ public class UserController {
      * @param enableVO 启用/禁用信息
      * @return true/false
      */
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "启用/禁用用户")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "启用-禁用用户")
     @PutMapping("/forbidden")
     public Result<Boolean> forbidden(@RequestBody @Validated EnableVO enableVO) {
         return Result.ok(userService.enable(enableVO));
