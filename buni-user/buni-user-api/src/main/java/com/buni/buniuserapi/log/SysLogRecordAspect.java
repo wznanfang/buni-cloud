@@ -1,8 +1,6 @@
 package com.buni.buniuserapi.log;
 
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
-import cn.hutool.json.JSONUtil;
 import com.buni.buniframework.util.HeaderUtil;
 import com.buni.buniuserapi.service.SysLogApiService;
 import com.buni.usercommon.entity.SysLog;
@@ -18,7 +16,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
 /**
  * @author zp.wei
