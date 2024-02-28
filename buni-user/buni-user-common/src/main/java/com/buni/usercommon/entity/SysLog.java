@@ -86,5 +86,10 @@ public class SysLog implements Serializable {
      */
     private String description;
 
+    /**
+     * 耗时
+     */
+    private Long elapsedTime;
+
 
 }

@@ -1,5 +1,5 @@
 spring:
   application:
-    name: buni-user # 服务名称
+    name: buni-user
   profiles:
     active: dev

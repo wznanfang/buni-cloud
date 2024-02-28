@@ -5,8 +5,6 @@ spring:
   main:
     web-application-type: reactive
     allow-bean-definition-overriding: true
-  application:
-    name: buni-gateway # 服务名称
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/buni?useSSL=false&useUnicode=true&characterEncoding=UTF8&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
@@ -25,23 +23,21 @@ spring:
         namespace: buni
 
     gateway:
-      routes: # 网关路由配置
-        - id: buni-user  # 路由id，自定义，只要唯一即可
-          uri: lb://buni-user  # 路由的目标地址 lb是负载均衡，后面跟服务名称
-          predicates: Path=/user/** # 路径匹配
+      routes:
+        - id: buni-user
+          uri: lb://buni-user
+          predicates: Path=/user/**
           filters:
             - StripPrefix=1
-      globalcors: # 全局的跨域配置
-        add-to-simple-url-handler-mapping: true # 解决options请求被拦截问题
+      globalcors:
+        add-to-simple-url-handler-mapping: true
         corsConfigurations:
           '[/**]':
-            addAllowedOriginPattern: "*" # 允许跨域的源(网站域名/ip)，设置*为全部
-            allowedMethods: "*" # 允许的跨域的请求方式
-            allowedHeaders: "*"  # 允许在请求中携带的头信息
-            allowCredentials: true # 允许在请求中携带cookie
-            maxAge: 360000    # 本次跨域检测的有效期(单位毫秒),有效期内，跨域请求不会一直发option请求去增大服务器压力
-            default-filters:
-              - DedupeResponseHeader=Access-Control-Allow-Origin, RETAIN_UNIQUE
+            allowedOriginPatterns: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+            allowCredentials: true
+            maxAge: 360000
 
 buni:
   public-url:
