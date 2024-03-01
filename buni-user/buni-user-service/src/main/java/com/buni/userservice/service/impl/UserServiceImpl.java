@@ -82,7 +82,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
-        // 查询用户的角色权限并存入redis，提供给网关判断当前登录用户是否有对应的接口权限
+        // 查询用户的角色权限
         List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
         if (CollUtil.isNotEmpty(userRoles)) {
             List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
