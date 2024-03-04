@@ -13,23 +13,14 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.buniframework.config.exception.CustomException;
 import com.buni.buniframework.config.redis.RedisService;
-import com.buni.buniframework.constant.CommonConstant;
-import com.buni.buniframework.util.HeaderUtil;
-import com.buni.usercommon.dto.AuthDTO;
-import com.buni.usercommon.entity.Authority;
 import com.buni.usercommon.entity.User;
 import com.buni.usercommon.enums.BooleanEnum;
 import com.buni.usercommon.enums.ErrorEnum;
-import com.buni.usercommon.vo.login.LoginVO;
-import com.buni.usercommon.vo.login.TokenVO;
-import com.buni.usercommon.vo.login.UserLoginVO;
-import com.buni.usercommon.vo.role.AuthorityDTO;
-import com.buni.usercommon.vo.role.RoleAuthorityDTO;
-import com.buni.usercommon.vo.role.UserRoleDTO;
 import com.buni.userservice.constant.UserConstant;
 import com.buni.userservice.mapper.UserMapper;
-import com.buni.userservice.service.*;
-import com.buni.userservice.util.TokenUtil;
+import com.buni.userservice.service.RoleAuthorityService;
+import com.buni.userservice.service.UserRoleService;
+import com.buni.userservice.service.UserService;
 import com.buni.userservice.vo.user.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,68 +43,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     private UserConstant userConstant;
     private RedisService redisService;
-    private AuthService authService;
     private UserRoleService userRoleService;
     private RoleAuthorityService roleAuthorityService;
-    private AuthorityService authorityService;
-
-
-    /**
-     * 登录
-     *
-     * @param loginVO 登录信息
-     * @return {@link UserLoginVO}
-     */
-    @Override
-    public UserLoginVO login(LoginVO loginVO) {
-        User user = findByUsername(loginVO.getUsername());
-        if (ObjUtil.isEmpty(user) || user.getDeleted().equals(BooleanEnum.YES)) {
-            throw new CustomException(ErrorEnum.USER_NOT_EXISTS.getCode(), ErrorEnum.USER_NOT_EXISTS.getMessage());
-        }
-        if (user.getEnable().equals(BooleanEnum.NO)) {
-            throw new CustomException(ErrorEnum.USER_FORBIDDEN.getCode(), ErrorEnum.USER_FORBIDDEN.getMessage());
-        }
-        if (!SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
-            throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
-        }
-        UserLoginVO userLoginVO = new UserLoginVO();
-        BeanUtils.copyProperties(user, userLoginVO);
-        // 获取token
-        TokenVO tokenVO = TokenUtil.getToken();
-        userLoginVO.setTokenVO(tokenVO);
-        redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
-        // 查询用户的角色权限
-        List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
-        if (CollUtil.isNotEmpty(userRoles)) {
-            List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
-            List<RoleAuthorityDTO> roleAuthList = roleAuthorityService.findByRoleIds(roleIds);
-            List<Long> authorityIds = roleAuthList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
-            List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
-            redisService.setOneHour(Authority.REDIS_KEY + user.getId(), authorityList);
-        }
-        // 记录到用户鉴权信息
-        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
-        authService.saveOrUpdate(authDTO);
-        return userLoginVO;
-    }
-
-    public User findByUsername(String username) {
-        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDeleted, BooleanEnum.NO));
-    }
-
-
-    /**
-     * 退出登录
-     *
-     * @return true/false
-     */
-    @Override
-    public Boolean loginOut() {
-        String userId = HeaderUtil.getUserId();
-        redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
-        redisService.deleteKey(Authority.REDIS_KEY + userId);
-        return true;
-    }
 
 
     /**
@@ -247,6 +178,18 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         resultPage.setRecords(list);
         return resultPage;
+    }
+
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username
+     * @return
+     */
+    @Override
+    public User findByUsername(String username) {
+        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDeleted, BooleanEnum.NO));
     }
 
 

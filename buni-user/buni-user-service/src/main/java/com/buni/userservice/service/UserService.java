@@ -3,12 +3,7 @@ package com.buni.userservice.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.usercommon.entity.User;
-import com.buni.usercommon.vo.login.LoginVO;
-import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.userservice.vo.user.*;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Administrator
@@ -16,22 +11,6 @@ import org.springframework.web.bind.annotation.RequestBody;
  * @createDate 2023-09-19 10:52:51
  */
 public interface UserService extends IService<User> {
-
-
-    /**
-     * 登录
-     *
-     * @param loginVO 登录信息
-     * @return 用户信息
-     */
-    UserLoginVO login(LoginVO loginVO);
-
-    /**
-     * 退出登录
-     *
-     * @return true/false
-     */
-    Boolean loginOut();
 
     /**
      * 新增
@@ -80,6 +59,14 @@ public interface UserService extends IService<User> {
      * @return IPage<UserInfoVO>
      */
     IPage<UserGetVO> findPage(PageVO pageVO);
+
+    /**
+     * 根据用户名查询用户
+     *
+     * @param username
+     * @return
+     */
+    User findByUsername(String username);
 
 
 }
