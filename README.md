@@ -3,7 +3,7 @@
 > springCloud+nacos+openfeign+mybatis-plus+mysql+redis+hutool
 ## 框架模块描述
 1. buni-framework
-> 基础框架模块,提供项目所需底层依赖以及全局注解等相关工具类
+> 基础框架模块,提供项目所需底层依赖以及全局异常拦截器，线程池，分布式锁，限流，缓存等全局注解等相关工具类
 2. buni-gateway
 > 网关模块，权限校验等
 3. buni-user

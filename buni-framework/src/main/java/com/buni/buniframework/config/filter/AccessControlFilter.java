@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
+ * 全局过滤器
+ *
  * @author zp.wei
  * @date 2023/9/21 10:56
  */
