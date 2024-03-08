@@ -42,7 +42,6 @@ public class SysLogRecordAspect {
     public Object setLog(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         Object result = joinPoint.proceed();
-        long elapsedTime = System.currentTimeMillis() - startTime;
         // 将日志写入文件或者数据库
         try {
             HttpServletRequest request = HeaderUtil.getRequest();
@@ -57,7 +56,7 @@ public class SysLogRecordAspect {
             sysLog.setParameter(ObjUtil.isEmpty(joinPoint.getArgs()) ? null : objectMapper.writeValueAsString(joinPoint.getArgs()[0]));
             sysLog.setIp(HeaderUtil.getIp());
             sysLog.setDescription(sysLogRecord.description());
-            sysLog.setElapsedTime(elapsedTime);
+            sysLog.setElapsedTime(System.currentTimeMillis() - startTime);
             sysLogApiService.save(sysLog);
         } catch (Exception e) {
             log.error("日志记录错误：", e);
