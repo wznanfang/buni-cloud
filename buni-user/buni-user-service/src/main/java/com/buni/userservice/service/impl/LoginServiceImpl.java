@@ -68,18 +68,22 @@ public class LoginServiceImpl implements LoginService {
         userLoginVO.setTokenVO(tokenVO);
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
         // 查询用户的角色权限
-        List<UserRoleDTO> userRoles = userRoleService.findByUserId(user.getId());
+        getUserRole(user.getId());
+        // 记录到用户鉴权信息
+        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
+        authService.saveOrUpdate(authDTO);
+        return userLoginVO;
+    }
+
+    private void getUserRole(Long userId) {
+        List<UserRoleDTO> userRoles = userRoleService.findByUserId(userId);
         if (CollUtil.isNotEmpty(userRoles)) {
             List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
             List<RoleAuthorityDTO> roleAuthList = roleAuthorityService.findByRoleIds(roleIds);
             List<Long> authorityIds = roleAuthList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
             List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
-            redisService.setOneHour(Authority.REDIS_KEY + user.getId(), authorityList);
+            redisService.setOneHour(Authority.REDIS_KEY + userId, authorityList);
         }
-        // 记录到用户鉴权信息
-        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
-        authService.saveOrUpdate(authDTO);
-        return userLoginVO;
     }
 
 
