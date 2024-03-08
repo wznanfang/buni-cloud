@@ -39,7 +39,7 @@ public class SysLogRecordAspect {
 
 
     @Around("sysLogRecord()")
-    public Object logAndMeasureTime(ProceedingJoinPoint joinPoint) throws Throwable {
+    public Object setLog(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
         Object result = joinPoint.proceed();
         long elapsedTime = System.currentTimeMillis() - startTime;
