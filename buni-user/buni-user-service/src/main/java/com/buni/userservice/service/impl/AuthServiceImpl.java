@@ -41,15 +41,16 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
         // 判断该平台是否已经有对应的鉴权信息
         Auth auth = super.getOne(Wrappers.<Auth>lambdaQuery().eq(Auth::getUserId, authDTO.getUserId()).eq(Auth::getClientIdentity, authDTO.getClientIdentity()));
         Auth newAuth = new Auth();
+        if (ObjUtil.isEmpty(auth)) {
+            BeanUtils.copyProperties(authDTO, newAuth);
+            super.save(newAuth);
+        }
         if (ObjUtil.isNotEmpty(auth)) {
             newAuth.setId(auth.getId());
             newAuth.setToken(authDTO.getToken());
             super.updateById(newAuth);
             // 移除redis中的旧token
             redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + auth.getToken());
-        } else {
-            BeanUtils.copyProperties(authDTO, newAuth);
-            super.save(newAuth);
         }
     }
 
