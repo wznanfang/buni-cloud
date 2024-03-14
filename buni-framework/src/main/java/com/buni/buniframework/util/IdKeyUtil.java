@@ -15,7 +15,7 @@ import java.net.UnknownHostException;
  */
 public class IdKeyUtil {
 
-    // ==============================Fields===========================================
+
     /**
      * 开始时间截 (2015-01-01)
      */
