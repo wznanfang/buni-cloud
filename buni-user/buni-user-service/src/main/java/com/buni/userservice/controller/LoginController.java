@@ -5,7 +5,7 @@ import com.buni.buniuserapi.log.SysLogRecord;
 import com.buni.usercommon.vo.login.LoginVO;
 import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.userservice.constant.CommonConstant;
-import com.buni.userservice.service.UserService;
+import com.buni.userservice.service.LoginService;
 import jakarta.annotation.Resource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     @Resource
-    private UserService userService;
+    private LoginService loginService;
 
 
     /**
@@ -34,7 +34,7 @@ public class LoginController {
     @SysLogRecord(description = CommonConstant.USER_MODEL + "用户登录")
     @PostMapping("/login")
     public Result<UserLoginVO> login(@RequestBody @Validated LoginVO loginVO) {
-        return Result.ok(userService.login(loginVO));
+        return Result.ok(loginService.login(loginVO));
     }
 
 
@@ -46,7 +46,7 @@ public class LoginController {
     @SysLogRecord(description = CommonConstant.USER_MODEL + "退出登录")
     @PostMapping("/loginOut")
     public Result<Boolean> loginOut() {
-        return Result.ok(userService.loginOut());
+        return Result.ok(loginService.loginOut());
     }
 
 
