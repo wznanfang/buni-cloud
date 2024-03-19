@@ -56,7 +56,7 @@ public class GateWayFilter implements GlobalFilter {
 
     /**
      * @param exchange 请求上下文
-     * @param chain   过滤器链
+     * @param chain    过滤器链
      * @return reactor.core.publisher.Mono<java.lang.Void>
      */
     @Override
@@ -90,14 +90,14 @@ public class GateWayFilter implements GlobalFilter {
                     return returnMsg(exchange, ResultEnum.ACCESS_DENIED);
                 }
             }
-            //给token重新生成过期时间，进行有效期延长
+            // 给token重新生成过期时间，进行有效期延长
             userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
             redisService.setOneHour(tokenKey, userLoginVO);
             //将用户信息存入请求头中
             request.mutate().header(CommonConstant.USER_ID, URLEncoder.encode(String.valueOf(userLoginVO.getId()), StandardCharsets.UTF_8)).build();
             request.mutate().header(CommonConstant.USER_NAME, URLEncoder.encode(userLoginVO.getUsername(), StandardCharsets.UTF_8)).build();
         }
-        //给请求头中加相应的设置，避免绕过网关直接请求对应的服务
+        // 给请求头中加相应的设置，避免绕过网关直接请求对应的服务
         request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();
         //结束处理
         return chain.filter(exchange.mutate().request(request).build());
@@ -123,7 +123,7 @@ public class GateWayFilter implements GlobalFilter {
     }
 
     /**
-     * 获取接口权限
+     * 获取当前用户的接口权限
      *
      * @param userId 用户id
      * @return 权限列表
@@ -167,7 +167,7 @@ public class GateWayFilter implements GlobalFilter {
     /**
      * 异常返回
      *
-     * @param exchange 请求上下文
+     * @param exchange   请求上下文
      * @param resultEnum 异常枚举
      * @return reactor.core.publisher.Mono<java.lang.Void>
      */
