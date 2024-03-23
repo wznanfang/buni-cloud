@@ -10,6 +10,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author Administrator
  * @description 针对表【authority(权限)】的数据库操作Controller
@@ -59,6 +61,19 @@ public class AuthorityController {
     @DeleteMapping("/authority/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(authorityService.delete(id));
+    }
+
+
+    /**
+     * 批量删除权限
+     *
+     * @param batchIds 权限信息id
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
+    @DeleteMapping("/authority")
+    public Result<Boolean> BatchDelete(@RequestBody BatchIds batchIds) {
+        return Result.ok(authorityService.batchDelete(batchIds));
     }
 
 

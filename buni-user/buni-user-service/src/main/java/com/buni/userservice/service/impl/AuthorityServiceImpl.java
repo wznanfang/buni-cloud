@@ -117,6 +117,27 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     }
 
 
+    /**
+     * 根据ID集合批量删除权限
+     *
+     * @param batchIds 权限id集合
+     * @return true/false
+     */
+    @Override
+    public boolean batchDelete(BatchIds batchIds) {
+        List<Long> ids = batchIds.getIds();
+        super.removeBatchByIds(ids);
+        //更新角色权限表，剔除拥有该权限的用户缓存
+        List<String> keys = new ArrayList<>();
+        ids.forEach(id -> {
+            updateAuthority(id);
+            keys.add(Authority.REDIS_KEY + id);
+        });
+        redisService.delAllByKeys(keys);
+        return true;
+    }
+
+
     private Authority getAuthority(Long id) {
         Authority authority = super.getById(id);
         if (ObjUtil.isEmpty(authority)) {

@@ -4,11 +4,7 @@ package com.buni.userservice.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.usercommon.entity.Role;
-import com.buni.userservice.vo.role.PageVO;
-import com.buni.userservice.vo.role.AddVO;
-import com.buni.userservice.vo.role.RoleGetVO;
-import com.buni.userservice.vo.role.RoleInfoVO;
-import com.buni.userservice.vo.role.UpdateVO;
+import com.buni.userservice.vo.role.*;
 
 /**
  * @author Administrator
@@ -37,10 +33,19 @@ public interface RoleService extends IService<Role> {
 	/**
 	 * 根据ID删除权限
 	 *
-	 * @param id
+	 * @param id id
 	 * @return true/false
 	 */
 	boolean delete(Long id);
+
+
+	/**
+	 * 根据ID集合批量删除角色
+	 *
+	 * @param batchIds id集合
+	 * @return true/false
+	 */
+	boolean batchDelete(BatchIds batchIds);
 
 	/**
 	 * 根据ID查询角色

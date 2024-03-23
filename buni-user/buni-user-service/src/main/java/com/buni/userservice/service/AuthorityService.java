@@ -36,10 +36,18 @@ public interface AuthorityService extends IService<Authority> {
     /**
      * 根据ID删除权限
      *
-     * @param id
+     * @param id id
      * @return true/false
      */
     boolean delete(Long id);
+
+    /**
+     * 根据ID集合批量删除权限
+     *
+     * @param batchIds id集合
+     * @return true/false
+     */
+    boolean batchDelete(BatchIds batchIds);
 
     /**
      * 根据ID查询权限

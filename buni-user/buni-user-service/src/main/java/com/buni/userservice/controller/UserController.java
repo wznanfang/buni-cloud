@@ -1,7 +1,6 @@
 package com.buni.userservice.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.buni.buniframework.config.rateLimit.RateLimit;
 import com.buni.buniframework.util.Result;
 import com.buni.buniuserapi.log.SysLogRecord;
 import com.buni.userservice.constant.CommonConstant;

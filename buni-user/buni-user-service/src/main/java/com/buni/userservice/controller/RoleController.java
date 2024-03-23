@@ -63,6 +63,19 @@ public class RoleController {
 
 
     /**
+     * 批量删除权限
+     *
+     * @param batchIds 权限信息id
+     * @return true/false
+     */
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
+    @DeleteMapping("/authority")
+    public Result<Boolean> BatchDelete(@RequestBody BatchIds batchIds) {
+        return Result.ok(roleService.batchDelete(batchIds));
+    }
+
+
+    /**
      * 根据id查询角色
      *
      * @param id
