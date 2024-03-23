@@ -65,8 +65,8 @@ public class AuthorityController {
     /**
      * 根据id查询权限
      *
-     * @param id
-     * @return
+     * @param id id
+     * @return 权限信息
      */
     @GetMapping("/authority/{id:\\d+}")
     public Result<AuthorityInfoVO> findById(@PathVariable Long id) {
@@ -78,7 +78,7 @@ public class AuthorityController {
      * 分页查询
      *
      * @param pageVO 查询条件
-     * @return 用户信息
+     * @return 权限信息
      */
     @GetMapping("/authority")
     public Result<IPage<AuthorityGetVO>> page(PageVO pageVO) {

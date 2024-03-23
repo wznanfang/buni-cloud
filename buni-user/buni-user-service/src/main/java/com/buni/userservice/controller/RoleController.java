@@ -37,7 +37,7 @@ public class RoleController {
 
 
     /**
-     * 修改权限
+     * 修改角色
      *
      * @param updateVO 权限信息
      * @return true/false
@@ -50,7 +50,7 @@ public class RoleController {
 
 
     /**
-     * 删除权限
+     * 删除角色
      *
      * @param id 权限信息id
      * @return true/false
@@ -63,7 +63,7 @@ public class RoleController {
 
 
     /**
-     * 根据id查询权限
+     * 根据id查询角色
      *
      * @param id
      * @return
@@ -75,10 +75,10 @@ public class RoleController {
 
 
     /**
-     * 分页查询
+     * 分页查询角色
      *
      * @param pageVO 查询条件
-     * @return 用户信息
+     * @return 角色信息
      */
     @GetMapping("/role")
     public Result<IPage<RoleGetVO>> page(PageVO pageVO) {
