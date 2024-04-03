@@ -1,6 +1,6 @@
-package com.buni.bunifile.controller;
+package com.buni.fileservice.controller;
 
-import com.buni.bunifile.util.MinioUtil;
+import com.buni.fileservice.util.MinioUtil;
 import com.buni.buniframework.util.Result;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;

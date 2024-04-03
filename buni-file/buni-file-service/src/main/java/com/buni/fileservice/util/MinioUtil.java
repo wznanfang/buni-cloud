@@ -1,6 +1,6 @@
-package com.buni.bunifile.util;
+package com.buni.fileservice.util;
 
-import com.buni.bunifile.properties.MinioProperties;
+import com.buni.fileservice.properties.MinioProperties;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;

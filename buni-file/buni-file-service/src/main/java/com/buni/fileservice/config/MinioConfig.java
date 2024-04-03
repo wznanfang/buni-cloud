@@ -1,6 +1,6 @@
-package com.buni.bunifile.config;
+package com.buni.fileservice.config;
 
-import com.buni.bunifile.properties.MinioProperties;
+import com.buni.fileservice.properties.MinioProperties;
 import io.minio.MinioClient;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
