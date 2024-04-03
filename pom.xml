@@ -17,6 +17,7 @@
         <module>buni-framework</module>
         <module>buni-gateway</module>
         <module>buni-user</module>
+        <module>buni-file</module>
     </modules>
     <properties>
         <java.version>17</java.version>
