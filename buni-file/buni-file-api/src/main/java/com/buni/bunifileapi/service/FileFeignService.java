@@ -14,7 +14,7 @@ public interface FileFeignService {
      *
      * @return 文件预览地址
      */
-    @PostMapping("/v1/upload")
+    @PostMapping("/file/v1/upload")
     String upload(@RequestParam("file") MultipartFile file);
 
 

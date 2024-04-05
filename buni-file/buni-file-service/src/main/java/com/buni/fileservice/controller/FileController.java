@@ -25,7 +25,7 @@ public class FileController {
      * @param file 文件
      * @return 链接
      */
-    @PostMapping("/minio")
+    @PostMapping("/upload")
     public Result<String> fileUpload(@RequestParam("file") MultipartFile file) {
         String url = minioUtil.uploadFile(file);
         //todo 相关信息存入数据库，便于后续数据库和minio映射
