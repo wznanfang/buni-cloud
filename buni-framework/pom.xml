@@ -13,6 +13,8 @@
     <artifactId>buni-framework</artifactId>
 
     <properties>
+        <spring.cloud-version>2022.0.4</spring.cloud-version>
+        <spring.boot-version>3.0.2</spring.boot-version>
         <mybatis-version>3.0.2</mybatis-version>
         <nacos-version>2022.0.0.0-RC2</nacos-version>
         <bootstrap-version>4.0.2</bootstrap-version>
@@ -23,13 +25,23 @@
         <common-lang3-version>3.14.0</common-lang3-version>
         <zxing-version>3.5.3</zxing-version>
         <minio-version>8.5.9</minio-version>
+        <feign-version>4.1.0</feign-version>
+        <loadbalancer-version>4.0.4</loadbalancer-version>
     </properties>
 
     <dependencies>
 
         <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring.cloud-version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot-version}</version>
         </dependency>
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
@@ -101,6 +113,17 @@
             <groupId>io.minio</groupId>
             <artifactId>minio</artifactId>
             <version>${minio-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>${feign-version}</version>
+        </dependency>
+        <!--loadbalancer -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+            <version>${loadbalancer-version}</version>
         </dependency>
     </dependencies>
     <build>
