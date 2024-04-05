@@ -22,6 +22,7 @@ public class FileController {
 
     /**
      * minio数据上传
+     * todo 调用feign服务，一直报错404，后续再看怎么解决
      *
      * @param file 文件
      * @return 链接
