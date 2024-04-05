@@ -9,10 +9,10 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 @EnableDiscoveryClient
 @EnableFeignClients
 @SpringBootApplication
-public class FileApplication {
+public class FileServiceApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FileApplication.class, args);
+        SpringApplication.run(FileServiceApplication.class, args);
         System.out.println("--------------------启动成功--------------------");
     }
 
