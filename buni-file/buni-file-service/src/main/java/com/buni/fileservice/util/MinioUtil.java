@@ -1,6 +1,5 @@
 package com.buni.fileservice.util;
 
-import com.buni.fileservice.properties.MinioProperties;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
@@ -28,11 +27,9 @@ public class MinioUtil {
 
 
     @Resource
-    private MinioProperties minioProperties;
-
-    @Resource
     @Qualifier("minioClient")
     private MinioClient minioClient;
+
 
     /**
      * 创建bucket
@@ -41,34 +38,6 @@ public class MinioUtil {
         if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
             minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
         }
-    }
-
-    /**
-     * 上传文件
-     */
-    public String uploadFile(MultipartFile file) {
-        //判断文件是否为空
-        if (null == file || 0 == file.getSize()) {
-            return "文件不存在！";
-        }
-        //文件名
-        String fileName = "";
-        String url = "";
-        //判断存储桶是否存在  不存在则创建
-        String bucketName = minioProperties.getBucket();
-        try {
-            createBucket(bucketName);
-            String filename = file.getOriginalFilename();
-            //新的文件名 = 存储桶文件名_时间戳_格式化时间.后缀名
-            //todo 后续更改为md5值作为文件名，方便使用文件的md5值进行文件是否存在的判断，以避免重复上传文件
-            fileName = bucketName + "_" + System.currentTimeMillis() + "_" + filename.substring(filename.lastIndexOf("."));
-            //开始上传
-            putObject(bucketName, fileName, file.getInputStream(), file.getSize(), file.getContentType());
-            url = getObjectURL(bucketName, fileName, 3);
-        } catch (Exception e) {
-            log.error("文件上传失败", e.fillInStackTrace());
-        }
-        return url;
     }
 
     /**
@@ -99,6 +68,36 @@ public class MinioUtil {
     }
 
     /**
+     * 上传文件
+     *
+     * @param bucketName 数据桶
+     * @param file       文件
+     * @return 预览链接
+     */
+    public String uploadFile(String bucketName, MultipartFile file) {
+        //判断文件是否为空
+        if (null == file || 0 == file.getSize()) {
+            return "文件不存在！";
+        }
+        //文件名
+        String url = "";
+        try {
+            //判断存储桶是否存在  不存在则创建
+            createBucket(bucketName);
+            String filename = file.getOriginalFilename();
+            //新的文件名 = 存储桶文件名_时间戳_格式化时间.后缀名
+            //todo 后续更改为md5值作为文件名，方便使用文件的md5值进行文件是否存在的判断，以避免重复上传文件
+            String fileName = bucketName + "_" + System.currentTimeMillis() + "_" + filename.substring(filename.lastIndexOf("."));
+            //开始上传
+            putObject(bucketName, fileName, file.getInputStream(), file.getSize(), file.getContentType());
+            url = getObjectURL(bucketName, fileName, 3);
+        } catch (Exception e) {
+            log.error("文件上传失败", e.fillInStackTrace());
+        }
+        return url;
+    }
+
+    /**
      * 获取⽂件外链
      *
      * @param bucketName bucket名称
@@ -106,14 +105,19 @@ public class MinioUtil {
      * @param expires    过期时间
      * @return url
      */
-    public String getObjectURL(String bucketName, String objectName, Integer expires) throws Exception {
-        return minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs
-                .builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .expiry(expires, TimeUnit.HOURS)
-                .method(Method.GET)
-                .build());
+    public String getObjectURL(String bucketName, String objectName, Integer expires) {
+        String url = "";
+        try {
+            url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .expiry(expires, TimeUnit.HOURS)
+                    .method(Method.GET)
+                    .build());
+        } catch (Exception e) {
+            log.error("文件链接获取失败", e.fillInStackTrace());
+        }
+        return url;
     }
 
     /**

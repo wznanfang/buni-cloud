@@ -19,4 +19,14 @@ public interface FileFeignService {
     String upload(@RequestParam("file") MultipartFile file);
 
 
+    /**
+     * 获取文件链接
+     *
+     * @param filename 文件名
+     * @return 链接
+     */
+    @PostMapping(value = "/preview")
+    String preview(String filename);
+
+
 }
