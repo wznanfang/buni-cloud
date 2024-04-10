@@ -1,6 +1,6 @@
 package com.buni.fileservice.service;
 
-import com.buni.bunifileapi.service.FileFeignService;
+import com.buni.fileapi.service.FileFeignService;
 import com.buni.fileservice.util.MinioUtil;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;

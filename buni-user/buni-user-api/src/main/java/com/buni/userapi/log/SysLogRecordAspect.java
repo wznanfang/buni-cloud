@@ -1,8 +1,8 @@
-package com.buni.buniuserapi.log;
+package com.buni.userapi.log;
 
 import cn.hutool.core.util.ObjUtil;
 import com.buni.buniframework.util.HeaderUtil;
-import com.buni.buniuserapi.service.SysLogApiService;
+import com.buni.userapi.service.SysLogApiService;
 import com.buni.usercommon.entity.SysLog;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
@@ -32,7 +32,7 @@ public class SysLogRecordAspect {
     private ObjectMapper objectMapper;
 
 
-    @Pointcut("@annotation(com.buni.buniuserapi.log.SysLogRecord)")
+    @Pointcut("@annotation(com.buni.userapi.log.SysLogRecord)")
     private void sysLogRecord() {
 
     }

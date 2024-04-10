@@ -1,6 +1,6 @@
 package com.buni.userservice.controller;
 
-import com.buni.bunifileapi.service.FileFeignService;
+import com.buni.fileapi.service.FileFeignService;
 import com.buni.buniframework.util.Result;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;

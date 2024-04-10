@@ -1,4 +1,4 @@
-package com.buni.bunifileapi.config;
+package com.buni.fileapi.config;
 
 import cn.hutool.core.util.RandomUtil;
 import com.buni.buniframework.constant.CommonConstant;

@@ -15,6 +15,7 @@
     <modules>
         <module>buni-file-service</module>
         <module>buni-file-api</module>
+        <module>buni-file-common</module>
     </modules>
 
     <properties>

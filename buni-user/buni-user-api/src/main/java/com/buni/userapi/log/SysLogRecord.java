@@ -1,4 +1,4 @@
-package com.buni.buniuserapi.log;
+package com.buni.userapi.log;
 
 
 import java.lang.annotation.ElementType;

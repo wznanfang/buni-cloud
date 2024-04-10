@@ -1,6 +1,6 @@
 package com.buni.userservice.service.impl;
 
-import com.buni.buniuserapi.service.SysLogApiService;
+import com.buni.userapi.service.SysLogApiService;
 import com.buni.usercommon.entity.SysLog;
 import com.buni.userservice.service.SysLogService;
 import jakarta.annotation.Resource;

@@ -1,7 +1,8 @@
-package com.buni.bunifileapi.service;
+package com.buni.fileapi.service;
 
-import com.buni.bunifileapi.config.FeignRequestInterceptor;
+import com.buni.fileapi.config.FeignRequestInterceptor;
 import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -14,7 +15,7 @@ public interface FileFeignService {
      *
      * @return 文件预览地址
      */
-    @PostMapping("/file/v1/upload")
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     String upload(@RequestParam("file") MultipartFile file);
 
 

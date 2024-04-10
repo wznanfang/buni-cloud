@@ -1,4 +1,4 @@
-package com.buni.buniuserapi.service;
+package com.buni.userapi.service;
 
 import com.buni.usercommon.entity.SysLog;
 

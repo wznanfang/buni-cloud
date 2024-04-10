@@ -2,15 +2,13 @@ package com.buni.userservice.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.buniframework.util.Result;
-import com.buni.buniuserapi.log.SysLogRecord;
+import com.buni.userapi.log.SysLogRecord;
 import com.buni.userservice.constant.CommonConstant;
 import com.buni.userservice.service.AuthorityService;
 import com.buni.userservice.vo.authority.*;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 /**
  * @author Administrator

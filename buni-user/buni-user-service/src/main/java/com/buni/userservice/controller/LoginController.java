@@ -1,7 +1,7 @@
 package com.buni.userservice.controller;
 
 import com.buni.buniframework.util.Result;
-import com.buni.buniuserapi.log.SysLogRecord;
+import com.buni.userapi.log.SysLogRecord;
 import com.buni.usercommon.vo.login.LoginVO;
 import com.buni.usercommon.vo.login.UserLoginVO;
 import com.buni.userservice.constant.CommonConstant;
