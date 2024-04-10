@@ -6,6 +6,7 @@ import com.buni.filecommon.enums.ErrorEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.openfeign.FallbackFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 文件服务降级处理
@@ -17,8 +18,16 @@ public class FileFallbackFactory implements FallbackFactory<FileFeignService> {
     @Override
     public FileFeignService create(Throwable throwable) {
         log.error("文件服务调用失败:{}", throwable.getMessage());
-        return fileService -> {
-            throw new CustomException(ErrorEnum.FILE_SERVICE_FAIL.getCode(), ErrorEnum.FILE_SERVICE_FAIL.getMessage());
+        return new FileFeignService() {
+            @Override
+            public String upload(MultipartFile file) {
+                throw new CustomException(ErrorEnum.FILE_SERVICE_FAIL.getCode(), ErrorEnum.FILE_SERVICE_FAIL.getMessage());
+            }
+
+            @Override
+            public String preview(String filename) {
+                throw new CustomException(ErrorEnum.FILE_SERVICE_FAIL.getCode(), ErrorEnum.FILE_SERVICE_FAIL.getMessage());
+            }
         };
     }
 }
