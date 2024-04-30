@@ -34,6 +34,8 @@ dubbo:
     id: nacos-registry
     address: nacos://127.0.0.1:8848
 
+
+
 buni:
   minio:
     endpoint: http://127.0.0.1:9001
