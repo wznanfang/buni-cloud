@@ -1,15 +1,17 @@
-package com.buni.fileservice.service;
+package com.buni.fileservice.service.impl;
 
-import com.buni.fileapi.service.FileFeignService;
+import com.buni.fileapi.service.FileDubboService;
 import com.buni.fileservice.properties.MinioProperties;
 import com.buni.fileservice.util.MinioUtil;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
+import lombok.NoArgsConstructor;
+import org.apache.dubbo.config.annotation.DubboService;
 
-@Service
+@DubboService
 @AllArgsConstructor
-public class FileFeignServiceImpl implements FileFeignService {
+@NoArgsConstructor
+public class FileDubboServiceImpl implements FileDubboService {
 
 
     @Resource

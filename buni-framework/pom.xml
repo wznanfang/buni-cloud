@@ -25,8 +25,7 @@
         <common-lang3-version>3.14.0</common-lang3-version>
         <zxing-version>3.5.3</zxing-version>
         <minio-version>8.5.9</minio-version>
-        <feign-version>4.1.0</feign-version>
-        <loadbalancer-version>4.0.4</loadbalancer-version>
+        <dubbo-version>3.1.2</dubbo-version>
     </properties>
 
     <dependencies>
@@ -110,15 +109,9 @@
             <version>${minio-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-openfeign</artifactId>
-            <version>${feign-version}</version>
-        </dependency>
-        <!--loadbalancer -->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-            <version>${loadbalancer-version}</version>
+            <groupId>org.apache.dubbo</groupId>
+            <artifactId>dubbo-spring-boot-starter</artifactId>
+            <version>${dubbo-version}</version>
         </dependency>
     </dependencies>
     <build>

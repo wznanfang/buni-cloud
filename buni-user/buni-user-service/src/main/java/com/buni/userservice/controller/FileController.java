@@ -1,7 +1,7 @@
 package com.buni.userservice.controller;
 
 import com.buni.buniframework.util.Result;
-import com.buni.fileapi.service.FileFeignService;
+import com.buni.fileapi.service.FileDubboService;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FileController {
 
     @Resource
-    private FileFeignService fileFeignService;
+    private FileDubboService fileDubboService;
 
 
     /**
@@ -28,7 +28,7 @@ public class FileController {
      */
     @GetMapping("/file/{filename}")
     public Result<String> fileUpload(@PathVariable("filename") String filename) {
-        String url = fileFeignService.preview(filename);
+        String url = fileDubboService.preview(filename);
         return Result.ok(url);
     }
 

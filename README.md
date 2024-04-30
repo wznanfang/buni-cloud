@@ -1,6 +1,6 @@
 # buni-cloud，一个简单的springCloud基础框架
 ## 项目架构
-> springCloud+nacos+openfeign+mybatis-plus+mysql+redis+hutool+minio
+> springCloud+nacos+dubbo+mybatis-plus+mysql+redis+hutool+minio+knife4j2
 ## 框架模块描述
 1. buni-framework
 > 基础框架模块,提供项目所需底层依赖以及全局异常拦截器，线程池，分布式锁，限流，缓存等全局注解等相关工具类

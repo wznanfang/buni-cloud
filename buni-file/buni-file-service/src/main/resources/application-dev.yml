@@ -23,11 +23,23 @@ mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
+# dubbo的配置
+dubbo:
+  application:
+    name: provider_file_dubbo_service
+  protocol:
+    name: dubbo
+    port: -1
+  registry:
+    id: nacos-registry
+    address: nacos://127.0.0.1:8848
+
 buni:
   minio:
     endpoint: http://127.0.0.1:9001
     accessKey: minioadmin
     secretKey: minioadmin
     bucket: buni
+
 
 

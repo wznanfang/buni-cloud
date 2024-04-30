@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
@@ -75,21 +76,28 @@ public class MinioUtil {
      * @return 预览链接
      */
     public String uploadFile(String bucketName, MultipartFile file) {
-        //判断文件是否为空
+        // 判断文件是否为空
         if (null == file || 0 == file.getSize()) {
             return "文件不存在！";
         }
-        //文件名
+        // 文件名
         String url = "";
         try {
-            //判断存储桶是否存在  不存在则创建
+            // 判断存储桶是否存在,不存在则创建
             createBucket(bucketName);
             String filename = file.getOriginalFilename();
-            //新的文件名 = 存储桶文件名_时间戳_格式化时间.后缀名
-            //todo 后续更改为md5值作为文件名，方便使用文件的md5值进行文件是否存在的判断，以避免重复上传文件
-            String fileName = bucketName + "_" + System.currentTimeMillis() + "_" + filename.substring(filename.lastIndexOf("."));
-            //开始上传
-            putObject(bucketName, fileName, file.getInputStream(), file.getSize(), file.getContentType());
+            // 新的文件名 = 文件md5.后缀名
+            InputStream inputStream = file.getInputStream();
+            // 使用DigestUtils计算MD5值并以16进制字符串形式返回
+            String md5 = DigestUtils.md5DigestAsHex(inputStream);
+            // 关闭输入流
+            inputStream.close();
+            String fileName = md5 + filename.substring(filename.lastIndexOf("."));
+            // 判断文件是否存在
+            if (!checkFileExist(bucketName, fileName)) {
+                // 开始上传
+                putObject(bucketName, fileName, file.getInputStream());
+            }
             url = getObjectURL(bucketName, fileName, 3);
         } catch (Exception e) {
             log.error("文件上传失败", e.fillInStackTrace());
@@ -199,6 +207,47 @@ public class MinioUtil {
                 .build());
     }
 
+    /**
+     * 判断文件是否存在
+     *
+     * @param bucketName 桶名称
+     * @param objectName 文件名称, 如果要带文件夹请用 / 分割, 例如 /help/index.html
+     * @return true存在, 反之
+     */
+    public Boolean checkFileExist(String bucketName, String objectName) {
+        try {
+            minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 判断文件夹是否存在
+     *
+     * @param bucketName 桶名称
+     * @param folderName 文件夹名称
+     * @return true存在, 反之
+     */
+    public Boolean checkFolderExist(String bucketName, String folderName) {
+        try {
+            Iterable<Result<Item>> results = minioClient.listObjects(ListObjectsArgs.builder()
+                    .bucket(bucketName)
+                    .prefix(folderName)
+                    .recursive(false)
+                    .build());
+            for (Result<Item> result : results) {
+                Item item = result.get();
+                if (item.isDir() && folderName.equals(item.objectName())) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
 
     /**
      * minio桶之间数据复制
