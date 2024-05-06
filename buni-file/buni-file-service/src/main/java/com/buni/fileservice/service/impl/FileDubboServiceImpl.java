@@ -1,6 +1,6 @@
 package com.buni.fileservice.service.impl;
 
-import com.buni.fileapi.service.FileDubboService;
+import com.buni.fileapi.FileDubboService;
 import com.buni.fileservice.properties.MinioProperties;
 import com.buni.fileservice.util.MinioUtil;
 import jakarta.annotation.Resource;

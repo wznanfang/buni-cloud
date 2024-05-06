@@ -35,7 +35,6 @@
             <artifactId>spring-cloud-dependencies</artifactId>
             <version>${spring.cloud-version}</version>
             <type>pom</type>
-            <scope>import</scope>
         </dependency>
         <!--2021.0.5版本的 Spring Cloud 默认不再启用 bootstrap 包,但是nacos的配置需要-->
         <dependency>

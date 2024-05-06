@@ -8,11 +8,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.scheduling.annotation.EnableAsync;
 
+@EnableDubbo
 @EnableAsync
 @MapperScan(value = "com.buni.userservice.mapper")
 @EnableDiscoveryClient
 @SpringBootApplication
-@EnableDubbo
 public class UserServiceApplication {
 
     public static void main(String[] args) {

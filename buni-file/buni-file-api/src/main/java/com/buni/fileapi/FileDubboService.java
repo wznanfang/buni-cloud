@@ -1,4 +1,4 @@
-package com.buni.fileapi.service;
+package com.buni.fileapi;
 
 public interface FileDubboService {
 

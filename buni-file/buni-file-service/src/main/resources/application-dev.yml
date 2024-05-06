@@ -26,13 +26,15 @@ mybatis-plus:
 # dubbo的配置
 dubbo:
   application:
-    name: provider_file_dubbo_service
+    name: file_dubbo_service
+    qos:
+      port: 22223
+  registry:
+    id: file_dubbo_service
+    address: nacos://127.0.0.1:8848?namespace=buni
   protocol:
     name: dubbo
     port: -1
-  registry:
-    id: nacos-registry
-    address: nacos://127.0.0.1:8848
 
 
 
