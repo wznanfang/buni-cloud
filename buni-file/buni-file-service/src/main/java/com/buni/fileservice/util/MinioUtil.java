@@ -96,7 +96,7 @@ public class MinioUtil {
             // 判断文件是否存在
             if (!checkFileExist(bucketName, fileName)) {
                 // 开始上传
-                putObject(bucketName, fileName, file.getInputStream());
+                putObject(bucketName, fileName, file);
             }
             url = getObjectURL(bucketName, fileName, 3);
         } catch (Exception e) {
@@ -148,15 +148,15 @@ public class MinioUtil {
      *
      * @param bucketName bucket名称
      * @param objectName ⽂件名称
-     * @param stream     ⽂件流
+     * @param file     ⽂件
      * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#putObject
      */
-    public void putObject(String bucketName, String objectName, InputStream stream) throws Exception {
+    public void putObject(String bucketName, String objectName, MultipartFile file) throws Exception {
         minioClient.putObject(PutObjectArgs.builder()
                 .bucket(bucketName)
                 .object(objectName)
-                .stream(stream, stream.available(), -1)
-                .contentType(objectName.substring(objectName.lastIndexOf("."))).build());
+                .stream(file.getInputStream(), file.getSize(), -1)
+                .contentType(file.getContentType()).build());
     }
 
     /**
