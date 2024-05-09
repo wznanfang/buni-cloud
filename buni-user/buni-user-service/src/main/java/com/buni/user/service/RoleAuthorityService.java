@@ -1,0 +1,44 @@
+package com.buni.user.service;
+
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.buni.user.entity.RoleAuthority;
+import com.buni.user.vo.role.RoleAuthorityDTO;
+
+import java.util.List;
+
+/**
+ * @author Administrator
+ * @description 针对表【role_authority(角色权限)】的数据库操作Service
+ * @createDate 2023-09-25 13:45:26
+ */
+public interface RoleAuthorityService extends IService<RoleAuthority> {
+
+
+    /**
+     * 查询roleAuthority
+     *
+     * @param roleIds
+     * @return {@link List}<{@link RoleAuthorityDTO}>
+     */
+    List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds);
+
+    /**
+     * 查询roleAuthority
+     *
+     * @param authorityId 权限id
+     * @return {@link List}<{@link RoleAuthorityDTO}>
+     */
+    List<RoleAuthorityDTO> findByAuthorityId(Long authorityId);
+
+    /**
+     * 根据角色id删除角色权限
+     *
+     * @param roleIds 角色id集合
+     */
+    void deleteByRoleIds(List<Long> roleIds);
+
+
+
+
+}
