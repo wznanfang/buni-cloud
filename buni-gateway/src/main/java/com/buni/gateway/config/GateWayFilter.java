@@ -62,15 +62,15 @@ public class GateWayFilter implements GlobalFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         ServerHttpRequest request = exchange.getRequest();
-        //获取请求路径，判断是否是公共接口
-        //针对路径进行处理
+        // 获取请求路径，判断是否是公共接口
+        // 针对路径进行处理
         String path = getPath(request);
         if (!publicUrlConstant.getPublicUrl().contains(path)) {
             String token = getToken(request);
             String tokenKey = CommonConstant.TOKEN_REDIS_KEY + token;
-            //从redis中获取当前登录用户的信息
+            // 从redis中获取当前登录用户的信息
             UserLoginVO userLoginVO = (UserLoginVO) redisService.get(tokenKey);
-            //校验token，如果token正确则放行
+            // 校验token，如果token正确则放行
             if (ObjUtil.isEmpty(userLoginVO)) {
                 log.error("---------- token为空 ----------");
                 return returnMsg(exchange, ResultEnum.UNAUTHORIZED);
@@ -79,9 +79,9 @@ public class GateWayFilter implements GlobalFilter {
                 log.error("---------- token已失效 ----------");
                 return returnMsg(exchange, ResultEnum.INVALID_TOKEN);
             }
-            //校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
+            // 校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
             if (userLoginVO.getAdmin().equals(BooleanEnum.NO)) {
-                //校验是否有对应的接口权限
+                // 校验是否有对应的接口权限
                 List<String> urls = getUrls(userLoginVO.getId());
                 if (CollUtil.isEmpty(urls)) {
                     return returnMsg(exchange, ResultEnum.INVALID_TOKEN);
@@ -93,13 +93,13 @@ public class GateWayFilter implements GlobalFilter {
             // 给token重新生成过期时间，进行有效期延长
             userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
             redisService.setOneHour(tokenKey, userLoginVO);
-            //将用户信息存入请求头中
+            // 将用户信息存入请求头中
             request.mutate().header(CommonConstant.USER_ID, URLEncoder.encode(String.valueOf(userLoginVO.getId()), StandardCharsets.UTF_8)).build();
             request.mutate().header(CommonConstant.USER_NAME, URLEncoder.encode(userLoginVO.getUsername(), StandardCharsets.UTF_8)).build();
         }
         // 给请求头中加相应的设置，避免绕过网关直接请求对应的服务
         request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();
-        //结束处理
+        // 结束处理
         return chain.filter(exchange.mutate().request(request).build());
     }
 
@@ -113,7 +113,7 @@ public class GateWayFilter implements GlobalFilter {
     private String getToken(ServerHttpRequest request) {
         String token = CommonConstant.EMPTY_STR;
         if (ObjUtil.isNotEmpty(request.getHeaders().get(CommonConstant.AUTHORIZATION))) {
-            token = Objects.requireNonNull(request.getHeaders().get(CommonConstant.AUTHORIZATION)).get(0);
+            token = Objects.requireNonNull(request.getHeaders().getFirst(CommonConstant.AUTHORIZATION));
         }
         // 如果前端设置了令牌前缀，则裁剪掉前缀
         if (ObjUtil.isNotEmpty(token) && token.startsWith(CommonConstant.PREFIX)) {
