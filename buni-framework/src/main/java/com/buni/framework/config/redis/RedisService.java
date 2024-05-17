@@ -34,13 +34,35 @@ public class RedisService {
 
     /**
      * 存储缓存
-     * @param key key
-     * @param val value
-     * @param time 缓存时间
+     *
+     * @param key
+     * @param val
+     */
+    public void set(String key, Object val) {
+        redisTemplate.opsForValue().set(key, val);
+    }
+
+
+    /**
+     * 存储缓存
+     *
+     * @param key      key
+     * @param val      value
+     * @param time     缓存时间
      * @param timeUnit 时间单位
      */
     public void set(String key, Object val, Long time, TimeUnit timeUnit) {
         redisTemplate.opsForValue().set(key, val, time, timeUnit);
+    }
+
+    /**
+     * 存储数据并设置过期时间
+     *
+     * @param key
+     * @param val
+     */
+    public void setHalfHour(String key, Object val) {
+        set(key, val, 30L, TimeUnit.MINUTES);
     }
 
 
