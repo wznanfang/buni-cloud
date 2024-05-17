@@ -15,10 +15,10 @@ public class Knife4jConfig {
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI().info(new Info()
-                .title("SpringBoot API 管理")
-                .contact(new Contact().name("N_007").email("xxxx@163.com").url("https://blog.csdn.net/N_007"))
+                .title("文件管理")
+                .contact(new Contact().name("不逆").email("wzp3821@163.com").url("https://www.buni.com"))
                 .version("1.0")
-                .description("SpringBoot 集成 Knife4j 示例")
+                .description("文件接口管理")
                 .license(new License().name("Apache 2.0")));
     }
 
