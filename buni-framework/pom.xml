@@ -14,7 +14,6 @@
 
     <properties>
         <spring.cloud-version>2022.0.4</spring.cloud-version>
-        <spring.boot-version>3.0.2</spring.boot-version>
         <mybatis-version>3.0.2</mybatis-version>
         <nacos-version>2022.0.0.0-RC2</nacos-version>
         <bootstrap-version>4.0.2</bootstrap-version>
@@ -26,13 +25,13 @@
         <zxing-version>3.5.3</zxing-version>
         <minio-version>8.5.9</minio-version>
         <dubbo-version>3.2.10</dubbo-version>
+        <knife4j2-version>4.4.0</knife4j2-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-            <version>${spring.boot-version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -104,6 +103,11 @@
             <groupId>org.apache.dubbo</groupId>
             <artifactId>dubbo-spring-boot-starter</artifactId>
             <version>${dubbo-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+            <version>${knife4j2-version}</version>
         </dependency>
     </dependencies>
     <build>

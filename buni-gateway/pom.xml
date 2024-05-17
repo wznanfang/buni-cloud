@@ -14,6 +14,7 @@
 
     <properties>
         <gateway-version>4.0.4</gateway-version>
+        <knife4j2-version>4.4.0</knife4j2-version>
     </properties>
 
     <dependencies>
@@ -39,6 +40,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-loadbalancer</artifactId>
             <version>${gateway-version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.xiaoymin</groupId>
+            <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
+            <version>${knife4j2-version}</version>
         </dependency>
 
     </dependencies>

@@ -27,8 +27,7 @@ mybatis-plus:
 dubbo:
   application:
     name: user_dubbo_service
-    qos:
-     port: 22224
+    qos-enable: false
   registry:
     id: user_dubbo_service
     address: nacos://127.0.0.1:8848?namespace=buni
@@ -38,6 +37,12 @@ dubbo:
   consumer:
     check: false
 
+knife4j:
+  enable: true
+springdoc:
+  group-configs:
+    - group: 用户管理
+      packages-to-scan: com.buni.user.controller
 
 buni:
   salt: buni

@@ -45,7 +45,9 @@ spring:
           filters:
             - StripPrefix=1
 
+
 buni:
   public-url:
+    - /v2/api-docs/GET
     - /v1/login/POST
     - /v1/register/POST
