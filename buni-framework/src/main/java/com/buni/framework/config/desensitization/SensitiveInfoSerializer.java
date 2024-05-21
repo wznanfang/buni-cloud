@@ -25,44 +25,35 @@ public class SensitiveInfoSerializer extends JsonSerializer<String> implements C
 
 
     @Override
+    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
+        if (property != null && property.getAnnotation(Desensitization.class) != null) {
+            Desensitization desensitization = property.getAnnotation(Desensitization.class);
+            this.type = desensitization.type();
+            this.prefixLen = desensitization.prefixLen();
+            this.suffixLen = desensitization.suffixLen();
+            useMasking = true;
+        }
+        return this;
+    }
+
+
+    @Override
     public void serialize(String value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (useMasking && value != null) {
-            switch (type) {
-                case CUSTOMIZE_RULE:
-                    gen.writeString(StrUtil.hide(value, prefixLen, suffixLen));
-                    break;
-                case ID_CARD:
-                    gen.writeString(DesensitizedUtil.idCardNum(value, prefixLen, suffixLen));
-                    break;
-                case MOBILE_PHONE:
-                    gen.writeString(DesensitizedUtil.mobilePhone(value));
-                    break;
-                case ADDRESS:
-                    gen.writeString(DesensitizedUtil.address(value, suffixLen));
-                    break;
-                case EMAIL:
-                    gen.writeString(DesensitizedUtil.email(value));
-                    break;
-                default:
-                    gen.writeString(DesensitizedUtil.firstMask(value));
-            }
+            String desensitizedValue = switch (type) {
+                case CUSTOMIZE_RULE -> StrUtil.hide(value, prefixLen, suffixLen);
+                case ID_CARD -> DesensitizedUtil.idCardNum(value, prefixLen, suffixLen);
+                case MOBILE_PHONE -> DesensitizedUtil.mobilePhone(value);
+                case ADDRESS -> DesensitizedUtil.address(value, suffixLen);
+                case EMAIL -> DesensitizedUtil.email(value);
+                default -> DesensitizedUtil.firstMask(value);
+            };
+            gen.writeString(desensitizedValue);
         } else {
             gen.writeObject(value);
         }
     }
 
-    @Override
-    public JsonSerializer<?> createContextual(SerializerProvider prov, BeanProperty property) {
-        if (property != null) {
-            Desensitization desensitization = property.getAnnotation(Desensitization.class);
-            if (desensitization != null) {
-                this.type = desensitization.type();
-                this.prefixLen = desensitization.prefixLen();
-                this.suffixLen = desensitization.suffixLen();
-                useMasking = true;
-            }
-        }
-        return this;
-    }
+
 }
 
