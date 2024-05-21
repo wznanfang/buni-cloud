@@ -39,11 +39,21 @@ spring:
           predicates: Path=/user/**
           filters:
             - StripPrefix=1
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 100
+                keyResolver: '#{@ipAddressKeyResolver}'
         - id: buni-file
           uri: lb://buni-file
           predicates: Path=/file/**
           filters:
             - StripPrefix=1
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 1
+                redis-rate-limiter.burstCapacity: 1
+                keyResolver: '#{@ipAddressKeyResolver}'
 
 
 # knife4j 网关接口文档配置
