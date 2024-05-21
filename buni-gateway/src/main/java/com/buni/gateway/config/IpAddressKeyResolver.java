@@ -6,8 +6,10 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 /**
+ * 根据ip地址限流
+ *
  * @author zp.wei
- * @date 2024/5/21 13:17
+ * @date 2024/5/21 13:14
  */
 @Component
 public class IpAddressKeyResolver implements KeyResolver {
