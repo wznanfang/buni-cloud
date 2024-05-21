@@ -6,6 +6,9 @@ import com.buni.user.log.SysLogRecord;
 import com.buni.user.constant.CommonConstant;
 import com.buni.user.service.RoleService;
 import com.buni.user.vo.role.*;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
  * @description 针对表【role(角色)】的数据库操作Controller
  * @createDate 2023-09-25 13:45:26
  */
+@Tag(name = "角色管理")
+@ApiSort(3)
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1")
@@ -29,6 +34,7 @@ public class RoleController {
      * @param addVO 权限信息
      * @return true/false
      */
+    @Operation(summary = "新增角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增角色")
     @PostMapping("/role")
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
@@ -42,6 +48,7 @@ public class RoleController {
      * @param updateVO 权限信息
      * @return true/false
      */
+    @Operation(summary = "修改角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改角色")
     @PutMapping("/role")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
@@ -55,6 +62,7 @@ public class RoleController {
      * @param id 权限信息id
      * @return true/false
      */
+    @Operation(summary = "删除角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除角色")
     @DeleteMapping("/role/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
@@ -68,6 +76,7 @@ public class RoleController {
      * @param batchIds 角色id集合
      * @return true/false
      */
+    @Operation(summary = "批量删除角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除角色")
     @DeleteMapping("/role")
     public Result<Boolean> BatchDelete(@RequestBody BatchIds batchIds) {
@@ -81,6 +90,7 @@ public class RoleController {
      * @param id
      * @return
      */
+    @Operation(summary = "根据id查询角色")
     @GetMapping("/role/{id:\\d+}")
     public Result<RoleInfoVO> findById(@PathVariable Long id) {
         return Result.ok(roleService.findById(id));
@@ -93,6 +103,7 @@ public class RoleController {
      * @param pageVO 查询条件
      * @return 角色信息
      */
+    @Operation(summary = "分页查询角色")
     @GetMapping("/role")
     public Result<IPage<RoleGetVO>> page(PageVO pageVO) {
         return Result.ok(roleService.findPage(pageVO));

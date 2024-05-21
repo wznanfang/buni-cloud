@@ -6,6 +6,9 @@ import com.buni.user.log.SysLogRecord;
 import com.buni.user.constant.CommonConstant;
 import com.buni.user.service.AuthorityService;
 import com.buni.user.vo.authority.*;
+import com.github.xiaoymin.knife4j.annotations.ApiSort;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
  * @description 针对表【authority(权限)】的数据库操作Controller
  * @createDate 2023-09-25 13:45:26
  */
+@Tag(name = "权限管理")
+@ApiSort(4)
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1")
@@ -29,6 +34,7 @@ public class AuthorityController {
      * @param addVO 权限信息
      * @return true/false
      */
+    @Operation(summary = "新增权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
     @PostMapping("/authority")
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
@@ -42,6 +48,7 @@ public class AuthorityController {
      * @param updateVO 权限信息
      * @return true/false
      */
+    @Operation(summary = "修改权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
     @PutMapping("/authority")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
@@ -55,6 +62,7 @@ public class AuthorityController {
      * @param id 权限信息id
      * @return true/false
      */
+    @Operation(summary = "删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除权限")
     @DeleteMapping("/authority/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
@@ -68,6 +76,7 @@ public class AuthorityController {
      * @param batchIds 权限信息id
      * @return true/false
      */
+    @Operation(summary = "批量删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
     @DeleteMapping("/authority")
     public Result<Boolean> BatchDelete(@RequestBody BatchIds batchIds) {
@@ -81,6 +90,7 @@ public class AuthorityController {
      * @param id id
      * @return 权限信息
      */
+    @Operation(summary = "根据id查询权限")
     @GetMapping("/authority/{id:\\d+}")
     public Result<AuthorityInfoVO> findById(@PathVariable Long id) {
         return Result.ok(authorityService.findById(id));
@@ -93,6 +103,7 @@ public class AuthorityController {
      * @param pageVO 查询条件
      * @return 权限信息
      */
+    @Operation(summary = "分页查询")
     @GetMapping("/authority")
     public Result<IPage<AuthorityGetVO>> page(PageVO pageVO) {
         return Result.ok(authorityService.findPage(pageVO));

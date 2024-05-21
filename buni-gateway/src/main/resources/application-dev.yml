@@ -64,12 +64,12 @@ knife4j:
         # 服务名称
         service-name: buni-user
         # 路由前缀
-        context-path: /
+        context-path: /user
         order: 1
       - name: 文件管理
         url: /file/v3/api-docs?group=文件管理
         service-name: buni-file
-        context-path: /
+        context-path: /file
         order: 2
 
 buni:
