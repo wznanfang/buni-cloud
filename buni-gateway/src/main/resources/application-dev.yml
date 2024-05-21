@@ -42,7 +42,7 @@ spring:
             - name: RequestRateLimiter
               args:
                 redis-rate-limiter.replenishRate: 5
-                redis-rate-limiter.burstCapacity: 100
+                redis-rate-limiter.burstCapacity: 5
                 keyResolver: '#{@ipAddressKeyResolver}'
         - id: buni-file
           uri: lb://buni-file
@@ -51,8 +51,8 @@ spring:
             - StripPrefix=1
             - name: RequestRateLimiter
               args:
-                redis-rate-limiter.replenishRate: 1
-                redis-rate-limiter.burstCapacity: 1
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 5
                 keyResolver: '#{@ipAddressKeyResolver}'
 
 
