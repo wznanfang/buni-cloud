@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -106,7 +107,7 @@ public class UserController {
      */
     @Operation(summary = "分页查询用户信息")
     @GetMapping("/user")
-    public Result<IPage<UserGetVO>> page(PageVO pageVO) {
+    public Result<IPage<UserGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));
     }
 

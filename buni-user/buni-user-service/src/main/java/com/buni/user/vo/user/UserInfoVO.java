@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,18 +17,21 @@ import java.time.LocalDateTime;
  * @author zp.wei
  * @date 2023/9/21 11:36
  */
+@Schema(description = "用户信息InfoVO")
 @Data
 public class UserInfoVO {
 
     /**
      * id
      */
+    @Schema(description = "id")
     @JsonSerialize(using = StringSerializer.class)
     private Long id;
 
     /**
      * 创建时间
      */
+    @Schema(description = "创建时间")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -36,6 +40,7 @@ public class UserInfoVO {
     /**
      * 修改时间
      */
+    @Schema(description = "修改时间")
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
@@ -44,31 +49,37 @@ public class UserInfoVO {
     /**
      * 用户名
      */
+    @Schema(description = "用户名")
     private String username;
 
     /**
      * 名字
      */
+    @Schema(description = "名字")
     private String name;
 
     /**
      * 年龄
      */
+    @Schema(description = "年龄")
     private Integer age;
 
     /**
      * 性别
      */
+    @Schema(description = "性别（0：女；1：男）")
     private SexEnum sex;
 
     /**
      * 电话
      */
+    @Schema(description = "电话")
     private String tel;
 
     /**
      * 是否删除(0:否，1：是)
      */
+    @Schema(description = "是否删除(0:否，1：是)")
     private BooleanEnum deleted;
 
 }

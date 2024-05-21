@@ -10,6 +10,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,7 +106,7 @@ public class AuthorityController {
      */
     @Operation(summary = "分页查询")
     @GetMapping("/authority")
-    public Result<IPage<AuthorityGetVO>> page(PageVO pageVO) {
+    public Result<IPage<AuthorityGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(authorityService.findPage(pageVO));
     }
 

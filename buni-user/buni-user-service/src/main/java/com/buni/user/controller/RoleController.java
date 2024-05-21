@@ -10,6 +10,7 @@ import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -105,7 +106,7 @@ public class RoleController {
      */
     @Operation(summary = "分页查询角色")
     @GetMapping("/role")
-    public Result<IPage<RoleGetVO>> page(PageVO pageVO) {
+    public Result<IPage<RoleGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(roleService.findPage(pageVO));
     }
 
