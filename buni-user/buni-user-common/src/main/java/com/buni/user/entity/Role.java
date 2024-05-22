@@ -1,6 +1,7 @@
 package com.buni.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.buni.user.enums.BooleanEnum;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -61,6 +62,12 @@ public class Role implements Serializable {
      */
     @Size(max = 50, message = "角色名字不能超过50")
     private String name;
+
+    /**
+     * 是否删除(0:否，1：是)
+     */
+    @TableLogic
+    private BooleanEnum deleted;
 
 
 }

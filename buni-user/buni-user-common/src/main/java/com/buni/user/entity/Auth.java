@@ -1,6 +1,7 @@
 package com.buni.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.buni.user.enums.BooleanEnum;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -75,6 +76,12 @@ public class Auth implements Serializable {
      */
     @Size(max = 4, message = "是否能使用(0:否，1:是)不能超过4")
     private Integer canUse;
+
+    /**
+     * 是否删除(0:否，1：是)
+     */
+    @TableLogic
+    private BooleanEnum deleted;
 
 
 }

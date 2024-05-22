@@ -87,6 +87,12 @@ public class UserController {
     }
 
 
+    /**
+     * 根据id集合批量删除用户
+     *
+     * @param idVOs 用户id
+     * @return true/false
+     */
     @Operation(summary = "批量删除用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除用户")
     @DeleteMapping("/batchDelete")

@@ -3,6 +3,7 @@ package com.buni.user.entity;
 import com.baomidou.mybatisplus.annotation.*;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.buni.user.enums.AuthTypeEnum;
+import com.buni.user.enums.BooleanEnum;
 import lombok.*;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -90,6 +91,12 @@ public class Authority implements Serializable {
      */
     @Size(max = 255, message = "接口url不能超过255")
     private String url;
+
+    /**
+     * 是否删除(0:否，1：是)
+     */
+    @TableLogic
+    private BooleanEnum deleted;
 
 
 }
