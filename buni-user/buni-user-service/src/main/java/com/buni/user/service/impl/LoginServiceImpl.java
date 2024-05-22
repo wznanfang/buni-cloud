@@ -21,6 +21,7 @@ import com.buni.user.vo.role.UserRoleDTO;
 import com.buni.user.constant.UserConstant;
 import com.buni.user.service.*;
 import com.buni.user.util.TokenUtil;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -33,13 +34,19 @@ import java.util.List;
 @AllArgsConstructor
 public class LoginServiceImpl implements LoginService {
 
-
+    @Resource
     private UserConstant userConstant;
+    @Resource
     private RedisService redisService;
+    @Resource
     private AuthService authService;
+    @Resource
     private UserRoleService userRoleService;
+    @Resource
     private RoleAuthorityService roleAuthorityService;
+    @Resource
     private AuthorityService authorityService;
+    @Resource
     private UserService userService;
 
 

@@ -13,7 +13,7 @@
     <artifactId>buni-gateway</artifactId>
 
     <properties>
-        <gateway-version>4.0.4</gateway-version>
+        <gateway-version>4.1.2</gateway-version>
         <knife4j2-version>4.4.0</knife4j2-version>
     </properties>
 

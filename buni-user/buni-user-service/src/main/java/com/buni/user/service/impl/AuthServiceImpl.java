@@ -10,6 +10,7 @@ import com.buni.user.dto.AuthDTO;
 import com.buni.user.entity.Auth;
 import com.buni.user.mapper.AuthMapper;
 import com.buni.user.service.AuthService;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -26,6 +27,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements AuthService {
 
+    @Resource
     private RedisService redisService;
 
 

@@ -10,6 +10,7 @@ import com.buni.user.vo.role.*;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
@@ -27,7 +28,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/v1")
 public class RoleController {
 
-    private final RoleService roleService;
+    @Resource
+    private RoleService roleService;
 
 
     /**

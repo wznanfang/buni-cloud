@@ -23,6 +23,7 @@ import com.buni.user.service.UserRoleService;
 import com.buni.user.service.UserService;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -42,10 +43,12 @@ import java.util.List;
 @AllArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    @Resource
     private UserConstant userConstant;
+    @Resource
     private RedisService redisService;
+    @Resource
     private UserRoleService userRoleService;
-    private RoleAuthorityService roleAuthorityService;
 
 
     /**

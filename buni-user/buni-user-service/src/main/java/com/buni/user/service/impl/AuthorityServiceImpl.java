@@ -22,6 +22,7 @@ import com.buni.user.service.AuthorityService;
 import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.vo.authority.*;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -40,8 +41,11 @@ import java.util.List;
 @AllArgsConstructor
 public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority> implements AuthorityService {
 
+    @Resource
     private RedisService redisService;
+    @Resource
     private RoleAuthorityService roleAuthorityService;
+    @Resource
     private UserRoleService userRoleService;
 
 

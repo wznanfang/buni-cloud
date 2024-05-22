@@ -20,6 +20,7 @@ import com.buni.user.mapper.RoleMapper;
 import com.buni.user.service.RoleService;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.vo.role.*;
+import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
@@ -38,8 +39,11 @@ import java.util.List;
 @AllArgsConstructor
 public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
 
+    @Resource
     private RedisService redisService;
+    @Resource
     private UserRoleService userRoleService;
+    @Resource
     private RoleAuthorityService roleAuthorityService;
 
 
