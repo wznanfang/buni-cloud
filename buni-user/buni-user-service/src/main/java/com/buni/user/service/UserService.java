@@ -3,7 +3,9 @@ package com.buni.user.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.User;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Administrator
@@ -43,6 +45,14 @@ public interface UserService extends IService<User> {
      * @return true/false
      */
     boolean delete(Long id);
+
+    /**
+     * 批量删除用户
+     *
+     * @param idVOs 用户id集合
+     * @return true/false
+     */
+    Boolean batchDelete(IdVOs idVOs);
 
     /**
      * 根据id查询用户基本信息

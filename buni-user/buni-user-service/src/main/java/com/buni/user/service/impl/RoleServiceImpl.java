@@ -13,6 +13,8 @@ import com.buni.framework.config.redis.RedisService;
 import com.buni.user.entity.Authority;
 import com.buni.user.entity.Role;
 import com.buni.user.enums.ErrorEnum;
+import com.buni.user.service.RoleAuthorityService;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.role.UserRoleDTO;
 import com.buni.user.mapper.RoleMapper;
 import com.buni.user.service.RoleService;
@@ -38,6 +40,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     private RedisService redisService;
     private UserRoleService userRoleService;
+    private RoleAuthorityService roleAuthorityService;
 
 
     /**
@@ -98,6 +101,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             userRoleDtoS.forEach(userRole -> authorityKeys.add(Authority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
+        //删除角色权限关联
+        roleAuthorityService.deleteByRoleIds(roleIds);
         redisService.deleteKey(Role.REDIS_KEY + role.getId());
         return true;
     }
@@ -106,12 +111,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     /**
      * 根据ID集合批量删除角色
      *
-     * @param batchIds id集合
+     * @param idVOs id集合
      * @return true/false
      */
     @Override
-    public boolean batchDelete(BatchIds batchIds) {
-        List<Long> ids = batchIds.getIds();
+    public boolean batchDelete(IdVOs idVOs) {
+        List<Long> ids = idVOs.getIds();
         super.removeBatchByIds(ids);
         //更新角色权限表，剔除拥有该权限的用户缓存
         List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(ids);
@@ -120,6 +125,8 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             userRoleDtoS.forEach(userRole -> authorityKeys.add(Authority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
+        //删除角色权限关联
+        roleAuthorityService.deleteByRoleIds(ids);
         List<String> roleKeys = new ArrayList<>();
         ids.forEach(id -> roleKeys.add(Role.REDIS_KEY + id));
         redisService.delAllByKeys(roleKeys);

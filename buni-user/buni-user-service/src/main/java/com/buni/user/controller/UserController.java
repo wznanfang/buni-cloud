@@ -5,6 +5,7 @@ import com.buni.framework.util.Result;
 import com.buni.user.log.SysLogRecord;
 import com.buni.user.constant.CommonConstant;
 import com.buni.user.service.UserService;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -83,6 +84,14 @@ public class UserController {
     @DeleteMapping("/delete/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(userService.delete(id));
+    }
+
+
+    @Operation(summary = "批量删除用户")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除用户")
+    @DeleteMapping("/batchDelete")
+    public Result<Boolean> batchDelete(@RequestBody IdVOs idVOs) {
+        return Result.ok(userService.batchDelete(idVOs));
     }
 
 

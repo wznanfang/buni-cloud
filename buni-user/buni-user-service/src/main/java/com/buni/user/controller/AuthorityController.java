@@ -5,6 +5,7 @@ import com.buni.framework.util.Result;
 import com.buni.user.log.SysLogRecord;
 import com.buni.user.constant.CommonConstant;
 import com.buni.user.service.AuthorityService;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.authority.*;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,14 +75,14 @@ public class AuthorityController {
     /**
      * 批量删除权限
      *
-     * @param batchIds 权限信息id
+     * @param idVOs 权限信息id
      * @return true/false
      */
     @Operation(summary = "批量删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
     @DeleteMapping("/authority")
-    public Result<Boolean> BatchDelete(@RequestBody BatchIds batchIds) {
-        return Result.ok(authorityService.batchDelete(batchIds));
+    public Result<Boolean> BatchDelete(@RequestBody IdVOs idVOs) {
+        return Result.ok(authorityService.batchDelete(idVOs));
     }
 
 

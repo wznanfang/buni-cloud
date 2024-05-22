@@ -4,6 +4,7 @@ package com.buni.user.service;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.Authority;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.role.AuthorityDTO;
 import com.buni.user.vo.authority.*;
 
@@ -44,10 +45,10 @@ public interface AuthorityService extends IService<Authority> {
     /**
      * 根据ID集合批量删除权限
      *
-     * @param batchIds id集合
+     * @param idVOs id集合
      * @return true/false
      */
-    boolean batchDelete(BatchIds batchIds);
+    boolean batchDelete(IdVOs idVOs);
 
     /**
      * 根据ID查询权限

@@ -13,6 +13,7 @@ import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.user.entity.Authority;
 import com.buni.user.enums.ErrorEnum;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.role.AuthorityDTO;
 import com.buni.user.vo.role.RoleAuthorityDTO;
 import com.buni.user.vo.role.UserRoleDTO;
@@ -120,12 +121,12 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     /**
      * 根据ID集合批量删除权限
      *
-     * @param batchIds 权限id集合
+     * @param idVOs 权限id集合
      * @return true/false
      */
     @Override
-    public boolean batchDelete(BatchIds batchIds) {
-        List<Long> ids = batchIds.getIds();
+    public boolean batchDelete(IdVOs idVOs) {
+        List<Long> ids = idVOs.getIds();
         super.removeBatchByIds(ids);
         //更新角色权限表，剔除拥有该权限的用户缓存
         List<String> keys = new ArrayList<>();

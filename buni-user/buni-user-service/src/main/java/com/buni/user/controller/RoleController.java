@@ -5,6 +5,7 @@ import com.buni.framework.util.Result;
 import com.buni.user.log.SysLogRecord;
 import com.buni.user.constant.CommonConstant;
 import com.buni.user.service.RoleService;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.role.*;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -74,14 +75,14 @@ public class RoleController {
     /**
      * 批量删除权限
      *
-     * @param batchIds 角色id集合
+     * @param idVOs 角色id集合
      * @return true/false
      */
     @Operation(summary = "批量删除角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除角色")
     @DeleteMapping("/role")
-    public Result<Boolean> BatchDelete(@RequestBody BatchIds batchIds) {
-        return Result.ok(roleService.batchDelete(batchIds));
+    public Result<Boolean> BatchDelete(@RequestBody IdVOs idVOs) {
+        return Result.ok(roleService.batchDelete(idVOs));
     }
 
 

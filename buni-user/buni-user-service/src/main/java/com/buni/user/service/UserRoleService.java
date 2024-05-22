@@ -35,8 +35,14 @@ public interface UserRoleService extends IService<UserRole> {
      * 根据用户id删除用户角色
      *
      * @param userId 用户id
-     * @return {@link List}<{@link Long}>
      */
-    List<Long> deleteByUserId(Long userId);
+    void deleteByUserId(Long userId);
+
+    /**
+     * 根据用户id删除用户角色
+     *
+     * @param userIds 用户id集合
+     */
+    void deleteByUserIds(List<Long> userIds);
 
 }

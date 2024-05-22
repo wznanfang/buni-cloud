@@ -6,9 +6,9 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.user.entity.UserRole;
-import com.buni.user.vo.role.UserRoleDTO;
 import com.buni.user.mapper.UserRoleMapper;
 import com.buni.user.service.UserRoleService;
+import com.buni.user.vo.role.UserRoleDTO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -67,21 +67,24 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
 
     /**
-     * 根据用户id删除用户角色
+     * 根据用户id删除用户角色关联
      *
      * @param userId 用户id
-     * @return {@link List}<{@link Long}>
      */
     @Override
-    public List<Long> deleteByUserId(Long userId) {
-        List<Long> roleIds = new ArrayList<>();
-        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
-        if (CollUtil.isEmpty(list)) {
-            return roleIds;
-        }
-        roleIds = list.stream().map(UserRole::getId).toList();
-        super.removeBatchByIds(roleIds);
-        return roleIds;
+    public void deleteByUserId(Long userId) {
+        super.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
+    }
+
+
+    /**
+     * 根据用户id集合删除用户角色关联
+     *
+     * @param userIds 用户id集合
+     */
+    @Override
+    public void deleteByUserIds(List<Long> userIds) {
+        super.remove(Wrappers.<UserRole>lambdaQuery().in(UserRole::getUserId, userIds));
     }
 
 

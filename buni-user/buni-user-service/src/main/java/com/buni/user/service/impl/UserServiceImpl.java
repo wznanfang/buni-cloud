@@ -13,14 +13,15 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
+import com.buni.user.constant.UserConstant;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
-import com.buni.user.constant.UserConstant;
 import com.buni.user.mapper.UserMapper;
 import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.service.UserService;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -122,13 +123,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Transactional(rollbackFor = Exception.class)
     public boolean delete(Long id) {
         getUser(id);
-        User deleteUser = new User();
-        deleteUser.setId(id);
-        deleteUser.setDeleted(BooleanEnum.YES);
-        super.updateById(deleteUser);
-        List<Long> roleIds = userRoleService.deleteByUserId(id);
-        roleAuthorityService.deleteByRoleIds(roleIds);
+        super.removeById(id);
+        userRoleService.deleteByUserId(id);
         redisService.deleteKey(User.REDIS_KEY + id);
+        return true;
+    }
+
+
+    /**
+     * 批量删除
+     *
+     * @param idVOs 用户id集合
+     * @return
+     */
+    @Override
+    public Boolean batchDelete(IdVOs idVOs) {
+        List<Long> ids = idVOs.getIds();
+        super.removeByIds(ids);
+        userRoleService.deleteByUserIds(ids);
+        List<String> deleteKeys = ids.stream().map(id -> User.REDIS_KEY + id).toList();
+        redisService.delAllByKeys(deleteKeys);
         return true;
     }
 
