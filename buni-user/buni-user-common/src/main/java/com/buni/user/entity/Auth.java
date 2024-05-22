@@ -72,10 +72,10 @@ public class Auth implements Serializable {
     private String token;
 
     /**
-     * 是否能使用(0:否，1:是)
+     * 是否启用(0:否，1:是)
      */
-    @Size(max = 4, message = "是否能使用(0:否，1:是)不能超过4")
-    private Integer canUse;
+    @Size(max = 4, message = "是否启用(0:否，1:是)不能超过4")
+    private BooleanEnum enable;
 
     /**
      * 是否删除(0:否，1：是)

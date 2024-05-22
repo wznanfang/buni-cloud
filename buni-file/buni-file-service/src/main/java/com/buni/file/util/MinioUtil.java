@@ -76,33 +76,24 @@ public class MinioUtil {
      * @return 预览链接
      */
     public String uploadFile(String bucketName, MultipartFile file) {
-        // 判断文件是否为空
         if (null == file || 0 == file.getSize()) {
             return "文件不存在！";
         }
-        // 文件名
-        String url = "";
+        String fileName = "";
         try {
-            // 判断存储桶是否存在,不存在则创建
             createBucket(bucketName);
             String filename = file.getOriginalFilename();
-            // 新的文件名 = 文件md5.后缀名
             InputStream inputStream = file.getInputStream();
-            // 使用DigestUtils计算MD5值并以16进制字符串形式返回
             String md5 = DigestUtils.md5DigestAsHex(inputStream);
-            // 关闭输入流
             inputStream.close();
-            String fileName = md5 + filename.substring(filename.lastIndexOf("."));
-            // 判断文件是否存在
+            fileName = md5 + filename.substring(filename.lastIndexOf("."));
             if (!checkFileExist(bucketName, fileName)) {
-                // 开始上传
                 putObject(bucketName, fileName, file);
             }
-            url = getObjectURL(bucketName, fileName, 3);
         } catch (Exception e) {
             log.error("文件上传失败", e.fillInStackTrace());
         }
-        return url;
+        return fileName;
     }
 
     /**
@@ -148,7 +139,7 @@ public class MinioUtil {
      *
      * @param bucketName bucket名称
      * @param objectName ⽂件名称
-     * @param file     ⽂件
+     * @param file       ⽂件
      * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#putObject
      */
     public void putObject(String bucketName, String objectName, MultipartFile file) throws Exception {
