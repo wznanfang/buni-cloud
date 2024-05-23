@@ -18,16 +18,4 @@
         <module>buni-file-common</module>
     </modules>
 
-    <properties>
-
-    </properties>
-
-    <dependencies>
-        <dependency>
-            <groupId>com.buni</groupId>
-            <artifactId>buni-framework</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-    </dependencies>
-
 </project>
