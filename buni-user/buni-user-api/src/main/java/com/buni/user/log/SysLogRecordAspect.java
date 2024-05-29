@@ -2,8 +2,8 @@ package com.buni.user.log;
 
 import cn.hutool.core.util.ObjUtil;
 import com.buni.framework.util.HeaderUtil;
-import com.buni.user.service.SysLogApiService;
 import com.buni.user.entity.SysLog;
+import com.buni.user.service.SysLogApiService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,6 +16,8 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * @author zp.wei
@@ -30,6 +32,8 @@ public class SysLogRecordAspect {
     private SysLogApiService sysLogApiService;
     @Resource
     private ObjectMapper objectMapper;
+    @Resource
+    private ThreadPoolExecutor threadPoolExecutor;
 
 
     @Pointcut("@annotation(com.buni.user.log.SysLogRecord)")
@@ -41,13 +45,21 @@ public class SysLogRecordAspect {
     @Around("sysLogRecord()")
     public Object setLog(ProceedingJoinPoint joinPoint) throws Throwable {
         long startTime = System.currentTimeMillis();
-        Object result = joinPoint.proceed();
-        // 将日志写入文件或者数据库
+        Object result;
+        try {
+            result = joinPoint.proceed();
+        } finally {
+            saveSysLog(joinPoint, startTime);
+        }
+        return result;
+    }
+
+    private void saveSysLog(ProceedingJoinPoint joinPoint, long startTime) {
         try {
             HttpServletRequest request = HeaderUtil.getRequest();
             Method method = ((MethodSignature) joinPoint.getSignature()).getMethod();
             SysLogRecord sysLogRecord = method.getAnnotation(SysLogRecord.class);
-            //日志入库
+            // 构建SysLog对象
             SysLog sysLog = new SysLog();
             sysLog.setUsername(HeaderUtil.getUserName());
             sysLog.setUrl(String.valueOf(request.getRequestURL()));
@@ -57,11 +69,11 @@ public class SysLogRecordAspect {
             sysLog.setIp(HeaderUtil.getIp());
             sysLog.setDescription(sysLogRecord.description());
             sysLog.setElapsedTime(System.currentTimeMillis() - startTime);
-            sysLogApiService.save(sysLog);
+            // 异步保存日志
+            CompletableFuture.runAsync(() -> sysLogApiService.save(sysLog), threadPoolExecutor);
         } catch (Exception e) {
-            log.error("日志记录错误：", e);
+            log.error("日志记录失败,失败原因是----------：{}", e.getMessage());
         }
-        return result;
     }
 
 
