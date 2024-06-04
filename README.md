@@ -3,7 +3,7 @@
     	<img src ="https://img.shields.io/github/languages/code-size/wznanfang/buni-cloud" alt="codesize"/>
     	<img src="https://img.shields.io/badge/SpringBoot-3.3.0-brightgreen" alt="SpringBoot"/>
     	<img src="https://img.shields.io/github/languages/count/wznanfang/buni-cloud" alt="languages"/>
-    	<img src="https://img.shields.io/badge/Java-17-skyblue" alt="Java"/>
+        <img src="https://img.shields.io/badge/Java-17-skyblue" alt="Java"/>
     	<img src="https://img.shields.io/github/last-commit/wznanfang/buni-cloud" alt="lastcommit"/><br>
     	<img src="https://img.shields.io/badge/Author-wznanfang-orange" alt="Author"/>
     </p>
@@ -13,7 +13,7 @@
 ## 简介
 >buni-cloud —— 后端基础框架，用于框架快速搭建，功能快速开发
 ## 项目架构
-> SpringCloud+Nacos+Dubbo+Mybatis-Plus+Mysql+Redis+Minio+Hutool+Knife4j2
+> SpringCloud+Maven+Nacos+Dubbo+Mybatis-Plus+Mysql+Redis+Minio+Hutool+Knife4j2
 ## 框架模块描述
 1. buni-framework
 > 基础框架模块——提供项目所需底层依赖以及异常拦截器，线程池，分布式锁，限流，缓存等全局相关工具类
