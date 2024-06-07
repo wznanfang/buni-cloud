@@ -147,7 +147,7 @@ public class RedisService {
             keys.forEach(key -> {
                 set[0].addAll(redisTemplate.keys(key));
             });
-            if (CollUtil.isEmpty(set[0])) {
+            if (CollUtil.isNotEmpty(set[0])) {
                 redisTemplate.delete(set[0]);
             }
         }
