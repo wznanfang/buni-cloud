@@ -19,6 +19,18 @@ spring:
         server-addr: 127.0.0.1:8848
         namespace: buni
 
+  rabbitmq:
+    host: localhost
+    port: 5672
+    virtual-host: /
+    username: guest
+    password: guest
+    publisher-returns: true #消息发送到队列确认
+    publisher-confirm-type: correlated #开启 confirm 确认机制,确认消息发送到交换机(Exchange),是否确定回调
+    listener:
+      simple:
+        acknowledge-mode: manual # 开启消费者消息确认
+
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
