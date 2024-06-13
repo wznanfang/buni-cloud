@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author zp.wei
  * @date 2023/11/3 16:54
  */
-@Schema(description = "权限信息Get")
+@Schema(description = "权限信息GetVO")
 @Data
 public class AuthorityGetVO implements Serializable {
 

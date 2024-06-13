@@ -11,6 +11,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -19,7 +20,7 @@ import java.time.LocalDateTime;
  */
 @Schema(description = "用户信息InfoVO")
 @Data
-public class UserInfoVO {
+public class UserInfoVO implements Serializable {
 
     /**
      * id

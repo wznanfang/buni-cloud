@@ -5,13 +5,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @author zp.wei
  * @date 2023/9/19 10:41
  */
 @Schema(description = "新增用户VO")
 @Data
-public class AddVO {
+public class AddVO implements Serializable {
 
     /**
      * 用户名

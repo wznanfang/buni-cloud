@@ -12,7 +12,7 @@ import java.io.Serializable;
  * @author zp.wei
  * @date 2023/11/3 15:31
  */
-@Schema(description = "修改角色")
+@Schema(description = "VO")
 @Data
 public class UpdateVO implements Serializable {
 

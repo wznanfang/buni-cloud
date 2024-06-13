@@ -10,7 +10,7 @@ import lombok.Data;
  * @author zp.wei
  * @date 2023/11/3 16:54
  */
-@Schema(description = "分页查询权限信息")
+@Schema(description = "分页查询权限信息VO")
 @Data
 public class PageVO extends Page<Authority> {
 
