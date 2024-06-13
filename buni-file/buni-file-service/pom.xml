@@ -14,6 +14,7 @@
     <properties>
         <framework-version>0.0.1-SNAPSHOT</framework-version>
         <file-api-version>0.0.1-SNAPSHOT</file-api-version>
+        <minio-version>8.5.9</minio-version>
     </properties>
 
     <dependencies>
@@ -27,6 +28,11 @@
             <groupId>com.buni</groupId>
             <artifactId>buni-file-api</artifactId>
             <version>${file-api-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.minio</groupId>
+            <artifactId>minio</artifactId>
+            <version>${minio-version}</version>
         </dependency>
     </dependencies>
 

@@ -17,14 +17,11 @@
         <spring-cloud-version>2023.0.1</spring-cloud-version>
         <bootstrap-version>4.1.2</bootstrap-version>
         <nacos-version>2023.0.1.0</nacos-version>
-        <lombok-version>1.18.32</lombok-version>
         <mysql-version>8.0.33</mysql-version>
         <mybatis-plus-version>3.5.6</mybatis-plus-version>
         <hutool-version>5.8.25</hutool-version>
-        <common-lang3-version>3.12.0</common-lang3-version>
         <zxing-version>3.5.3</zxing-version>
         <aspectj-version>1.9.22</aspectj-version>
-        <minio-version>8.5.9</minio-version>
         <dubbo-version>3.2.10</dubbo-version>
         <knife4j-version>4.5.0</knife4j-version>
     </properties>
@@ -85,7 +82,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>${lombok-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
         </dependency>
         <dependency>
             <groupId>mysql</groupId>
@@ -103,24 +107,9 @@
             <version>${hutool-version}</version>
         </dependency>
         <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${common-lang3-version}</version>
-        </dependency>
-        <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>core</artifactId>
             <version>${zxing-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.aspectj</groupId>
-            <artifactId>aspectjweaver</artifactId>
-            <version>${aspectj-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.minio</groupId>
-            <artifactId>minio</artifactId>
-            <version>${minio-version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.dubbo</groupId>
