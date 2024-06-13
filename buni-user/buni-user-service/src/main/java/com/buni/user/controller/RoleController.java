@@ -83,7 +83,7 @@ public class RoleController {
     @Operation(summary = "批量删除角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除角色")
     @DeleteMapping("/role")
-    public Result<Boolean> BatchDelete(@RequestBody IdVOs idVOs) {
+    public Result<Boolean> BatchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(roleService.batchDelete(idVOs));
     }
 

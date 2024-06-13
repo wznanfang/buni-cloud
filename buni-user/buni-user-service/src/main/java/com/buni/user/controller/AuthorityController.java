@@ -83,7 +83,7 @@ public class AuthorityController {
     @Operation(summary = "批量删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
     @DeleteMapping("/authority")
-    public Result<Boolean> BatchDelete(@RequestBody IdVOs idVOs) {
+    public Result<Boolean> BatchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(authorityService.batchDelete(idVOs));
     }
 

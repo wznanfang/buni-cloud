@@ -96,7 +96,7 @@ public class UserController {
     @Operation(summary = "批量删除用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除用户")
     @DeleteMapping("/batchDelete")
-    public Result<Boolean> batchDelete(@RequestBody IdVOs idVOs) {
+    public Result<Boolean> batchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(userService.batchDelete(idVOs));
     }
 
