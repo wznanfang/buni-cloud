@@ -13,7 +13,7 @@
 ## 简介
 >buni-cloud —— 后端基础框架，用于框架快速搭建，功能快速开发
 ## 项目架构
-> SpringCloud+Maven+Nacos+Dubbo+Mybatis-Plus+Mysql+Redis+Minio+Hutool+Knife4j2
+> SpringCloud+Maven+Nacos+Dubbo+Mybatis-Plus+Mysql+Redis+Minio+RabbitMq+Hutool+Knife4j2
 ## 框架模块描述
 1. buni-framework
 > 基础框架模块——提供项目所需底层依赖以及异常拦截器，线程池，分布式锁，限流，缓存等全局相关工具类
