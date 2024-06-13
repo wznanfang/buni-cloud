@@ -1,6 +1,7 @@
 package com.buni.user.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
@@ -24,6 +25,17 @@ public enum BooleanEnum {
     BooleanEnum(Integer code, String value) {
         this.code = code;
         this.value = value;
+    }
+
+
+    @JsonCreator
+    public static BooleanEnum getCode(Integer code) {
+        for (BooleanEnum booleanEnum : BooleanEnum.values()) {
+            if (booleanEnum.code.equals(code)) {
+                return booleanEnum;
+            }
+        }
+        return null;
     }
 
 }

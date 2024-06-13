@@ -1,6 +1,7 @@
 package com.buni.user.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
 
@@ -24,6 +25,17 @@ public enum AuthTypeEnum {
     AuthTypeEnum(Integer code, String value) {
         this.code = code;
         this.value = value;
+    }
+
+
+    @JsonCreator
+    public static AuthTypeEnum getCode(Integer code) {
+        for (AuthTypeEnum authTypeEnum : AuthTypeEnum.values()) {
+            if (authTypeEnum.code.equals(code)) {
+                return authTypeEnum;
+            }
+        }
+        return null;
     }
 
 
