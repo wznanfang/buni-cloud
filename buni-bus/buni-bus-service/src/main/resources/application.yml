@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: buni-bus
+  profiles:
+    active: dev

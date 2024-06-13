@@ -21,6 +21,7 @@
         <module>buni-gateway</module>
         <module>buni-user</module>
         <module>buni-file</module>
+        <module>buni-bus</module>
     </modules>
 
     <properties>
