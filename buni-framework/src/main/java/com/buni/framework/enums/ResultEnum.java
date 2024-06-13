@@ -11,7 +11,7 @@ public enum ResultEnum {
     UNAUTHORIZED(false, 401, "未经授权的请求"),
     INVALID_TOKEN(false, 402, "无效的token"),
     ACCESS_DENIED(false, 403, "无权访问"),
-    SYSTEM_ERROR(false, 500, "系统错误"),
+    SYSTEM_ERROR(false, 500, "请求失败"),
     FREQUENT_VISITS(false, 100001, "访问频繁，请稍后再试"),
     ;
 

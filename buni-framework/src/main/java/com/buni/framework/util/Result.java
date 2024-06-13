@@ -77,6 +77,14 @@ public class Result<T> {
     }
 
     /**
+     * @param msg 传入对应的错误消息
+     * @return
+     */
+    public static <T> Result<T> error(String msg) {
+        return error(ResultEnum.SYSTEM_ERROR.getSuccess(), ResultEnum.SYSTEM_ERROR.getCode(), msg);
+    }
+
+    /**
      * @param error 传入对应的错误码 自动返回对应错误消息
      * @param <T>
      * @return
