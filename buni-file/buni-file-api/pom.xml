@@ -11,11 +11,15 @@
 
     <artifactId>buni-file-api</artifactId>
 
+    <properties>
+        <file-common-version>0.0.1-SNAPSHOT</file-common-version>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-file-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${file-common-version}</version>
         </dependency>
     </dependencies>
 

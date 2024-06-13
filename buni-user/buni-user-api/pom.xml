@@ -12,14 +12,14 @@
     <artifactId>buni-user-api</artifactId>
 
     <properties>
-
+        <user-common-version>0.0.1-SNAPSHOT</user-common-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-user-common</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${user-common-version}</version>
         </dependency>
     </dependencies>
 

@@ -19,14 +19,14 @@
     </modules>
 
     <properties>
-
+        <framework-version>0.0.1-SNAPSHOT</framework-version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-framework</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${framework-version}</version>
         </dependency>
     </dependencies>
 

@@ -11,17 +11,22 @@
 
     <artifactId>buni-file-service</artifactId>
 
+    <properties>
+        <framework-version>0.0.1-SNAPSHOT</framework-version>
+        <file-api-version>0.0.1-SNAPSHOT</file-api-version>
+    </properties>
+
     <dependencies>
 
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-framework</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${framework-version}</version>
         </dependency>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-file-api</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${file-api-version}</version>
         </dependency>
     </dependencies>
 
