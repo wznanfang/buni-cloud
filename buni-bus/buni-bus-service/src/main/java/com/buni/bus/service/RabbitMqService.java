@@ -9,17 +9,17 @@ import com.buni.bus.dto.MessageDTO;
 public interface RabbitMqService {
 
     /**
-     * 发送消息
+     * 默认交换机发送消息
      *
-     * @param message
+     * @param message 消息
      */
     void directDefaultSend(String message);
 
 
     /**
-     * 发送消息
+     * 延时交换机发送消息
      *
-     * @param messageDTO
+     * @param messageDTO 消息
      */
     void sendMessage(MessageDTO messageDTO);
 

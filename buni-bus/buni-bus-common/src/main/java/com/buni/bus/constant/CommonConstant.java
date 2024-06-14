@@ -1,10 +1,10 @@
-package com.buni.bus.properties;
+package com.buni.bus.constant;
 
 /**
  * @author zp.wei
  * @date 2024/6/7 10:32
  */
-public class CommonProperties {
+public class CommonConstant {
 
     /**
      * 默认mq配置

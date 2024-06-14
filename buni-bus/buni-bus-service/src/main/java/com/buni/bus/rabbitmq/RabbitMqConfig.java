@@ -1,6 +1,6 @@
 package com.buni.bus.rabbitmq;
 
-import com.buni.bus.properties.CommonProperties;
+import com.buni.bus.constant.CommonConstant;
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.DirectExchange;
@@ -31,7 +31,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public DirectExchange directExchange() {
-        return new DirectExchange(CommonProperties.DIRECT_DEFAULT_EXCHANGE_NAME, true, false);
+        return new DirectExchange(CommonConstant.DIRECT_DEFAULT_EXCHANGE_NAME, true, false);
     }
 
 
@@ -42,7 +42,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public Queue directQueue() {
-        return new Queue(CommonProperties.DIRECT_DEFAULT_QUEUE, true);
+        return new Queue(CommonConstant.DIRECT_DEFAULT_QUEUE, true);
     }
 
 
@@ -53,7 +53,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(directQueue()).to(directExchange()).with(CommonProperties.DIRECT_DEFAULT_ROUTING_KEY);
+        return BindingBuilder.bind(directQueue()).to(directExchange()).with(CommonConstant.DIRECT_DEFAULT_ROUTING_KEY);
     }
 
 
