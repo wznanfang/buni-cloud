@@ -3,3 +3,40 @@ spring:
     name: buni-user
   profiles:
     active: dev
+
+# 以下为固定配置
+# mybatis-plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      logic-delete-field: deleted # 全局逻辑删除的实体字段名(since 3.3.0,配置后可以忽略不配置步骤2)
+      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
+      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
+# dubbo的配置
+dubbo:
+  application:
+    name: user_dubbo_service
+    qos-enable: false
+  registry:
+    id: user_dubbo_service
+    address: nacos://127.0.0.1:8848?namespace=buni
+  protocol:
+    name: dubbo
+    port: -1
+  consumer:
+    check: false
+
+# knife4j接口文档配置
+knife4j:
+  enable: true
+springdoc:
+  group-configs:
+    - group: 用户管理
+      packages-to-scan: com.buni.user.controller
+
+# 自定义配置
+buni:
+  salt: buni

@@ -3,3 +3,29 @@ spring:
     name: buni-file
   profiles:
     active: dev
+
+# 以下为固定配置
+# mybatis-plus配置
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+# dubbo的配置
+dubbo:
+  application:
+    name: file_dubbo_service
+    qos-enable: false
+  registry:
+    id: file_dubbo_service
+    address: nacos://127.0.0.1:8848?namespace=buni
+  protocol:
+    name: dubbo
+    port: -1
+
+# knife4j接口文档配置
+knife4j:
+  enable: true
+springdoc:
+  group-configs:
+    - group: 文件管理
+      packages-to-scan: com.buni.file.controller
