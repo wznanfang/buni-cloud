@@ -10,7 +10,7 @@ import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.framework.enums.ResultEnum;
 import com.buni.framework.util.Result;
-import com.buni.gateway.constant.PublicUrlConstant;
+import com.buni.gateway.properties.PublicUrlProperties;
 import com.buni.user.entity.Authority;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.vo.login.UserLoginVO;
@@ -50,7 +50,7 @@ import java.util.stream.StreamSupport;
 @AllArgsConstructor
 public class GateWayFilter implements GlobalFilter {
 
-    private PublicUrlConstant publicUrlConstant;
+    private PublicUrlProperties publicUrlProperties;
     private RedisService redisService;
 
 
@@ -65,7 +65,7 @@ public class GateWayFilter implements GlobalFilter {
         // 获取请求路径，判断是否是公共接口
         // 针对路径进行处理
         String path = getPath(request);
-        if (!publicUrlConstant.getPublicUrl().contains(path)) {
+        if (!publicUrlProperties.getPublicUrl().contains(path)) {
             String token = getToken(request);
             String tokenKey = CommonConstant.TOKEN_REDIS_KEY + token;
             // 从redis中获取当前登录用户的信息

@@ -1,4 +1,4 @@
-package com.buni.gateway.constant;
+package com.buni.gateway.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -15,7 +15,7 @@ import java.util.List;
 @Order(1)
 @Component
 @ConfigurationProperties(prefix = "buni")
-public class PublicUrlConstant {
+public class PublicUrlProperties {
 
     private List<String> publicUrl;
 
