@@ -1,4 +1,4 @@
-package com.buni.user.constant;
+package com.buni.user.properties;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Order(1)
 @Component
 @ConfigurationProperties(prefix = "buni")
-public class UserConstant {
+public class UserProperties {
 
     private String salt;
 

@@ -1,13 +1,12 @@
 package com.buni.user.controller;
 
 import com.buni.framework.util.Result;
+import com.buni.user.constant.CommonConstant;
 import com.buni.user.log.SysLogRecord;
 import com.buni.user.vo.login.LoginVO;
 import com.buni.user.vo.login.UserLoginVO;
-import com.buni.user.constant.CommonConstant;
 import com.buni.user.service.LoginService;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
-import com.github.xiaoymin.knife4j.annotations.ApiSupport;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;

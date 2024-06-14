@@ -1,6 +1,6 @@
 package com.buni.user.service.impl;
 
-import com.buni.user.service.SysLogApiService;
+import com.buni.user.service.SysLogDubboService;
 import com.buni.user.entity.SysLog;
 import com.buni.user.service.SysLogService;
 import jakarta.annotation.Resource;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class SysLogApiServiceImpl implements SysLogApiService {
+public class SysLogDubboServiceImpl implements SysLogDubboService {
 
     @Resource
     private SysLogService sysLogService;

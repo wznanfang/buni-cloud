@@ -13,12 +13,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
-import com.buni.user.constant.UserConstant;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.UserMapper;
-import com.buni.user.service.RoleAuthorityService;
+import com.buni.user.properties.UserProperties;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.service.UserService;
 import com.buni.user.vo.IdVOs;
@@ -44,7 +43,7 @@ import java.util.List;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Resource
-    private UserConstant userConstant;
+    private UserProperties userProperties;
     @Resource
     private RedisService redisService;
     @Resource
@@ -68,7 +67,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User user = new User();
         BeanUtils.copyProperties(addVO, user);
-        user.setPassword(SmUtil.sm3(userConstant.getSalt() + addVO.getPassword()));
+        user.setPassword(SmUtil.sm3(userProperties.getSalt() + addVO.getPassword()));
         return super.save(user);
     }
 

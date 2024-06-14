@@ -7,12 +7,12 @@ import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.framework.util.HeaderUtil;
-import com.buni.user.constant.UserConstant;
 import com.buni.user.dto.AuthDTO;
 import com.buni.user.entity.Authority;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
+import com.buni.user.properties.UserProperties;
 import com.buni.user.service.*;
 import com.buni.user.util.TokenUtil;
 import com.buni.user.vo.login.AuthorityVO;
@@ -37,7 +37,7 @@ import java.util.List;
 public class LoginServiceImpl implements LoginService {
 
     @Resource
-    private UserConstant userConstant;
+    private UserProperties userProperties;
     @Resource
     private RedisService redisService;
     @Resource
@@ -67,7 +67,7 @@ public class LoginServiceImpl implements LoginService {
         if (user.getEnable().equals(BooleanEnum.NO)) {
             throw new CustomException(ErrorEnum.USER_FORBIDDEN.getCode(), ErrorEnum.USER_FORBIDDEN.getMessage());
         }
-        if (!SmUtil.sm3(userConstant.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
+        if (!SmUtil.sm3(userProperties.getSalt() + loginVO.getPassword()).equals(user.getPassword())) {
             throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
         }
         UserLoginVO userLoginVO = new UserLoginVO();

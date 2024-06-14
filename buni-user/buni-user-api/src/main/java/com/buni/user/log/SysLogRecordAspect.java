@@ -3,7 +3,7 @@ package com.buni.user.log;
 import cn.hutool.core.util.ObjUtil;
 import com.buni.framework.util.HeaderUtil;
 import com.buni.user.entity.SysLog;
-import com.buni.user.service.SysLogApiService;
+import com.buni.user.service.SysLogDubboService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,7 +29,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class SysLogRecordAspect {
 
     @Resource
-    private SysLogApiService sysLogApiService;
+    private SysLogDubboService sysLogDubboService;
     @Resource
     private ObjectMapper objectMapper;
     @Resource
@@ -70,7 +70,7 @@ public class SysLogRecordAspect {
             sysLog.setDescription(sysLogRecord.description());
             sysLog.setElapsedTime(System.currentTimeMillis() - startTime);
             // 异步保存日志
-            CompletableFuture.runAsync(() -> sysLogApiService.save(sysLog), threadPoolExecutor);
+            CompletableFuture.runAsync(() -> sysLogDubboService.save(sysLog), threadPoolExecutor);
         } catch (Exception e) {
             log.error("日志记录失败,失败原因是----------：{}", e.getMessage());
         }
