@@ -24,8 +24,8 @@ public class FileServiceImpl implements FileService {
     /**
      * 文件上传
      *
-     * @param file
-     * @return
+     * @param file 文件
+     * @return 文件名
      */
     @Override
     public String upload(MultipartFile file) {
@@ -34,10 +34,10 @@ public class FileServiceImpl implements FileService {
 
 
     /**
-     * 获取文件链接
+     * 文件预览
      *
-     * @param filename
-     * @return
+     * @param filename 文件名
+     * @return 文件预览地址
      */
     @Override
     public String preview(String filename) {

@@ -27,8 +27,8 @@ public class FileController {
     /**
      * 上传文件
      *
-     * @param file
-     * @return
+     * @param file 文件
+     * @return 文件名
      */
     @Operation(summary = "上传文件")
     @PostMapping("upload")
@@ -40,8 +40,8 @@ public class FileController {
     /**
      * 预览文件
      *
-     * @param filename
-     * @return
+     * @param filename 文件名
+     * @return 文件预览地址
      */
     @Operation(summary = "预览文件")
     @GetMapping("/preview")
