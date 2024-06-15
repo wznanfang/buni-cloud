@@ -2,6 +2,7 @@ package com.buni.framework.config.redis;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
+import com.buni.framework.constant.CommonConstant;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.DataType;
@@ -21,39 +22,8 @@ public class RedisService {
     private RedisTemplate redisTemplate;
 
 
-    /**
-     * 指定 key 的过期时间
-     *
-     * @param key  键
-     * @param time 时间
-     */
-    public void setKeyTime(String key, long time, TimeUnit timeUnit) {
-        redisTemplate.expire(key, time, timeUnit);
-    }
+    /********************************************* String *********************************************/
 
-
-    /**
-     * 存储缓存
-     *
-     * @param key
-     * @param val
-     */
-    public void set(String key, Object val) {
-        redisTemplate.opsForValue().set(key, val);
-    }
-
-
-    /**
-     * 存储缓存
-     *
-     * @param key      key
-     * @param val      value
-     * @param time     缓存时间
-     * @param timeUnit 时间单位
-     */
-    public void set(String key, Object val, Long time, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(key, val, time, timeUnit);
-    }
 
     /**
      * 存储数据并设置过期时间
@@ -89,124 +59,54 @@ public class RedisService {
 
 
     /**
-     * 根据 key 获取过期时间（-1 即为永不过期）
-     *
-     * @param key 键
-     * @return 过期时间
-     */
-    public Long getKeyTime(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
-    }
-
-
-    /**
-     * 判断 key 是否存在
-     *
-     * @param key 键
-     * @return 如果存在 key 则返回 true，否则返回 false
-     */
-    public Boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
-    }
-
-
-    /**
-     * 删除 key
-     *
-     * @param key 键
-     */
-    public Long deleteKey(String key) {
-        if (ObjUtil.isEmpty(key)) {
-            return 0L;
-        }
-        return redisTemplate.delete(Collections.singletonList(key));
-    }
-
-
-    /**
-     * 删除key值前缀匹配相同的缓存
+     * 存储缓存
      *
      * @param key
+     * @param val
      */
-    public void delAllByKey(String key) {
-        Set<String> keys = redisTemplate.keys(key + "*");
-        if (CollUtil.isNotEmpty(keys)) {
-            redisTemplate.delete(keys);
-        }
+    public void set(String key, Object val) {
+        redisTemplate.opsForValue().set(key, val);
     }
 
 
     /**
-     * 根据key批量删除缓存
+     * 存储缓存
      *
-     * @param keys
+     * @param key      key
+     * @param val      value
+     * @param time     缓存时间
+     * @param timeUnit 时间单位
      */
-    public void delAllByKeys(List<String> keys) {
-        if (CollUtil.isNotEmpty(keys)) {
-            final Set<String>[] set = new Set[]{new HashSet<>()};
-            keys.forEach(key -> {
-                set[0].addAll(redisTemplate.keys(key));
-            });
-            if (CollUtil.isNotEmpty(set[0])) {
-                redisTemplate.delete(set[0]);
-            }
-        }
+    public void set(String key, Object val, Long time, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, val, time, timeUnit);
     }
 
 
     /**
-     * 根据key从redis中获取数据
+     * 自增操作
      *
      * @param key
+     * @param min
      * @return
      */
-    public Object get(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public Long incr(String key, long min) {
+        return redisTemplate.opsForValue().increment(key, ObjUtil.isEmpty(key) || min < CommonConstant.ZERO ? CommonConstant.ZERO : min);
     }
 
 
     /**
-     * 获取 Key 的类型
+     * 自减操作
      *
-     * @param key 键
+     * @param key
+     * @param min
+     * @return
      */
-    public String keyType(String key) {
-        DataType dataType = redisTemplate.type(key);
-        assert dataType != null;
-        return dataType.code();
+    public Long decr(String key, long min) {
+        return redisTemplate.opsForValue().decrement(key, ObjUtil.isEmpty(key) || min < CommonConstant.ZERO ? CommonConstant.ZERO : min);
     }
 
 
-    /**
-     * 批量设置值
-     *
-     * @param map 要插入的 key value 集合
-     */
-    public void batchSet(Map<String, Object> map) {
-        redisTemplate.opsForValue().multiSet(map);
-    }
-
-
-    /**
-     * 批量获取值
-     *
-     * @param list 查询的 Key 列表
-     * @return value 列表
-     */
-    public List<Object> batchGet(List<String> list) {
-        return redisTemplate.opsForValue().multiGet(Collections.singleton(list));
-    }
-
-
-    /**
-     * 设置对象类型的数据
-     *
-     * @param key   键
-     * @param value 值
-     */
-    public void objectSetValue(String key, Object value) {
-        redisTemplate.opsForValue().set(key, value);
-    }
+    /********************************************* list *********************************************/
 
 
     /**
@@ -348,6 +248,9 @@ public class RedisService {
     }
 
 
+    /********************************************* hash *********************************************/
+
+
     /**
      * 存hash数据
      *
@@ -382,6 +285,9 @@ public class RedisService {
     }
 
 
+    /********************************************* set *********************************************/
+
+
     /**
      * 存储set类型数据
      *
@@ -389,7 +295,56 @@ public class RedisService {
      * @param value
      * @return
      */
-    public Long setAdd(String key, Set<Object> value) {
+    public Long setAdd(String key, Object value) {
+        return redisTemplate.opsForSet().add(key, value);
+    }
+
+
+    /**
+     * 移除范围内的缓存数据
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long setRemove(String key, Object value) {
+        return redisTemplate.opsForSet().remove(key, value);
+    }
+
+
+    /**
+     * 判断是否包含value
+     *
+     * @param key
+     * @param value
+     */
+    public void contains(String key, String value) {
+        redisTemplate.opsForSet().isMember(key, value);
+    }
+
+
+    /**
+     * 获取集合中所有的值
+     *
+     * @param key
+     * @return
+     */
+    public Set<String> values(String key) {
+        return redisTemplate.opsForSet().members(key);
+    }
+
+
+    /********************************************* zset *********************************************/
+
+
+    /**
+     * 存储set类型数据
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long zSetAdd(String key, Set<Object> value) {
         return redisTemplate.opsForZSet().add(key, value);
     }
 
@@ -400,7 +355,7 @@ public class RedisService {
      * @param score
      * @return
      */
-    public Boolean setAdd(String key, Long currentTime, Long score) {
+    public Boolean zSetAdd(String key, Long currentTime, Long score) {
         return redisTemplate.opsForZSet().add(key, currentTime, score);
     }
 
@@ -413,7 +368,7 @@ public class RedisService {
      * @param max
      * @return
      */
-    public Long setCount(String key, Long min, Long max) {
+    public Long zSetCount(String key, Long min, Long max) {
         return redisTemplate.opsForZSet().count(key, min, max);
     }
 
@@ -426,8 +381,132 @@ public class RedisService {
      * @param max
      * @return
      */
-    public Long setRemoveRangeByScore(String key, Long min, Long max) {
+    public Long zSetRemoveRangeByScore(String key, Long min, Long max) {
         return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+    }
+
+
+    /********************************************* 操作缓存 *********************************************/
+
+
+    /**
+     * 指定 key 的过期时间
+     *
+     * @param key  键
+     * @param time 时间
+     */
+    public void setKeyTime(String key, long time, TimeUnit timeUnit) {
+        redisTemplate.expire(key, time, timeUnit);
+    }
+
+
+    /**
+     * 根据 key 获取过期时间（-1 即为永不过期）
+     *
+     * @param key 键
+     * @return 过期时间
+     */
+    public Long getKeyTime(String key) {
+        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+    }
+
+
+    /**
+     * 判断 key 是否存在
+     *
+     * @param key 键
+     * @return 如果存在 key 则返回 true，否则返回 false
+     */
+    public Boolean hasKey(String key) {
+        return redisTemplate.hasKey(key);
+    }
+
+
+    /**
+     * 删除 key
+     *
+     * @param key 键
+     */
+    public Long deleteKey(String key) {
+        if (ObjUtil.isEmpty(key)) {
+            return 0L;
+        }
+        return redisTemplate.delete(Collections.singletonList(key));
+    }
+
+
+    /**
+     * 删除key值前缀匹配相同的缓存
+     *
+     * @param key
+     */
+    public void delAllByKey(String key) {
+        Set<String> keys = redisTemplate.keys(key + "*");
+        if (CollUtil.isNotEmpty(keys)) {
+            redisTemplate.delete(keys);
+        }
+    }
+
+
+    /**
+     * 根据key批量删除缓存
+     *
+     * @param keys
+     */
+    public void delAllByKeys(List<String> keys) {
+        if (CollUtil.isNotEmpty(keys)) {
+            final Set<String>[] set = new Set[]{new HashSet<>()};
+            keys.forEach(key -> {
+                set[0].addAll(redisTemplate.keys(key));
+            });
+            if (CollUtil.isNotEmpty(set[0])) {
+                redisTemplate.delete(set[0]);
+            }
+        }
+    }
+
+
+    /**
+     * 根据key从redis中获取数据
+     *
+     * @param key
+     * @return
+     */
+    public Object get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
+
+    /**
+     * 获取 Key 的类型
+     *
+     * @param key 键
+     */
+    public String keyType(String key) {
+        DataType dataType = redisTemplate.type(key);
+        assert dataType != null;
+        return dataType.code();
+    }
+
+
+    /**
+     * 批量设置值
+     *
+     * @param map 要插入的 key value 集合
+     */
+    public void batchSet(Map<String, Object> map) {
+        redisTemplate.opsForValue().multiSet(map);
+    }
+
+
+    /**
+     * 批量获取值
+     *
+     * @param list 查询的 Key 列表
+     * @return value 列表
+     */
+    public List<Object> batchGet(List<String> list) {
+        return redisTemplate.opsForValue().multiGet(list);
     }
 
 

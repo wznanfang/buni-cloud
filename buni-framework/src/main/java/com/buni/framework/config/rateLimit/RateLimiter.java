@@ -33,12 +33,12 @@ public class RateLimiter {
         long startTime = (currentTime / seconds) * seconds;
         long endTime = startTime + seconds;
         //获取时间段内的请求量
-        long allRequests = redisService.setCount(key, startTime, endTime);
+        long allRequests = redisService.zSetCount(key, startTime, endTime);
         if (allRequests > maxLimit) {
             throw new CustomException(ResultEnum.FREQUENT_VISITS.getCode(), ResultEnum.FREQUENT_VISITS.getMessage());
         }
-        redisService.setRemoveRangeByScore(key, 0L, currentTime - seconds);
-        redisService.setAdd(key, currentTime, currentTime);
+        redisService.zSetRemoveRangeByScore(key, 0L, currentTime - seconds);
+        redisService.zSetAdd(key, currentTime, currentTime);
         redisService.setKeyTime(key, seconds + 1, TimeUnit.SECONDS);
         return joinPoint.proceed();
     }
