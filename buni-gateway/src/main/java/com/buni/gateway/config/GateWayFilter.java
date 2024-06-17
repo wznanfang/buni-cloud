@@ -72,7 +72,6 @@ public class GateWayFilter implements GlobalFilter {
             UserLoginVO userLoginVO = (UserLoginVO) redisService.get(tokenKey);
             // 校验token，如果token正确则放行
             if (ObjUtil.isEmpty(userLoginVO) || userLoginVO.getTokenVO().getExpireTime() < System.currentTimeMillis()) {
-                log.error("---------- token为空 ----------");
                 return returnMsg(exchange, ResultEnum.UNAUTHORIZED);
             }
             // 校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
