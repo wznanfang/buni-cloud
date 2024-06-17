@@ -71,22 +71,15 @@ public class GateWayFilter implements GlobalFilter {
             // 从redis中获取当前登录用户的信息
             UserLoginVO userLoginVO = (UserLoginVO) redisService.get(tokenKey);
             // 校验token，如果token正确则放行
-            if (ObjUtil.isEmpty(userLoginVO)) {
+            if (ObjUtil.isEmpty(userLoginVO) || userLoginVO.getTokenVO().getExpireTime() < System.currentTimeMillis()) {
                 log.error("---------- token为空 ----------");
                 return returnMsg(exchange, ResultEnum.UNAUTHORIZED);
-            }
-            if (userLoginVO.getTokenVO().getExpireTime() < System.currentTimeMillis()) {
-                log.error("---------- token已失效 ----------");
-                return returnMsg(exchange, ResultEnum.INVALID_TOKEN);
             }
             // 校验是否是超级管理员,如果是超级管理员则放行，否则校验是否拥有接口权限
             if (userLoginVO.getAdmin().equals(BooleanEnum.NO)) {
                 // 校验是否有对应的接口权限
                 List<String> urls = getUrls(userLoginVO.getId());
-                if (CollUtil.isEmpty(urls)) {
-                    return returnMsg(exchange, ResultEnum.INVALID_TOKEN);
-                }
-                if (!urls.contains(path)) {
+                if (CollUtil.isEmpty(urls) || !urls.contains(path)) {
                     return returnMsg(exchange, ResultEnum.ACCESS_DENIED);
                 }
             }
@@ -136,9 +129,8 @@ public class GateWayFilter implements GlobalFilter {
             try {
                 JsonNode jsonNode = mapper.readTree(JSONUtil.toJsonStr(authorityList));
                 // 提取每个对象的 url 值并分割成数组
-                String[] urls = StreamSupport.stream(jsonNode.spliterator(), false).map(node -> node.get(CommonConstant.URL).asText())
-                        .flatMap(url -> Arrays.stream(url.split(CommonConstant.COMMA))).map(String::trim).toArray(String[]::new);
-                urlList = List.of(urls);
+                urlList = List.of(StreamSupport.stream(jsonNode.spliterator(), false).map(node -> node.get(CommonConstant.URL).asText())
+                        .flatMap(url -> Arrays.stream(url.split(CommonConstant.COMMA))).map(String::trim).toArray(String[]::new));
             } catch (Exception e) {
                 log.error("接口权限获取失败{}", e.getMessage());
             }
