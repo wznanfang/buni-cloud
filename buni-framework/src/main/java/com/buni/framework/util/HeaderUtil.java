@@ -55,7 +55,7 @@ public class HeaderUtil {
      */
     public static String getUserId() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? "" : URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? CommonConstant.EMPTY_STR : URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
     }
 
 
@@ -66,7 +66,7 @@ public class HeaderUtil {
      */
     public static String getUserName() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? "" : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? CommonConstant.EMPTY_STR : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
     }
 
 
@@ -88,11 +88,11 @@ public class HeaderUtil {
      */
     public static String getIp() {
         HttpServletRequest request = getRequest();
-        String ip = request.getHeader("x-forwarded-for");
+        String ip = request.getHeader(CommonConstant.FORWARDED);
         if (StrUtil.isNotEmpty(ip) && !CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {
             // 多次反向代理后会有多个ip值，第一个ip才是真实ip
-            if (ip.contains(",")) {
-                ip = ip.split(",")[0];
+            if (ip.contains(CommonConstant.COMMA)) {
+                ip = ip.split(CommonConstant.COMMA)[CommonConstant.ZERO];
             }
         }
         if (StrUtil.isEmpty(ip) || CommonConstant.UNKNOWN.equalsIgnoreCase(ip)) {

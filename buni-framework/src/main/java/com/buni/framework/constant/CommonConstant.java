@@ -91,6 +91,7 @@ public class CommonConstant {
     /**
      * IP地址相关常量
      */
+    public static final String FORWARDED = "x-forwarded-for";
     public static final String UNKNOWN = "unknown";
     public static final String PROXY_CLIENT_IP = "Proxy-Client-IP";
     public static final String WL_PROXY_CLIENT_IP = "WL-Proxy-Client-IP";
