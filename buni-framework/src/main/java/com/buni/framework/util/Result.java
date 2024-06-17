@@ -53,7 +53,7 @@ public class Result<T> {
                 .success(ResultEnum.RESULT_SUCCESS.getSuccess())
                 .code(ResultEnum.RESULT_SUCCESS.getCode())
                 .timeStamp()
-                .msg(ResultEnum.RESULT_SUCCESS.getMessage());
+                .message(ResultEnum.RESULT_SUCCESS.getMessage());
     }
 
     public static <T> Result<T> ok() {
@@ -62,7 +62,7 @@ public class Result<T> {
                 .success(ResultEnum.RESULT_SUCCESS.getSuccess())
                 .code(ResultEnum.RESULT_SUCCESS.getCode())
                 .timeStamp()
-                .msg(ResultEnum.RESULT_SUCCESS.getMessage());
+                .message(ResultEnum.RESULT_SUCCESS.getMessage());
     }
 
 
@@ -77,11 +77,11 @@ public class Result<T> {
     }
 
     /**
-     * @param msg 传入对应的错误消息
+     * @param message 传入对应的错误消息
      * @return
      */
-    public static <T> Result<T> error(String msg) {
-        return error(ResultEnum.SYSTEM_ERROR.getSuccess(), ResultEnum.SYSTEM_ERROR.getCode(), msg);
+    public static <T> Result<T> error(String message) {
+        return error(ResultEnum.SYSTEM_ERROR.getSuccess(), ResultEnum.SYSTEM_ERROR.getCode(), message);
     }
 
     /**
@@ -140,8 +140,8 @@ public class Result<T> {
         return this;
     }
 
-    public Result<T> msg(String msg) {
-        this.message = msg;
+    public Result<T> message(String message) {
+        this.message = message;
         return this;
     }
 
