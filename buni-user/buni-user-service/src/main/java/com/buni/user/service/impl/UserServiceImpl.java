@@ -61,8 +61,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!Validator.isMobile(addVO.getTel())) {
             throw new CustomException(ErrorEnum.PHONE_ERROR.getCode(), ErrorEnum.PHONE_ERROR.getMessage());
         }
-        long count = super.count(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).or().eq(User::getTel, addVO.getTel()).last("LIMIT 1"));
-        if (count > 0) {
+        User existUser = super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).or().eq(User::getTel, addVO.getTel()));
+        if (ObjUtil.isNotEmpty(existUser)) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
         User user = new User();

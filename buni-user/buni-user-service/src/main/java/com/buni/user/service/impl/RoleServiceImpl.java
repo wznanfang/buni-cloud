@@ -27,6 +27,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -97,8 +99,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         Role role = getRole(id);
         super.removeById(role.getId());
         // 剔除拥有该角色的用户缓存
-        List<Long> roleIds = new ArrayList<>();
-        roleIds.add(role.getId());
+        List<Long> roleIds = new ArrayList<>(Collections.singletonList(role.getId()));
         List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(roleIds);
         if (CollUtil.isNotEmpty(userRoleDtoS)) {
             List<String> authorityKeys = new ArrayList<>();

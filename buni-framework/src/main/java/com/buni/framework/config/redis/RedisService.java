@@ -455,12 +455,10 @@ public class RedisService {
      */
     public void delAllByKeys(List<String> keys) {
         if (CollUtil.isNotEmpty(keys)) {
-            final Set<String>[] set = new Set[]{new HashSet<>()};
-            keys.forEach(key -> {
-                set[0].addAll(redisTemplate.keys(key));
-            });
-            if (CollUtil.isNotEmpty(set[0])) {
-                redisTemplate.delete(set[0]);
+            Set<String> allKeys = new HashSet<>();
+            keys.forEach(key -> allKeys.addAll(redisTemplate.keys(key)));
+            if (CollUtil.isNotEmpty(allKeys)) {
+                redisTemplate.delete(allKeys);
             }
         }
     }
