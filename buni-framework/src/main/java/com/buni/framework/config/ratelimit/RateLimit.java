@@ -1,4 +1,4 @@
-package com.buni.framework.config.rateLimit;
+package com.buni.framework.config.ratelimit;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

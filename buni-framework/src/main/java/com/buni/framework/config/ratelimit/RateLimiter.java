@@ -1,5 +1,6 @@
-package com.buni.framework.config.rateLimit;
+package com.buni.framework.config.ratelimit;
 
+import com.buni.framework.constant.CommonConstant;
 import com.buni.framework.enums.ResultEnum;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
@@ -26,13 +27,13 @@ public class RateLimiter {
 
     @Around("@annotation(rateLimit)")
     public Object limit(ProceedingJoinPoint joinPoint, RateLimit rateLimit) throws Throwable {
-        String key = "rate:limit:" + joinPoint.getSignature().getName();
+        String key = CommonConstant.RATE_LIMITER + joinPoint.getSignature().getName();
         int maxLimit = rateLimit.limit();
         int seconds = rateLimit.time();
         long currentTime = LocalDateTime.now().getSecond();
         long startTime = (currentTime / seconds) * seconds;
         long endTime = startTime + seconds;
-        //获取时间段内的请求量
+        // 获取时间段内的请求量
         long allRequests = redisService.zSetCount(key, startTime, endTime);
         if (allRequests > maxLimit) {
             throw new CustomException(ResultEnum.FREQUENT_VISITS.getCode(), ResultEnum.FREQUENT_VISITS.getMessage());

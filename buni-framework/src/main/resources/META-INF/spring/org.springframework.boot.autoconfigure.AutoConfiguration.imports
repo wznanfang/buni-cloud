@@ -5,6 +5,6 @@ com.buni.framework.config.filter.AccessControlFilter
 com.buni.framework.config.lock.RedisLockImpl
 com.buni.framework.config.mybatisplus.MybatisPlusConfig
 com.buni.framework.config.mybatisplus.MyMetaObjectHandler
-com.buni.framework.config.rateLimit.RateLimiter
+com.buni.framework.config.ratelimit.RateLimiter
 com.buni.framework.config.redis.RedisConfig
 com.buni.framework.config.redis.RedisService

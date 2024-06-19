@@ -1,5 +1,6 @@
 package com.buni.framework.constant;
 
+import com.alibaba.nacos.client.config.impl.Limiter;
 import lombok.Data;
 
 import java.io.File;
@@ -80,6 +81,11 @@ public class CommonConstant {
      * 客户端标识
      */
     public static final String USER_AGENT = "User-Agent";
+
+    /**
+     * 限流前缀
+     */
+    public static final String RATE_LIMITER = "rate:limit:";
 
 
     /**
