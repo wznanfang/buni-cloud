@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
      * @return
      */
     @ExceptionHandler(BindException.class)
-    public Result handleError(BindException e) {
+    public Result<BindException> handleError(BindException e) {
         BindingResult bindingResult = e.getBindingResult();
         return Result.error(Objects.requireNonNull(bindingResult.getFieldError()).getDefaultMessage());
     }
