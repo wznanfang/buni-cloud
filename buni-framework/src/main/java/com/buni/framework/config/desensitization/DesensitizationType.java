@@ -12,12 +12,29 @@ public enum DesensitizationType {
     CUSTOMIZE_RULE,
     // 默认的
     DEFAULT,
+    // 姓名
+    CHINESE_NAME,
     // 身份证号
     ID_CARD,
     // 手机号
     MOBILE_PHONE,
+    // 座机
+    FIXED_PHONE,
     // 地址
     ADDRESS,
     // 电子邮件
-    EMAIL
+    EMAIL,
+    // 密码
+    PASSWORD,
+    // 银行卡
+    BANK_CARD,
+    // 中国大陆车牌
+    CAR_LICENSE,
+    // ipv4
+    IPV4,
+    // ipv6
+    IPV6,
+    ;
+
+
 }

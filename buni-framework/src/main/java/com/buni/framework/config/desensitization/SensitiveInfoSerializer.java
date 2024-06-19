@@ -42,10 +42,17 @@ public class SensitiveInfoSerializer extends JsonSerializer<String> implements C
         if (useMasking && value != null) {
             String desensitizedValue = switch (type) {
                 case CUSTOMIZE_RULE -> StrUtil.hide(value, prefixLen, suffixLen);
-                case ID_CARD -> DesensitizedUtil.idCardNum(value, prefixLen, suffixLen);
+                case CHINESE_NAME -> DesensitizedUtil.chineseName(value);
+                case ID_CARD -> DesensitizedUtil.idCardNum(value, 2, 2);
                 case MOBILE_PHONE -> DesensitizedUtil.mobilePhone(value);
-                case ADDRESS -> DesensitizedUtil.address(value, suffixLen);
+                case FIXED_PHONE -> DesensitizedUtil.fixedPhone(value);
+                case ADDRESS -> DesensitizedUtil.address(value, 10);
                 case EMAIL -> DesensitizedUtil.email(value);
+                case PASSWORD -> DesensitizedUtil.password(value);
+                case BANK_CARD -> DesensitizedUtil.bankCard(value);
+                case CAR_LICENSE -> DesensitizedUtil.carLicense(value);
+                case IPV4 -> DesensitizedUtil.ipv4(value);
+                case IPV6 -> DesensitizedUtil.ipv6(value);
                 default -> DesensitizedUtil.firstMask(value);
             };
             gen.writeString(desensitizedValue);

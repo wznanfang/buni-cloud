@@ -32,8 +32,5 @@ public @interface Desensitization {
      */
     int suffixLen() default 0;
 
-    /**
-     * 遮罩字符
-     */
-    String maskingChar() default "*";
+
 }
