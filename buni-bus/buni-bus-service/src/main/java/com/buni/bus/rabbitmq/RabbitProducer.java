@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 
 /**
+ * 生产者
+ *
  * @author zp.wei
  * @date 2024/6/7 10:32
  */

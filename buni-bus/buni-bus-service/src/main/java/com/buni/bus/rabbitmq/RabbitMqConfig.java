@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 /**
+ * ma配置类
  * @author zp.wei
  * @date 2024/6/7 11:04
  */
