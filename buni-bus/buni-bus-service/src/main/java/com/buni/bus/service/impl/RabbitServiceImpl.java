@@ -45,4 +45,16 @@ public class RabbitServiceImpl implements RabbitMqService {
     }
 
 
+    /**
+     * 发送消息
+     * @param messageDTO
+     */
+    @Async(ExecutorConfig.EXECUTOR_NAME)
+    @Override
+    public void fanoutMessage(MessageDTO messageDTO) {
+        rabbitProducer.fanoutMessage(messageDTO);
+    }
+
+
+
 }

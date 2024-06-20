@@ -38,4 +38,12 @@ public class RabbitMqController {
     }
 
 
+    @Operation(summary = "扇形交换机发送消息",description = "支持延时消息")
+    @PostMapping("/fanoutMessage")
+    public Result<Boolean> fanoutMessage(@RequestBody @Valid MessageDTO messageDTO) {
+        rabbitMqService.fanoutMessage(messageDTO);
+        return Result.success();
+    }
+
+
 }

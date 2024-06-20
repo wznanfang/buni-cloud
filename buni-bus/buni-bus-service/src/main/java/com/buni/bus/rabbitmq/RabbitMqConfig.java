@@ -1,10 +1,7 @@
 package com.buni.bus.rabbitmq;
 
 import com.buni.bus.constant.CommonConstant;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +19,24 @@ public class RabbitMqConfig {
     @Lazy
     @Autowired
     private RabbitAdmin rabbitAdmin;
+
+
+    /**
+     * 创建初始化RabbitAdmin对象
+     *
+     * @param connectionFactory
+     * @return
+     */
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
+        // 只有设置为 true，spring 才会加载 RabbitAdmin 这个类
+        rabbitAdmin.setAutoStartup(true);
+        return rabbitAdmin;
+    }
+
+
+    /***************************************直连交换机*******************************************/
 
 
     /**
@@ -57,29 +72,53 @@ public class RabbitMqConfig {
     }
 
 
-    /**
-     * 创建初始化RabbitAdmin对象
-     *
-     * @param connectionFactory
-     * @return
-     */
+    /***************************************扇形交换机*******************************************/
+
+/*
+
     @Bean
-    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
-        RabbitAdmin rabbitAdmin = new RabbitAdmin(connectionFactory);
-        // 只有设置为 true，spring 才会加载 RabbitAdmin 这个类
-        rabbitAdmin.setAutoStartup(true);
-        return rabbitAdmin;
+    public FanoutExchange fanoutExchange() {
+        return new FanoutExchange(CommonConstant.FANOUT_EXCHANGE_NAME);
     }
+
+
+    @Bean
+    public Queue queueOne() {
+        return new Queue(CommonConstant.FANOUT_QUEUE_ONE);
+    }
+
+
+    @Bean
+    public Queue queueTwo() {
+        return new Queue(CommonConstant.FANOUT_QUEUE_TWO);
+    }
+
+
+    @Bean
+    public Binding bindingOne() {
+        return BindingBuilder.bind(queueOne()).to(fanoutExchange());
+    }
+
+
+    @Bean
+    public Binding bindingTwo() {
+        return BindingBuilder.bind(queueTwo()).to(fanoutExchange());
+    }
+*/
 
 
     /**
      * 创建交换机和对列
      */
     @Bean
-    public boolean createExchangeQueue() {
+    public void createExchangeQueue() {
+        // 直连交换机
         rabbitAdmin.declareExchange(directExchange());
         rabbitAdmin.declareQueue(directQueue());
-        return true;
+        // 扇形交换机
+        /*rabbitAdmin.declareExchange(fanoutExchange());
+        rabbitAdmin.declareQueue(queueOne());
+        rabbitAdmin.declareQueue(queueTwo());*/
     }
 
 

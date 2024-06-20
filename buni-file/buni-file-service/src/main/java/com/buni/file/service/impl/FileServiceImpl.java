@@ -41,6 +41,6 @@ public class FileServiceImpl implements FileService {
      */
     @Override
     public String preview(String filename) {
-        return minioUtil.getObjectURL(minioProperties.getBucket(), filename, 3);
+        return minioUtil.getObjectURL(minioProperties.getBucket(), filename, 1);
     }
 }

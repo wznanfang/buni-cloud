@@ -13,6 +13,8 @@ import org.springframework.context.annotation.Configuration;
 import java.io.IOException;
 
 /**
+ * 消费者示例代码
+ *
  * @author zp.wei
  * @date 2024/6/7 16:04
  */
@@ -37,6 +39,30 @@ public class DirectConsumer {
             exchange = @Exchange(value = CommonConstant.DIRECT_EXCHANGE_NAME, delayed = "true"), key = CommonConstant.DIRECT_ROUTING_KEY))
     public void receive2(Message message, Channel channel) {
         log.info("[延时消费者接收消息]---------- '{}'", new String(message.getBody()));
+        try {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = CommonConstant.FANOUT_QUEUE_ONE, durable = CommonConstant.TRUE),
+            exchange = @Exchange(value = CommonConstant.FANOUT_EXCHANGE_NAME, delayed = CommonConstant.TRUE)))
+    public void fanoutQueueOne(Message message, Channel channel) {
+        log.info("[扇形交换机1延时消费者接收消息]---------- '{}'", new String(message.getBody()));
+        try {
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
+    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = CommonConstant.FANOUT_QUEUE_TWO, durable = CommonConstant.TRUE),
+            exchange = @Exchange(value = CommonConstant.FANOUT_EXCHANGE_NAME, delayed = CommonConstant.TRUE)))
+    public void fanoutQueueTeo(Message message, Channel channel) {
+        log.info("[扇形交换机2延时消费者接收消息]---------- '{}'", new String(message.getBody()));
         try {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (IOException e) {
