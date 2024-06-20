@@ -65,12 +65,17 @@ public class CommonConstant {
     /**
      * 用户id
      */
-    public static final String USER_ID = "user_id";
+    public static final String USER_ID = "userId";
 
     /**
      * 用户名字
      */
     public static final String USER_NAME = "username";
+
+    /**
+     * 租户id
+     */
+    public static final String TENANT_ID = "tenantId";
 
     /**
      * url

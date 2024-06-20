@@ -10,9 +10,6 @@ import lombok.Data;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-
 /**
  * 获取用户的信息
  *
@@ -53,9 +50,9 @@ public class HeaderUtil {
      *
      * @return {@link String}
      */
-    public static String getUserId() {
+    public static Long getUserId() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? CommonConstant.EMPTY_STR : URLDecoder.decode(request.getHeader(CommonConstant.USER_ID), StandardCharsets.UTF_8);
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? CommonConstant.ZERO : Long.parseLong(request.getHeader(CommonConstant.USER_ID));
     }
 
 
@@ -66,7 +63,18 @@ public class HeaderUtil {
      */
     public static String getUserName() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? CommonConstant.EMPTY_STR : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? CommonConstant.EMPTY_STR : request.getHeader(CommonConstant.USER_NAME);
+    }
+
+
+    /**
+     * 获取用户id
+     *
+     * @return {@link String}
+     */
+    public static Integer getTenantId() {
+        HttpServletRequest request = getRequest();
+        return ObjUtil.isEmpty(request.getHeader(CommonConstant.TENANT_ID)) ? CommonConstant.ZERO : Integer.valueOf(request.getHeader(CommonConstant.TENANT_ID));
     }
 
 

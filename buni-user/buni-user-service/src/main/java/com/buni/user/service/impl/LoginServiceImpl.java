@@ -107,7 +107,7 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public Boolean loginOut() {
-        String userId = HeaderUtil.getUserId();
+        Long userId = HeaderUtil.getUserId();
         redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
         redisService.deleteKey(Authority.REDIS_KEY + userId);
         return true;

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -76,6 +77,12 @@ public class Auth implements Serializable {
      */
     @Size(max = 4, message = "是否启用(0:否，1:是)不能超过4")
     private BooleanEnum enable;
+
+    /**
+     * 租户id
+     */
+    @TableField(fill = FieldFill.INSERT, value = "tenant_id")
+    private Integer tenantId;
 
     /**
      * 是否删除(0:否，1：是)

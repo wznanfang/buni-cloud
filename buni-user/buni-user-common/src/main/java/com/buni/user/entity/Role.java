@@ -38,7 +38,6 @@ public class Role implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-
     /**
      * 创建时间
      */
@@ -46,7 +45,6 @@ public class Role implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
-
 
     /**
      * 修改时间
@@ -56,12 +54,17 @@ public class Role implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
 
-
     /**
      * 角色名字
      */
     @Size(max = 50, message = "角色名字不能超过50")
     private String name;
+
+    /**
+     * 租户id
+     */
+    @TableField(fill = FieldFill.INSERT, value = "tenant_id")
+    private Integer tenantId;
 
     /**
      * 是否删除(0:否，1：是)

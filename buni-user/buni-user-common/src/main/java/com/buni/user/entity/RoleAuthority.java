@@ -37,7 +37,6 @@ public class RoleAuthority implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-
     /**
      * 创建时间
      */
@@ -46,7 +45,6 @@ public class RoleAuthority implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
 
-
     /**
      * 修改时间
      */
@@ -54,7 +52,6 @@ public class RoleAuthority implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
-
 
     /**
      * 角色id
@@ -65,6 +62,12 @@ public class RoleAuthority implements Serializable {
      * 权限id
      */
     private Long authorityId;
+
+    /**
+     * 租户id
+     */
+    @TableField(fill = FieldFill.INSERT, value = "tenant_id")
+    private Integer tenantId;
 
     /**
      * 是否删除(0:否，1：是)

@@ -41,7 +41,6 @@ public class Authority implements Serializable {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
 
-
     /**
      * 创建时间
      */
@@ -50,7 +49,6 @@ public class Authority implements Serializable {
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime createTime;
 
-
     /**
      * 修改时间
      */
@@ -58,7 +56,6 @@ public class Authority implements Serializable {
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     private LocalDateTime updateTime;
-
 
     /**
      * 名字
@@ -93,10 +90,15 @@ public class Authority implements Serializable {
     private String url;
 
     /**
+     * 租户id
+     */
+    @TableField(fill = FieldFill.INSERT, value = "tenant_id")
+    private Integer tenantId;
+
+    /**
      * 是否删除(0:否，1：是)
      */
     @TableLogic
     private BooleanEnum deleted;
-
 
 }

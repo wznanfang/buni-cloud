@@ -86,8 +86,9 @@ public class GateWayFilter implements GlobalFilter {
             userLoginVO.getTokenVO().setExpireTime(System.currentTimeMillis() + CommonConstant.EXPIRE_TIME_MS);
             redisService.setOneHour(tokenKey, userLoginVO);
             // 将用户信息存入请求头中
-            request.mutate().header(CommonConstant.USER_ID, URLEncoder.encode(String.valueOf(userLoginVO.getId()), StandardCharsets.UTF_8)).build();
-            request.mutate().header(CommonConstant.USER_NAME, URLEncoder.encode(userLoginVO.getUsername(), StandardCharsets.UTF_8)).build();
+            request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
+            request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
+            request.mutate().header(CommonConstant.TENANT_ID, String.valueOf(userLoginVO.getTenantId())).build();
         }
         // 给请求头中加相应的设置，避免绕过网关直接请求对应的服务
         request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();

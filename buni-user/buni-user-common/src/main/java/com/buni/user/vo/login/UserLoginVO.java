@@ -80,5 +80,11 @@ public class UserLoginVO implements Serializable {
     @Schema(description = "权限信息")
     private List<AuthorityVO> authorityVOS;
 
+    /**
+     * 租户id
+     */
+    @Schema(description = "租户id")
+    private Integer tenantId;
+
 
 }
