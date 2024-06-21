@@ -1,6 +1,5 @@
 package com.buni.framework.constant;
 
-import com.alibaba.nacos.client.config.impl.Limiter;
 import lombok.Data;
 
 import java.io.File;
@@ -72,11 +71,6 @@ public class CommonConstant {
      * 用户名字
      */
     public static final String USER_NAME = "username";
-
-    /**
-     * 租户id
-     */
-    public static final String TENANT_ID = "tenant_id";
 
     /**
      * url
