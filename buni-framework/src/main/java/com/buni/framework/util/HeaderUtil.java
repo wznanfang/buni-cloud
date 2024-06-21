@@ -80,21 +80,6 @@ public class HeaderUtil {
 
 
     /**
-     * 获取用户id
-     * 针对登录接口，忽略掉了租户，所以在登录的时候将租户id存放在ThreadLocal中，这样上下文可以取用
-     *
-     * @return {@link String}
-     */
-    public static Integer getTenantId() {
-        HttpServletRequest request = getRequest();
-        if (ObjUtil.isNotEmpty(request)) {
-            return ObjUtil.isEmpty(request.getHeader(CommonConstant.TENANT_ID)) ? CommonConstant.ZERO : Integer.valueOf(request.getHeader(CommonConstant.TENANT_ID));
-        }
-        return CommonConstant.ZERO;
-    }
-
-
-    /**
      * 获取客户端标识
      *
      * @return {@link String}

@@ -8,4 +8,3 @@ com.buni.framework.config.mybatisplus.MyMetaObjectHandler
 com.buni.framework.config.ratelimit.RateLimiter
 com.buni.framework.config.redis.RedisConfig
 com.buni.framework.config.redis.RedisService
-com.buni.framework.config.mybatisplus.CustomTenantHandler
