@@ -46,8 +46,8 @@ public class HeaderUtil {
     public static String getToken() {
         HttpServletRequest request = getRequest();
         if (ObjUtil.isNotEmpty(request)) {
-            return ObjUtil.isEmpty(request.getHeader(CommonConstant.AUTHORIZATION)) ? CommonConstant.EMPTY_STR :
-                    StrUtil.subAfter(request.getHeader(CommonConstant.AUTHORIZATION), CommonConstant.PREFIX, true);
+            String token = request.getHeader(CommonConstant.AUTHORIZATION);
+            return ObjUtil.isEmpty(token) ? CommonConstant.EMPTY_STR : StrUtil.subAfter(token, CommonConstant.PREFIX, true);
         }
         return CommonConstant.EMPTY_STR;
     }
@@ -61,7 +61,8 @@ public class HeaderUtil {
     public static Long getUserId() {
         HttpServletRequest request = getRequest();
         if (ObjUtil.isNotEmpty(request)) {
-            return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? CommonConstant.ZERO : Long.parseLong(request.getHeader(CommonConstant.USER_ID));
+            Long userId = Long.valueOf(request.getHeader(CommonConstant.USER_ID));
+            return ObjUtil.isEmpty(userId) ? CommonConstant.ZERO : userId;
         }
         return Long.valueOf(CommonConstant.ZERO);
     }
@@ -75,8 +76,8 @@ public class HeaderUtil {
     public static String getUserName() {
         HttpServletRequest request = getRequest();
         if (ObjUtil.isNotEmpty(request)) {
-            return ObjUtil.isEmpty(URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8))
-                    ? CommonConstant.EMPTY_STR : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
+            String username = URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
+            return ObjUtil.isEmpty(username) ? CommonConstant.EMPTY_STR : username;
         }
         return CommonConstant.EMPTY_STR;
     }
@@ -90,7 +91,8 @@ public class HeaderUtil {
     public static String getIdentity() {
         HttpServletRequest request = getRequest();
         if (ObjUtil.isNotEmpty(request)) {
-            return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_AGENT)) ? CommonConstant.EMPTY_STR : request.getHeader(CommonConstant.USER_AGENT);
+            String identity = request.getHeader(CommonConstant.USER_AGENT);
+            return ObjUtil.isEmpty(identity) ? CommonConstant.EMPTY_STR : identity;
         }
         return CommonConstant.EMPTY_STR;
     }
