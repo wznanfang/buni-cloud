@@ -88,7 +88,6 @@ public class GateWayFilter implements GlobalFilter {
             // 将用户信息存入请求头中
             request.mutate().header(CommonConstant.USER_ID, String.valueOf(userLoginVO.getId())).build();
             request.mutate().header(CommonConstant.USER_NAME, userLoginVO.getUsername()).build();
-            request.mutate().header(CommonConstant.TENANT_ID, String.valueOf(userLoginVO.getTenantId())).build();
         }
         // 给请求头中加相应的设置，避免绕过网关直接请求对应的服务
         request.mutate().header(CommonConstant.GATEWAY_KEY, RandomUtil.randomString(32)).build();

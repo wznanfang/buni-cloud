@@ -4,7 +4,6 @@ import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.crypto.SmUtil;
 import com.buni.framework.config.exception.CustomException;
-import com.buni.framework.config.mybatisplus.TenantContextHolder;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.framework.util.HeaderUtil;
@@ -73,7 +72,6 @@ public class LoginServiceImpl implements LoginService {
         }
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(user, userLoginVO);
-        TenantContextHolder.setTenantId(user.getTenantId());
         // 获取token
         TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);

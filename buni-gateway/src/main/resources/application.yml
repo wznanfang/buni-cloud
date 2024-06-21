@@ -41,6 +41,5 @@ buni:
   public-url:
     - /v3/api-docs/GET
     - /v1/login/POST
-    - /v1/register/POST
     - /v1/getCode/GET
     - /v1/getQrCode/GET

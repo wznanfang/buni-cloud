@@ -64,12 +64,6 @@ public class RoleAuthority implements Serializable {
     private Long authorityId;
 
     /**
-     * 租户id
-     */
-    @TableField(fill = FieldFill.INSERT, value = "tenant_id")
-    private Integer tenantId;
-
-    /**
      * 是否删除(0:否，1：是)
      */
     @TableLogic

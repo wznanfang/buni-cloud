@@ -38,9 +38,9 @@ public class UserController {
      * @return true/false
      */
     @Operation(summary = "新增用户")
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "注册用户")
-    @PostMapping("/register")
-    public Result<Boolean> register(@RequestBody @Validated AddVO addVO) {
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "新增用户")
+    @PostMapping("/save")
+    public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(userService.save(addVO));
     }
 

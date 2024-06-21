@@ -10,6 +10,8 @@ import lombok.Data;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.util.Optional;
+
 /**
  * 获取用户的信息
  *
@@ -30,7 +32,7 @@ public class HeaderUtil {
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        return servletRequestAttributes.getRequest();
+        return Optional.ofNullable(servletRequestAttributes).map(ServletRequestAttributes::getRequest).orElse(null);
     }
 
 
@@ -41,7 +43,11 @@ public class HeaderUtil {
      */
     public static String getToken() {
         HttpServletRequest request = getRequest();
-        return StrUtil.subAfter(request.getHeader(CommonConstant.AUTHORIZATION), CommonConstant.PREFIX, true);
+        if (ObjUtil.isNotEmpty(request)) {
+            return ObjUtil.isEmpty(request.getHeader(CommonConstant.AUTHORIZATION)) ? CommonConstant.EMPTY_STR :
+                    StrUtil.subAfter(request.getHeader(CommonConstant.AUTHORIZATION), CommonConstant.PREFIX, true);
+        }
+        return CommonConstant.EMPTY_STR;
     }
 
 
@@ -52,7 +58,10 @@ public class HeaderUtil {
      */
     public static Long getUserId() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? CommonConstant.ZERO : Long.parseLong(request.getHeader(CommonConstant.USER_ID));
+        if (ObjUtil.isNotEmpty(request)) {
+            return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_ID)) ? CommonConstant.ZERO : Long.parseLong(request.getHeader(CommonConstant.USER_ID));
+        }
+        return Long.valueOf(CommonConstant.ZERO);
     }
 
 
@@ -63,18 +72,25 @@ public class HeaderUtil {
      */
     public static String getUserName() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? CommonConstant.EMPTY_STR : request.getHeader(CommonConstant.USER_NAME);
+        if (ObjUtil.isNotEmpty(request)) {
+            return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? CommonConstant.EMPTY_STR : request.getHeader(CommonConstant.USER_NAME);
+        }
+        return CommonConstant.EMPTY_STR;
     }
 
 
     /**
      * 获取用户id
+     * 针对登录接口，忽略掉了租户，所以在登录的时候将租户id存放在ThreadLocal中，这样上下文可以取用
      *
      * @return {@link String}
      */
     public static Integer getTenantId() {
         HttpServletRequest request = getRequest();
-        return ObjUtil.isEmpty(request.getHeader(CommonConstant.TENANT_ID)) ? CommonConstant.ZERO : Integer.valueOf(request.getHeader(CommonConstant.TENANT_ID));
+        if (ObjUtil.isNotEmpty(request)) {
+            return ObjUtil.isEmpty(request.getHeader(CommonConstant.TENANT_ID)) ? CommonConstant.ZERO : Integer.valueOf(request.getHeader(CommonConstant.TENANT_ID));
+        }
+        return CommonConstant.ZERO;
     }
 
 
@@ -85,7 +101,10 @@ public class HeaderUtil {
      */
     public static String getIdentity() {
         HttpServletRequest request = getRequest();
-        return request.getHeader(CommonConstant.USER_AGENT);
+        if (ObjUtil.isNotEmpty(request)) {
+            return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_AGENT)) ? CommonConstant.EMPTY_STR : request.getHeader(CommonConstant.USER_AGENT);
+        }
+        return CommonConstant.EMPTY_STR;
     }
 
 
