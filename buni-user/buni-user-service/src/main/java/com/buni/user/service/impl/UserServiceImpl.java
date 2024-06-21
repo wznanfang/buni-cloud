@@ -205,7 +205,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public User findByUsername(String username) {
-        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDeleted, BooleanEnum.NO));
+        return baseMapper.findByUsername(username);
     }
 
 

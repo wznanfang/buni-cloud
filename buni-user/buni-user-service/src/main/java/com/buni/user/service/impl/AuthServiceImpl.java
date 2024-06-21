@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.executor.ExecutorConfig;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
+import com.buni.framework.util.HeaderUtil;
 import com.buni.user.dto.AuthDTO;
 import com.buni.user.entity.Auth;
 import com.buni.user.mapper.AuthMapper;

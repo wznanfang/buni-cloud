@@ -5,7 +5,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.User;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Administrator

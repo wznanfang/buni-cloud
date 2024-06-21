@@ -4,6 +4,7 @@ import com.alibaba.nacos.client.config.impl.Limiter;
 import lombok.Data;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * @author zp.wei
@@ -65,7 +66,7 @@ public class CommonConstant {
     /**
      * 用户id
      */
-    public static final String USER_ID = "userId";
+    public static final String USER_ID = "user_id";
 
     /**
      * 用户名字
@@ -75,7 +76,7 @@ public class CommonConstant {
     /**
      * 租户id
      */
-    public static final String TENANT_ID = "tenantId";
+    public static final String TENANT_ID = "tenant_id";
 
     /**
      * url
@@ -109,5 +110,11 @@ public class CommonConstant {
     public static final String HTTP_CLIENT_IP = "HTTP_CLIENT_IP";
     public static final String HTTP_X_FORWARDED_FOR = "HTTP_X_FORWARDED_FOR";
     public static final String X_REAL_IP = "X-Real-IP";
+
+
+    /**
+     * 忽略租户id的表
+     */
+    public static final List<String> IGNORE_TENANT_TABLE = List.of("user");
 
 }
