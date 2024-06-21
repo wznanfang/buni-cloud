@@ -10,6 +10,8 @@ import lombok.Data;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
 /**
@@ -73,7 +75,8 @@ public class HeaderUtil {
     public static String getUserName() {
         HttpServletRequest request = getRequest();
         if (ObjUtil.isNotEmpty(request)) {
-            return ObjUtil.isEmpty(request.getHeader(CommonConstant.USER_NAME)) ? CommonConstant.EMPTY_STR : request.getHeader(CommonConstant.USER_NAME);
+            return ObjUtil.isEmpty(URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8))
+                    ? CommonConstant.EMPTY_STR : URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
         }
         return CommonConstant.EMPTY_STR;
     }
