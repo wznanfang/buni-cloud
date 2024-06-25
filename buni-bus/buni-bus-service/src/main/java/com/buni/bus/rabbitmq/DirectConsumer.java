@@ -4,9 +4,6 @@ import com.buni.bus.constant.CommonConstant;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
-import org.springframework.amqp.rabbit.annotation.Exchange;
-import org.springframework.amqp.rabbit.annotation.Queue;
-import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.context.annotation.Configuration;
 
@@ -24,9 +21,9 @@ import java.io.IOException;
 public class DirectConsumer {
 
 
-    @RabbitListener(queues = CommonConstant.DIRECT_DEFAULT_QUEUE)
-    public void receive(Message message, Channel channel) {
-        log.info("[默认消费者接收消息]---------- '{}'", new String(message.getBody()));
+    @RabbitListener(queues = CommonConstant.DIRECT_QUEUE)
+    public void directReceive(Message message, Channel channel) {
+        log.info("[直连交换机消费者接收消息]---------- '{}'", new String(message.getBody()));
         try {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
         } catch (IOException e) {
@@ -35,20 +32,7 @@ public class DirectConsumer {
     }
 
 
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = "complain-queue", durable = "true"),
-            exchange = @Exchange(value = CommonConstant.DIRECT_EXCHANGE_NAME, delayed = "true"), key = CommonConstant.DIRECT_ROUTING_KEY))
-    public void receive2(Message message, Channel channel) {
-        log.info("[延时消费者接收消息]---------- '{}'", new String(message.getBody()));
-        try {
-            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = CommonConstant.FANOUT_QUEUE_ONE, durable = CommonConstant.TRUE),
-            exchange = @Exchange(value = CommonConstant.FANOUT_EXCHANGE_NAME, delayed = CommonConstant.TRUE)))
+    @RabbitListener(queues = CommonConstant.FANOUT_QUEUE_ONE)
     public void fanoutQueueOne(Message message, Channel channel) {
         log.info("[扇形交换机1延时消费者接收消息]---------- '{}'", new String(message.getBody()));
         try {
@@ -59,9 +43,8 @@ public class DirectConsumer {
     }
 
 
-    @RabbitListener(bindings = @QueueBinding(value = @Queue(value = CommonConstant.FANOUT_QUEUE_TWO, durable = CommonConstant.TRUE),
-            exchange = @Exchange(value = CommonConstant.FANOUT_EXCHANGE_NAME, delayed = CommonConstant.TRUE)))
-    public void fanoutQueueTeo(Message message, Channel channel) {
+    @RabbitListener(queues = CommonConstant.FANOUT_QUEUE_TWO)
+    public void fanoutQueueTwo(Message message, Channel channel) {
         log.info("[扇形交换机2延时消费者接收消息]---------- '{}'", new String(message.getBody()));
         try {
             channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);

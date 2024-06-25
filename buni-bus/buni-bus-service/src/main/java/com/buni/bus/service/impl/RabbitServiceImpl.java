@@ -25,23 +25,12 @@ public class RabbitServiceImpl implements RabbitMqService {
     /**
      * 默认交换机发送消息
      *
-     * @param message 消息
-     */
-    @Async(ExecutorConfig.EXECUTOR_NAME)
-    @Override
-    public void directDefaultSend(String message) {
-        rabbitProducer.directDefaultSend(message);
-    }
-
-    /**
-     * 延时交换机发送消息
-     *
      * @param messageDTO 消息
      */
     @Async(ExecutorConfig.EXECUTOR_NAME)
     @Override
-    public void sendMessage(MessageDTO messageDTO) {
-        rabbitProducer.sendMessage(messageDTO);
+    public void directMessage(MessageDTO messageDTO) {
+        rabbitProducer.directMessage(messageDTO);
     }
 
 

@@ -24,25 +24,14 @@ public class RabbitProducer {
 
     /**
      * 默认交换机
-     *
-     * @param message 消息
-     */
-    public void directDefaultSend(String message) {
-        log.info("【默认生产者发送消息】---------: '{}'", message);
-        amqpTemplate.convertAndSend(CommonConstant.DIRECT_DEFAULT_EXCHANGE_NAME, CommonConstant.DIRECT_DEFAULT_ROUTING_KEY, message);
-    }
-
-
-    /**
-     * 延时交换机
+     * 支持延时消息
      *
      * @param messageDTO 消息
      */
-    public void sendMessage(MessageDTO messageDTO) {
-        log.info("【延时生产者发送消息】---------: '{}'", messageDTO.getMessage());
+    public void directMessage(MessageDTO messageDTO) {
+        log.info("【直连交换机生产者发送消息】---------: '{}'", messageDTO.getMessage());
         amqpTemplate.convertAndSend(CommonConstant.DIRECT_EXCHANGE_NAME, CommonConstant.DIRECT_ROUTING_KEY, messageDTO.getMessage(), msg -> {
-            // 设置延迟时间
-            msg.getMessageProperties().setHeader(CommonConstant.DELAY, messageDTO.getDelayTime());
+            msg.getMessageProperties().setHeader(CommonConstant.X_DELAY, messageDTO.getDelayTime());
             return msg;
         });
     }
@@ -55,9 +44,9 @@ public class RabbitProducer {
      * @param messageDTO
      */
     public void fanoutMessage(MessageDTO messageDTO) {
-        log.info("【延时扇形生产者发送消息】---------: '{}'", messageDTO.getMessage());
+        log.info("【扇形交换机生产者发送消息】---------: '{}'", messageDTO.getMessage());
         amqpTemplate.convertAndSend(CommonConstant.FANOUT_EXCHANGE_NAME, CommonConstant.EMPTY_STRING, messageDTO.getMessage(), msg -> {
-            msg.getMessageProperties().setHeader(CommonConstant.DELAY, messageDTO.getDelayTime());
+            msg.getMessageProperties().setHeader(CommonConstant.X_DELAY, messageDTO.getDelayTime());
             return msg;
         });
     }

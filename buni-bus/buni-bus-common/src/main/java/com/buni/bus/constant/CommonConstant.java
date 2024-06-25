@@ -7,16 +7,18 @@ package com.buni.bus.constant;
 public class CommonConstant {
 
     public static final String EMPTY_STRING = "";
-    public static final String TRUE = "true";
-    public static final String FALSE = "false";
-    public static final String DELAY = "x-delay";
+    public static final String X_DELAY = "x-delay";
+    public static final String X_DELAYED_TYPE = "x-delayed-type";
+    public static final String X_DELAYED_MESSAGE = "x-delayed-message";
+    public static final String DIRECT = "direct";
+    public static final String FANOUT = "fanout";
 
     /**
      * 直连交换机配置
      */
-    public static final String DIRECT_DEFAULT_EXCHANGE_NAME = "buni.default.direct";
-    public static final String DIRECT_DEFAULT_QUEUE = "buni.default.queue";
-    public static final String DIRECT_DEFAULT_ROUTING_KEY = "buni.default.routing";
+    public static final String DIRECT_EXCHANGE_NAME = "buni.direct";
+    public static final String DIRECT_QUEUE = "buni.queue";
+    public static final String DIRECT_ROUTING_KEY = "buni.routing";
 
     /**
      * 扇形交换机配置
@@ -25,10 +27,5 @@ public class CommonConstant {
     public static final String FANOUT_QUEUE_ONE = "buni.fanout.queue.one";
     public static final String FANOUT_QUEUE_TWO = "buni.fanout.queue.two";
 
-    /**
-     * 延时mq配置
-     */
-    public static final String DIRECT_EXCHANGE_NAME = "buni.direct";
-    public static final String DIRECT_ROUTING_KEY = "buni.routing";
 
 }

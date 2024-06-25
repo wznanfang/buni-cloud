@@ -11,16 +11,9 @@ public interface RabbitMqService {
     /**
      * 默认交换机发送消息
      *
-     * @param message 消息
-     */
-    void directDefaultSend(String message);
-
-    /**
-     * 延时交换机发送消息
-     *
      * @param messageDTO 消息
      */
-    void sendMessage(MessageDTO messageDTO);
+    void directMessage(MessageDTO messageDTO);
 
     /**
      * 发送消息

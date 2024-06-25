@@ -9,8 +9,12 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * ma配置类
+ *
  * @author zp.wei
  * @date 2024/6/7 11:04
  */
@@ -37,7 +41,7 @@ public class RabbitMqConfig {
     }
 
 
-    /***************************************直连交换机*******************************************/
+    /***************************************直连交换机-支持延时消息*******************************************/
 
 
     /**
@@ -46,8 +50,10 @@ public class RabbitMqConfig {
      * @return
      */
     @Bean
-    public DirectExchange directExchange() {
-        return new DirectExchange(CommonConstant.DIRECT_DEFAULT_EXCHANGE_NAME, true, false);
+    public Exchange directExchange() {
+        Map<String, Object> args = new HashMap<>(1);
+        args.put(CommonConstant.X_DELAYED_TYPE, CommonConstant.DIRECT);
+        return new CustomExchange(CommonConstant.DIRECT_EXCHANGE_NAME, CommonConstant.X_DELAYED_MESSAGE, true, false, args);
     }
 
 
@@ -58,7 +64,7 @@ public class RabbitMqConfig {
      */
     @Bean
     public Queue directQueue() {
-        return new Queue(CommonConstant.DIRECT_DEFAULT_QUEUE, true);
+        return new Queue(CommonConstant.DIRECT_QUEUE, true);
     }
 
 
@@ -69,17 +75,18 @@ public class RabbitMqConfig {
      */
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(directQueue()).to(directExchange()).with(CommonConstant.DIRECT_DEFAULT_ROUTING_KEY);
+        return BindingBuilder.bind(directQueue()).to(directExchange()).with(CommonConstant.DIRECT_ROUTING_KEY).noargs();
     }
 
 
-    /***************************************扇形交换机*******************************************/
+    /***************************************扇形交换机-支持延时消息*******************************************/
 
-/*
 
     @Bean
-    public FanoutExchange fanoutExchange() {
-        return new FanoutExchange(CommonConstant.FANOUT_EXCHANGE_NAME);
+    public Exchange fanoutExchange() {
+        Map<String, Object> args = new HashMap<>(1);
+        args.put(CommonConstant.X_DELAYED_TYPE, CommonConstant.FANOUT);
+        return new CustomExchange(CommonConstant.FANOUT_EXCHANGE_NAME, CommonConstant.X_DELAYED_MESSAGE, true, false, args);
     }
 
 
@@ -97,29 +104,29 @@ public class RabbitMqConfig {
 
     @Bean
     public Binding bindingOne() {
-        return BindingBuilder.bind(queueOne()).to(fanoutExchange());
+        return BindingBuilder.bind(queueOne()).to(fanoutExchange()).with("").noargs();
     }
 
 
     @Bean
     public Binding bindingTwo() {
-        return BindingBuilder.bind(queueTwo()).to(fanoutExchange());
+        return BindingBuilder.bind(queueTwo()).to(fanoutExchange()).with("").noargs();
     }
-*/
 
 
     /**
      * 创建交换机和对列
      */
     @Bean
-    public void createExchangeQueue() {
+    public boolean createExchangeQueue() {
         // 直连交换机
         rabbitAdmin.declareExchange(directExchange());
         rabbitAdmin.declareQueue(directQueue());
         // 扇形交换机
-        /*rabbitAdmin.declareExchange(fanoutExchange());
+        rabbitAdmin.declareExchange(fanoutExchange());
         rabbitAdmin.declareQueue(queueOne());
-        rabbitAdmin.declareQueue(queueTwo());*/
+        rabbitAdmin.declareQueue(queueTwo());
+        return true;
     }
 
 

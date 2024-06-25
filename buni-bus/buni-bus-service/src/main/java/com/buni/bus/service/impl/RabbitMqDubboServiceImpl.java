@@ -24,29 +24,30 @@ public class RabbitMqDubboServiceImpl implements RabbitMqDubboService {
 
 
     /**
-     * 默认交换机发送消息
-     *
-     * @param message 消息
-     * @return boolean
-     */
-    @Async(ExecutorConfig.EXECUTOR_NAME)
-    @Override
-    public boolean defaultSendMessage(String message) {
-        rabbitProducer.directDefaultSend(message);
-        return true;
-    }
-
-
-    /**
-     * 延时交换机发送消息
+     * 直连交换机发送消息
+     * 支持延时消息
      *
      * @param messageDTO 消息
      * @return boolean
      */
     @Async(ExecutorConfig.EXECUTOR_NAME)
     @Override
-    public boolean sendMessage(MessageDTO messageDTO) {
-        rabbitProducer.sendMessage(messageDTO);
+    public boolean directMessage(MessageDTO messageDTO) {
+        rabbitProducer.directMessage(messageDTO);
+        return true;
+    }
+
+
+    /**
+     * 扇形交换机发送消息
+     * 支持延时消息
+     *
+     * @param messageDTO 消息
+     * @return
+     */
+    @Override
+    public boolean fanoutMessage(MessageDTO messageDTO) {
+        rabbitProducer.fanoutMessage(messageDTO);
         return true;
     }
 

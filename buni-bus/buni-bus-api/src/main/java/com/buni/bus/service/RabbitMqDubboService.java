@@ -1,7 +1,6 @@
 package com.buni.bus.service;
 
 import com.buni.bus.dto.MessageDTO;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author zp.wei
@@ -11,20 +10,21 @@ public interface RabbitMqDubboService {
 
 
     /**
-     * 默认交换机发送消息
-     *
-     * @param message 消息
-     * @return boolean
-     */
-    boolean defaultSendMessage(String message);
-
-    /**
-     * 延时交换机发送消息
+     * 直连交换机发送消息
      *
      * @param messageDTO 消息
      * @return boolean
      */
-    boolean sendMessage(@RequestBody MessageDTO messageDTO);
+    boolean directMessage(MessageDTO messageDTO);
+
+
+    /**
+     * 扇形交换机发送消息
+     *
+     * @param messageDTO 消息
+     * @return boolean
+     */
+    boolean fanoutMessage(MessageDTO messageDTO);
 
 
 }
