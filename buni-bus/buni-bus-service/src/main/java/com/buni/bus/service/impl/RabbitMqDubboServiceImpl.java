@@ -1,7 +1,7 @@
 package com.buni.bus.service.impl;
 
 import com.buni.bus.dto.MessageDTO;
-import com.buni.bus.rabbitmq.RabbitProducer;
+import com.buni.bus.rabbitmq.RabbitMqProducer;
 import com.buni.bus.service.RabbitMqDubboService;
 import com.buni.framework.config.executor.ExecutorConfig;
 import jakarta.annotation.Resource;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 public class RabbitMqDubboServiceImpl implements RabbitMqDubboService {
 
     @Resource
-    private RabbitProducer rabbitProducer;
+    private RabbitMqProducer rabbitMqProducer;
 
 
     /**
@@ -33,7 +33,7 @@ public class RabbitMqDubboServiceImpl implements RabbitMqDubboService {
     @Async(ExecutorConfig.EXECUTOR_NAME)
     @Override
     public boolean directMessage(MessageDTO messageDTO) {
-        rabbitProducer.directMessage(messageDTO);
+        rabbitMqProducer.directMessage(messageDTO);
         return true;
     }
 
@@ -47,7 +47,7 @@ public class RabbitMqDubboServiceImpl implements RabbitMqDubboService {
      */
     @Override
     public boolean fanoutMessage(MessageDTO messageDTO) {
-        rabbitProducer.fanoutMessage(messageDTO);
+        rabbitMqProducer.fanoutMessage(messageDTO);
         return true;
     }
 

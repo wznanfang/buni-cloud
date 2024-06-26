@@ -1,7 +1,7 @@
 package com.buni.bus.service.impl;
 
 import com.buni.bus.dto.MessageDTO;
-import com.buni.bus.rabbitmq.RabbitProducer;
+import com.buni.bus.rabbitmq.RabbitMqProducer;
 import com.buni.bus.service.RabbitMqService;
 import com.buni.framework.config.executor.ExecutorConfig;
 import jakarta.annotation.Resource;
@@ -19,7 +19,7 @@ import org.springframework.scheduling.annotation.Async;
 public class RabbitServiceImpl implements RabbitMqService {
 
     @Resource
-    private RabbitProducer rabbitProducer;
+    private RabbitMqProducer rabbitMqProducer;
 
 
     /**
@@ -30,7 +30,7 @@ public class RabbitServiceImpl implements RabbitMqService {
     @Async(ExecutorConfig.EXECUTOR_NAME)
     @Override
     public void directMessage(MessageDTO messageDTO) {
-        rabbitProducer.directMessage(messageDTO);
+        rabbitMqProducer.directMessage(messageDTO);
     }
 
 
@@ -41,7 +41,7 @@ public class RabbitServiceImpl implements RabbitMqService {
     @Async(ExecutorConfig.EXECUTOR_NAME)
     @Override
     public void fanoutMessage(MessageDTO messageDTO) {
-        rabbitProducer.fanoutMessage(messageDTO);
+        rabbitMqProducer.fanoutMessage(messageDTO);
     }
 
 

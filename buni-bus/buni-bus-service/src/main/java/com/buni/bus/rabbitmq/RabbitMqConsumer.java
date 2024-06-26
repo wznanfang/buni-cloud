@@ -18,7 +18,7 @@ import java.io.IOException;
 @Slf4j
 @Configuration
 @Deprecated
-public class DirectConsumer {
+public class RabbitMqConsumer {
 
 
     @RabbitListener(queues = CommonConstant.DIRECT_QUEUE)
