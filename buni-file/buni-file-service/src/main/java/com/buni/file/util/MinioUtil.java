@@ -95,7 +95,7 @@ public class MinioUtil {
      * @return 预览链接
      */
     public String uploadFile(String bucketName, MultipartFile file) {
-        if (null == file || 0 == file.getSize()) {
+        if (file == null || file.isEmpty()) {
             throw new CustomException(ErrorEnum.FILE_NOT_EXIST.getCode(), ErrorEnum.FILE_NOT_EXIST.getMessage());
         }
         String fileName;
