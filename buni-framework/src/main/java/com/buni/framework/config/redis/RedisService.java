@@ -160,7 +160,7 @@ public class RedisService {
      * @param index 索引
      * @param value 值
      */
-    public void listIndexSet(String key, long index, Object value) {
+    public void listSet(String key, long index, Object value) {
         redisTemplate.opsForList().set(key, index, value);
     }
 
@@ -285,6 +285,51 @@ public class RedisService {
     }
 
 
+    /**
+     * 获取全部数据
+     *
+     * @param key
+     * @return
+     */
+    public Object hashGetAll(String key) {
+        return redisTemplate.opsForHash().entries(key);
+    }
+
+
+    /**
+     * 删除hash数据
+     *
+     * @param key
+     * @param hashKey
+     */
+    public void hashDelete(String key, String hashKey) {
+        redisTemplate.opsForHash().delete(key, hashKey);
+    }
+
+
+    /**
+     * 判断hashKey是否存在
+     *
+     * @param key
+     * @param hashKey
+     * @return
+     */
+    public boolean hashHasKey(String key, String hashKey) {
+        return redisTemplate.opsForHash().hasKey(key, hashKey);
+    }
+
+
+    /**
+     * 获取hash数据长度
+     *
+     * @param key
+     * @return
+     */
+    public Long hashSize(String key) {
+        return redisTemplate.opsForHash().size(key);
+    }
+
+
     /********************************************* set *********************************************/
 
 
@@ -318,7 +363,7 @@ public class RedisService {
      * @param key
      * @param value
      */
-    public void contains(String key, String value) {
+    public void setContains(String key, String value) {
         redisTemplate.opsForSet().isMember(key, value);
     }
 
@@ -329,8 +374,19 @@ public class RedisService {
      * @param key
      * @return
      */
-    public Set<String> values(String key) {
+    public Set<String> setValues(String key) {
         return redisTemplate.opsForSet().members(key);
+    }
+
+
+    /**
+     * 获取集合长度
+     *
+     * @param key
+     * @return
+     */
+    public Long setSize(String key) {
+        return redisTemplate.opsForSet().size(key);
     }
 
 
@@ -338,7 +394,7 @@ public class RedisService {
 
 
     /**
-     * 存储set类型数据
+     * 存储zset类型数据
      *
      * @param key
      * @param value
@@ -357,6 +413,29 @@ public class RedisService {
      */
     public Boolean zSetAdd(String key, Long currentTime, Long score) {
         return redisTemplate.opsForZSet().add(key, currentTime, score);
+    }
+
+
+    /**
+     * 移除缓存数据
+     *
+     * @param key
+     * @param value
+     * @return
+     */
+    public Long zSetRemove(String key, Object value) {
+        return redisTemplate.opsForZSet().remove(key, value);
+    }
+
+
+    /**
+     * 获取集合长度
+     *
+     * @param key
+     * @return
+     */
+    public Long zSetSize(String key) {
+        return redisTemplate.opsForZSet().size(key);
     }
 
 
