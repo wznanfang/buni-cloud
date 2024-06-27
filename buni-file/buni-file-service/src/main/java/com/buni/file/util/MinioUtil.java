@@ -1,5 +1,7 @@
 package com.buni.file.util;
 
+import com.buni.file.enums.ErrorEnum;
+import com.buni.framework.config.exception.CustomException;
 import io.minio.*;
 import io.minio.http.Method;
 import io.minio.messages.Bucket;
@@ -34,12 +36,20 @@ public class MinioUtil {
 
     /**
      * 创建bucket
+     * @param bucketName
      */
-    public void createBucket(String bucketName) throws Exception {
-        if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
-            minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+    public void createBucket(String bucketName) {
+        try {
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+            }
+        } catch (Exception e) {
+            log.error("创建bucket失败", e);
+            throw new CustomException(ErrorEnum.CREATE_BUCKET_ERROR.getCode(), ErrorEnum.CREATE_BUCKET_ERROR.getMessage());
         }
+
     }
+
 
     /**
      * 获取全部bucket
@@ -50,6 +60,7 @@ public class MinioUtil {
         return minioClient.listBuckets();
     }
 
+
     /**
      * 根据bucketName获取桶
      *
@@ -59,14 +70,22 @@ public class MinioUtil {
         return minioClient.listBuckets().stream().filter(b -> b.name().equals(bucketName)).findFirst();
     }
 
+
     /**
      * 根据bucketName删除桶
      *
      * @param bucketName bucket名称
      */
-    public void removeBucket(String bucketName) throws Exception {
-        minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
+    public void removeBucket(String bucketName) {
+        try {
+            minioClient.removeBucket(RemoveBucketArgs.builder().bucket(bucketName).build());
+        } catch (Exception e) {
+            log.error("删除bucket失败", e);
+            throw new CustomException(ErrorEnum.REMOVE_BUCKET_ERROR.getCode(), ErrorEnum.REMOVE_BUCKET_ERROR.getMessage());
+        }
+
     }
+
 
     /**
      * 上传文件
@@ -77,9 +96,9 @@ public class MinioUtil {
      */
     public String uploadFile(String bucketName, MultipartFile file) {
         if (null == file || 0 == file.getSize()) {
-            return "文件不存在！";
+            throw new CustomException(ErrorEnum.FILE_NOT_EXIST.getCode(), ErrorEnum.FILE_NOT_EXIST.getMessage());
         }
-        String fileName = "";
+        String fileName;
         try {
             createBucket(bucketName);
             String filename = file.getOriginalFilename();
@@ -92,9 +111,54 @@ public class MinioUtil {
             }
         } catch (Exception e) {
             log.error("文件上传失败", e.fillInStackTrace());
+            throw new CustomException(ErrorEnum.FILE_UPLOAD_ERROR.getCode(), ErrorEnum.FILE_UPLOAD_ERROR.getMessage());
         }
         return fileName;
     }
+
+
+    /**
+     * 上传⽂件
+     *
+     * @param bucketName bucket名称
+     * @param objectName ⽂件名称
+     * @param file       ⽂件
+     * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#putObject
+     */
+    public void putObject(String bucketName, String objectName, MultipartFile file) {
+        try {
+            putObject(bucketName, objectName, file.getInputStream(), file.getSize(), file.getContentType());
+        } catch (Exception e) {
+            log.error("文件上传失败", e.fillInStackTrace());
+            throw new CustomException(ErrorEnum.FILE_UPLOAD_ERROR.getCode(), ErrorEnum.FILE_UPLOAD_ERROR.getMessage());
+        }
+    }
+
+
+    /**
+     * 上传⽂件
+     *
+     * @param bucketName  bucket名称
+     * @param objectName  ⽂件名称
+     * @param stream      ⽂件流
+     * @param size        ⼤⼩
+     * @param contextType 类型
+     * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#putObject
+     */
+    public void putObject(String bucketName, String objectName, InputStream stream, long size, String contextType) {
+        try {
+            minioClient.putObject(PutObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(objectName)
+                    .stream(stream, size, -1)
+                    .contentType(contextType)
+                    .build());
+        } catch (Exception e) {
+            log.error("文件上传失败", e.fillInStackTrace());
+            throw new CustomException(ErrorEnum.FILE_UPLOAD_ERROR.getCode(), ErrorEnum.FILE_UPLOAD_ERROR.getMessage());
+        }
+    }
+
 
     /**
      * 获取⽂件外链
@@ -105,7 +169,7 @@ public class MinioUtil {
      * @return url
      */
     public String getObjectURL(String bucketName, String objectName, Integer expires) {
-        String url = "";
+        String url;
         try {
             url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(bucketName)
@@ -115,12 +179,14 @@ public class MinioUtil {
                     .build());
         } catch (Exception e) {
             log.error("文件链接获取失败", e.fillInStackTrace());
+            throw new CustomException(ErrorEnum.FILE_URL_ERROR.getCode(), ErrorEnum.FILE_URL_ERROR.getMessage());
         }
         return url;
     }
 
+
     /**
-     * 获取⽂件
+     * 获取⽂件流
      *
      * @param bucketName bucket名称
      * @param objectName ⽂件名称
@@ -134,39 +200,6 @@ public class MinioUtil {
                 .build());
     }
 
-    /**
-     * 上传⽂件
-     *
-     * @param bucketName bucket名称
-     * @param objectName ⽂件名称
-     * @param file       ⽂件
-     * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#putObject
-     */
-    public void putObject(String bucketName, String objectName, MultipartFile file) throws Exception {
-        minioClient.putObject(PutObjectArgs.builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .stream(file.getInputStream(), file.getSize(), -1)
-                .contentType(file.getContentType()).build());
-    }
-
-    /**
-     * 上传⽂件
-     *
-     * @param bucketName  bucket名称
-     * @param objectName  ⽂件名称
-     * @param stream      ⽂件流
-     * @param size        ⼤⼩
-     * @param contextType 类型
-     * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#putObject
-     */
-    public void putObject(String bucketName, String objectName, InputStream stream, long size, String contextType) throws Exception {
-        minioClient.putObject(PutObjectArgs.builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .stream(stream, size, -1)
-                .contentType(contextType).build());
-    }
 
     /**
      * 获取⽂件信息
@@ -175,13 +208,16 @@ public class MinioUtil {
      * @param objectName ⽂件名称
      * @throws Exception https://docs.minio.io/cn/java-client-api-reference.html#statObject
      */
-    public StatObjectResponse getObjectInfo(String bucketName, String objectName) throws Exception {
-        return minioClient.statObject(StatObjectArgs
-                .builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .build());
+    public StatObjectResponse getObjectInfo(String bucketName, String objectName) {
+        try {
+            return minioClient.statObject(StatObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        } catch (Exception e) {
+            log.error("文件信息获取失败", e.fillInStackTrace());
+            throw new CustomException(ErrorEnum.FILE_INFO_ERROR.getCode(), ErrorEnum.FILE_INFO_ERROR.getMessage());
+        }
+
     }
+
 
     /**
      * 删除⽂件
@@ -190,13 +226,15 @@ public class MinioUtil {
      * @param objectName ⽂件名称
      * @throws Exception https://docs.minio.io/cn/java-client-apireference.html#removeObject
      */
-    public void removeObject(String bucketName, String objectName) throws Exception {
-        minioClient.removeObject(RemoveObjectArgs
-                .builder()
-                .bucket(bucketName)
-                .object(objectName)
-                .build());
+    public void removeObject(String bucketName, String objectName) {
+        try {
+            minioClient.removeObject(RemoveObjectArgs.builder().bucket(bucketName).object(objectName).build());
+        } catch (Exception e) {
+            log.error("文件删除失败", e.fillInStackTrace());
+            throw new CustomException(ErrorEnum.FILE_DELETE_ERROR.getCode(), ErrorEnum.FILE_DELETE_ERROR.getMessage());
+        }
     }
+
 
     /**
      * 判断文件是否存在
@@ -213,6 +251,7 @@ public class MinioUtil {
         }
         return true;
     }
+
 
     /**
      * 判断文件夹是否存在
@@ -240,6 +279,7 @@ public class MinioUtil {
         return true;
     }
 
+
     /**
      * minio桶之间数据复制
      *
@@ -253,7 +293,7 @@ public class MinioUtil {
             createBucket(targetBucketName);
             copy(sourceBucketName, targetBucketName, recursive, prefix);
         } catch (Exception e) {
-            System.out.println(e);
+            log.error("桶复制失败", e.fillInStackTrace());
         }
     }
 
