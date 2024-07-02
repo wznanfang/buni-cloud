@@ -11,13 +11,16 @@
 
     <groupId>com.buni</groupId>
     <artifactId>buni-gateway</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>buni-gateway-api</module>
+        <module>buni-gateway-common</module>
+        <module>buni-gateway-service</module>
+    </modules>
 
     <properties>
         <framework-version>0.0.1-SNAPSHOT</framework-version>
-        <common-version>0.0.1-SNAPSHOT</common-version>
-        <gateway-version>4.1.3</gateway-version>
-        <loadbalancer-version>4.1.2</loadbalancer-version>
-        <knife4j2-version>4.5.0</knife4j2-version>
     </properties>
 
     <dependencies>
@@ -36,49 +39,6 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <dependency>
-            <groupId>com.buni</groupId>
-            <artifactId>buni-user-common</artifactId>
-            <version>${common-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
-            <version>${gateway-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
-            <version>${loadbalancer-version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-gateway-spring-boot-starter</artifactId>
-            <version>${knife4j2-version}</version>
-        </dependency>
-
     </dependencies>
-
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>17</source>
-                    <target>17</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: buni-gateway
+    name: buni-gateway-service
   profiles:
     active: dev
 
