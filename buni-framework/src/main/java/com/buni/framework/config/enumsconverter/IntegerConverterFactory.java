@@ -7,9 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Integer类型无需转换
+ *
  * @author zp.wei
  * @date 2024/7/3 13:59
  */
+@Deprecated
 public class IntegerConverterFactory implements ConverterFactory<Integer, BaseEnum> {
 
 

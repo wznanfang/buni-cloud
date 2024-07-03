@@ -1,9 +1,12 @@
 package com.buni.file.enums;
 
+import lombok.Getter;
+
 /**
  * @author zp.wei
  * @date 2024/4/10 9:29
  */
+@Getter
 public enum ErrorEnum {
 
     FILE_SERVICE_FAIL(40000, "文件服务不可用"),
@@ -19,14 +22,6 @@ public enum ErrorEnum {
     private final Integer code;
 
     private final String message;
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 
     private ErrorEnum(Integer code, String message) {
         this.code = code;

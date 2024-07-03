@@ -1,6 +1,7 @@
 package com.buni.user.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.buni.framework.config.enumsconverter.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -13,7 +14,7 @@ import java.io.Serializable;
  */
 @Getter
 //@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum SexEnum implements Serializable {
+public enum SexEnum implements BaseEnum {
 
     FEMALE(0, "女"),
     MALE(1, "男"),
@@ -27,16 +28,6 @@ public enum SexEnum implements Serializable {
     SexEnum(Integer code, String value) {
         this.code = code;
         this.value = value;
-    }
-
-    @JsonCreator
-    public static SexEnum getCode(Integer code) {
-        for (SexEnum sexEnum : SexEnum.values()) {
-            if (sexEnum.code.equals(code)) {
-                return sexEnum;
-            }
-        }
-        return null;
     }
 
 

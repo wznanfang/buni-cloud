@@ -7,10 +7,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Integer类型无需转换
+ *
  * @author zp.wei
  * @date 2024/7/3 13:53
  */
-
+@Deprecated
 public class IntegerConverter<T extends BaseEnum> implements Converter<Integer, T> {
 
     private Map<Integer, T> enumMap = new HashMap<>();

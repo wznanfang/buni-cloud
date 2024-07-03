@@ -1,6 +1,7 @@
 package com.buni.user.enums;
 
 import com.baomidou.mybatisplus.annotation.EnumValue;
+import com.buni.framework.config.enumsconverter.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import lombok.Getter;
  */
 @Getter
 //@JsonFormat(shape = JsonFormat.Shape.OBJECT)
-public enum BooleanEnum {
+public enum BooleanEnum implements BaseEnum {
 
     NO(0, "否"),
     YES(1, "是"),
@@ -27,15 +28,5 @@ public enum BooleanEnum {
         this.value = value;
     }
 
-
-    @JsonCreator
-    public static BooleanEnum getCode(Integer code) {
-        for (BooleanEnum booleanEnum : BooleanEnum.values()) {
-            if (booleanEnum.code.equals(code)) {
-                return booleanEnum;
-            }
-        }
-        return null;
-    }
 
 }
