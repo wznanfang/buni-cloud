@@ -12,7 +12,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 /**
  * 获取用户的信息
@@ -34,7 +33,7 @@ public class HeaderUtil {
      */
     public static HttpServletRequest getRequest() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        return Optional.ofNullable(servletRequestAttributes).map(ServletRequestAttributes::getRequest).orElse(null);
+        return ObjUtil.isNotEmpty(servletRequestAttributes) ? servletRequestAttributes.getRequest() : null;
     }
 
 
@@ -44,12 +43,13 @@ public class HeaderUtil {
      * @return {@link String}
      */
     public static String getToken() {
-        HttpServletRequest request = getRequest();
-        if (ObjUtil.isNotEmpty(request)) {
+        try {
+            HttpServletRequest request = getRequest();
             String token = request.getHeader(CommonConstant.AUTHORIZATION);
             return ObjUtil.isEmpty(token) ? CommonConstant.EMPTY_STR : StrUtil.subAfter(token, CommonConstant.PREFIX, true);
+        } catch (Exception e) {
+            return CommonConstant.EMPTY_STR;
         }
-        return CommonConstant.EMPTY_STR;
     }
 
 
@@ -59,12 +59,13 @@ public class HeaderUtil {
      * @return {@link String}
      */
     public static Long getUserId() {
-        HttpServletRequest request = getRequest();
-        if (ObjUtil.isNotEmpty(request)) {
+        try {
+            HttpServletRequest request = getRequest();
             Long userId = Long.valueOf(request.getHeader(CommonConstant.USER_ID));
             return ObjUtil.isEmpty(userId) ? CommonConstant.ZERO : userId;
+        } catch (Exception e) {
+            return Long.valueOf(CommonConstant.ZERO);
         }
-        return Long.valueOf(CommonConstant.ZERO);
     }
 
 
@@ -75,11 +76,12 @@ public class HeaderUtil {
      */
     public static String getUserName() {
         HttpServletRequest request = getRequest();
-        if (ObjUtil.isNotEmpty(request)) {
+        try {
             String username = URLDecoder.decode(request.getHeader(CommonConstant.USER_NAME), StandardCharsets.UTF_8);
             return ObjUtil.isEmpty(username) ? CommonConstant.EMPTY_STR : username;
+        } catch (Exception e) {
+            return CommonConstant.EMPTY_STR;
         }
-        return CommonConstant.EMPTY_STR;
     }
 
 
@@ -89,12 +91,13 @@ public class HeaderUtil {
      * @return {@link String}
      */
     public static String getIdentity() {
-        HttpServletRequest request = getRequest();
-        if (ObjUtil.isNotEmpty(request)) {
+        try {
+            HttpServletRequest request = getRequest();
             String identity = request.getHeader(CommonConstant.USER_AGENT);
             return ObjUtil.isEmpty(identity) ? CommonConstant.EMPTY_STR : identity;
+        } catch (Exception e) {
+            return CommonConstant.EMPTY_STR;
         }
-        return CommonConstant.EMPTY_STR;
     }
 
 

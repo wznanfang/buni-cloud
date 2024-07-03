@@ -121,7 +121,7 @@ public class UserController {
      * @return 用户信息
      */
     @Operation(summary = "分页查询用户信息")
-    @GetMapping("/user")
+    @GetMapping("/page")
     public Result<IPage<UserGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));
     }
