@@ -51,7 +51,6 @@
                                         <include name="${project.artifactId}-${project.version}.jar" />
                                     </fileset>
                                 </copy>
-
                             </target>
                         </configuration>
                     </execution>

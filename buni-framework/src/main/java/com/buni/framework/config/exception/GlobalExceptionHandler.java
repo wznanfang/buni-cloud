@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
      * @return Result
      */
     @ExceptionHandler(value = {CustomException.class})
-    public Result<CustomException> myExceptionHandler(CustomException exception) {
+    public Result<CustomException> customExceptionHandler(CustomException exception) {
         log.error("----------错误信息:", exception);
         return Result.error(exception);
     }
