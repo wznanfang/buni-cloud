@@ -1,9 +1,12 @@
 package com.buni.user.enums;
 
+import lombok.Getter;
+
 /**
  * @author zp.wei
  * @date 2023/9/21 9:29
  */
+@Getter
 public enum ErrorEnum {
 
     USER_EXISTS(300001, "用户名或手机号已存在"),
@@ -28,14 +31,6 @@ public enum ErrorEnum {
     private final Integer code;
 
     private final String message;
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 
     private ErrorEnum(Integer code, String message) {
         this.code = code;
