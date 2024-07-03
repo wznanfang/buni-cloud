@@ -1,8 +1,6 @@
 package com.buni.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.SexEnum;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;

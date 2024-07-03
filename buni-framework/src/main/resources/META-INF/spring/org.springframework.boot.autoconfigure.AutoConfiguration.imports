@@ -1,4 +1,5 @@
 com.buni.framework.config.bean.SpringContextHolder
+com.buni.framework.config.enumsconverter.EnumsConverterConfig
 com.buni.framework.config.exception.GlobalExceptionHandler
 com.buni.framework.config.executor.ExecutorConfig
 com.buni.framework.config.filter.AccessControlFilter
