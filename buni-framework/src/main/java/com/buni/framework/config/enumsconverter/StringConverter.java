@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,6 +16,12 @@ public class StringConverter<T extends BaseEnum> implements Converter<String, T>
 
     private Map<String, T> enumMap = new ConcurrentHashMap<>();
 
+
+    /**
+     * 构造方法
+     *
+     * @param enumType
+     */
     public StringConverter(Class<T> enumType) {
         T[] enums = enumType.getEnumConstants();
         for (T e : enums) {
@@ -24,6 +29,13 @@ public class StringConverter<T extends BaseEnum> implements Converter<String, T>
         }
     }
 
+
+    /**
+     * 转换
+     *
+     * @param source
+     * @return
+     */
     @Override
     public T convert(String source) {
         T t = enumMap.get(source);

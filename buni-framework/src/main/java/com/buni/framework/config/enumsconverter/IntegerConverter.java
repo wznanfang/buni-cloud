@@ -21,6 +21,11 @@ public class IntegerConverter<T extends BaseEnum> implements Converter<Integer, 
     private Map<Integer, T> enumMap = new ConcurrentHashMap<>();
 
 
+    /**
+     * 构造方法
+     *
+     * @param enumType
+     */
     public IntegerConverter(Class<T> enumType) {
         T[] enums = enumType.getEnumConstants();
         for (T e : enums) {
@@ -29,6 +34,12 @@ public class IntegerConverter<T extends BaseEnum> implements Converter<Integer, 
     }
 
 
+    /**
+     * 转换
+     *
+     * @param source
+     * @return
+     */
     @Override
     public T convert(Integer source) {
         T t = enumMap.get(source);
