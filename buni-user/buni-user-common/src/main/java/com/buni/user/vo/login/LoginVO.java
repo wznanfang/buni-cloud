@@ -8,7 +8,7 @@ import lombok.Data;
  * @author zp.wei
  * @date 2023/9/19 15:06
  */
-@SuppressWarnings("登录VO")
+@Schema(description = "登录VO")
 @Data
 public class LoginVO {
 

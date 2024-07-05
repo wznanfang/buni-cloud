@@ -1,6 +1,6 @@
 package com.buni.user.vo.role;
 
-import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.buni.framework.page.Page;
 import com.buni.user.entity.Authority;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
