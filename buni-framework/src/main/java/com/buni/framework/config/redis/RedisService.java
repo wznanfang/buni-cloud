@@ -346,7 +346,7 @@ public class RedisService {
 
 
     /**
-     * 移除范围内的缓存数据
+     * 移除缓存数据
      *
      * @param key
      * @param value
