@@ -6,6 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * @author zp.wei
@@ -14,7 +15,7 @@ import java.util.Map;
 @Slf4j
 public class StringConverter<T extends BaseEnum> implements Converter<String, T> {
 
-    private Map<String, T> enumMap = new HashMap<>();
+    private Map<String, T> enumMap = new ConcurrentHashMap<>();
 
     public StringConverter(Class<T> enumType) {
         T[] enums = enumType.getEnumConstants();

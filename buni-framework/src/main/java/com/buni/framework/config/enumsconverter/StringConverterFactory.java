@@ -22,12 +22,7 @@ public class StringConverterFactory implements ConverterFactory<String, BaseEnum
      */
     @Override
     public <T extends BaseEnum> Converter<String, T> getConverter(Class<T> targetType) {
-        Converter<String, T> converter = CONVERTERS.get(targetType);
-        if (converter == null) {
-            converter = new StringConverter<>(targetType);
-            CONVERTERS.put(targetType, converter);
-        }
-        return converter;
+        return CONVERTERS.computeIfAbsent(targetType, key -> new StringConverter<>(targetType));
     }
 
 }

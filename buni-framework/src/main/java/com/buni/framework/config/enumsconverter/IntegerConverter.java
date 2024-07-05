@@ -6,6 +6,7 @@ import org.springframework.core.convert.converter.Converter;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Integer类型无需转换
@@ -17,7 +18,7 @@ import java.util.Map;
 @Deprecated
 public class IntegerConverter<T extends BaseEnum> implements Converter<Integer, T> {
 
-    private Map<Integer, T> enumMap = new HashMap<>();
+    private Map<Integer, T> enumMap = new ConcurrentHashMap<>();
 
 
     public IntegerConverter(Class<T> enumType) {

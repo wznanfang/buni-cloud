@@ -26,12 +26,8 @@ public class IntegerConverterFactory implements ConverterFactory<Integer, BaseEn
      */
     @Override
     public <T extends BaseEnum> Converter<Integer, T> getConverter(Class<T> targetType) {
-        Converter<Integer, T> converter = CONVERTERS.get(targetType);
-        if (converter == null) {
-            converter = new IntegerConverter<>(targetType);
-            CONVERTERS.put(targetType, converter);
-        }
-        return converter;
+        return CONVERTERS.computeIfAbsent(targetType, key -> new StringConverter<>(targetType));
     }
+
 
 }

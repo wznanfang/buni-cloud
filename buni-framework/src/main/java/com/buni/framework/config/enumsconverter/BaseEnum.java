@@ -6,13 +6,19 @@ package com.buni.framework.config.enumsconverter;
  */
 public interface BaseEnum {
 
+
     /**
-     * 获取枚举编码
+     * 枚举值
      *
-     * @return 编码
+     * @return
      */
     Integer getCode();
 
+    /**
+     * 枚举描述
+     *
+     * @return
+     */
     String getValue();
 
 }
