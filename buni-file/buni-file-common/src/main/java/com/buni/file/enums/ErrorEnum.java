@@ -1,12 +1,16 @@
 package com.buni.file.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zp.wei
  * @date 2024/4/10 9:29
  */
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public enum ErrorEnum {
 
     FILE_SERVICE_FAIL(40000, "文件服务不可用"),
@@ -19,14 +23,9 @@ public enum ErrorEnum {
     FILE_INFO_ERROR(40007, "获取文件信息链接失败"),
     ;
 
-    private final Integer code;
+    private Integer code;
 
-    private final String message;
-
-    private ErrorEnum(Integer code, String message) {
-        this.code = code;
-        this.message = message;
-    }
+    private String message;
 
 
 }

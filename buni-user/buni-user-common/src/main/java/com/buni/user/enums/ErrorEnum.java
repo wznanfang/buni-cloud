@@ -1,12 +1,16 @@
 package com.buni.user.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zp.wei
  * @date 2023/9/21 9:29
  */
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public enum ErrorEnum {
 
     USER_EXISTS(300001, "用户名或手机号已存在"),
@@ -28,14 +32,10 @@ public enum ErrorEnum {
     ROLE_NOT_EXISTS(320002, "角色不存在"),
     ;
 
-    private final Integer code;
+    private Integer code;
 
-    private final String message;
+    private String message;
 
-    private ErrorEnum(Integer code, String message) {
-        this.code = code;
-        this.message = message;
-    }
 
 
 }

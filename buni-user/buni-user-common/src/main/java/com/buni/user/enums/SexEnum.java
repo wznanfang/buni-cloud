@@ -3,13 +3,17 @@ package com.buni.user.enums;
 import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.buni.framework.config.enumsconverter.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zp.wei
  * @date 2023/9/19 10:43
  */
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public enum SexEnum implements BaseEnum {
 
     FEMALE(0, "女"),
@@ -20,11 +24,6 @@ public enum SexEnum implements BaseEnum {
     @JsonValue
     private Integer code;
     private String value;
-
-    SexEnum(Integer code, String value) {
-        this.code = code;
-        this.value = value;
-    }
 
 
 }

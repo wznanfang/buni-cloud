@@ -4,13 +4,17 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.buni.framework.config.enumsconverter.BaseEnum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * @author zp.wei
  * @date 2023/9/20 16:56
  */
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 //@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum BooleanEnum implements BaseEnum {
 
@@ -22,11 +26,6 @@ public enum BooleanEnum implements BaseEnum {
     @JsonValue
     private Integer code;
     private String value;
-
-    BooleanEnum(Integer code, String value) {
-        this.code = code;
-        this.value = value;
-    }
 
 
 }

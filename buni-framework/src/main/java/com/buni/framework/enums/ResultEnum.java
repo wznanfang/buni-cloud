@@ -1,5 +1,6 @@
 package com.buni.framework.enums;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Getter;
  * @date 2023/9/21 9:29
  */
 @Getter
+@AllArgsConstructor
 public enum ResultEnum {
 
     RESULT_SUCCESS(true, 200, "请求成功"),
@@ -23,12 +25,6 @@ public enum ResultEnum {
     private final Integer code;
 
     private final String message;
-
-    private ResultEnum(Boolean success, Integer code, String message) {
-        this.success = success;
-        this.code = code;
-        this.message = message;
-    }
 
 
 }
