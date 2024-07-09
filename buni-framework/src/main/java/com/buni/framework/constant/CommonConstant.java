@@ -48,6 +48,11 @@ public class CommonConstant {
     public static final String FORWARD_SLASH = "/";
 
     /**
+     * 横杠
+     */
+    public static final String LINE = "-";
+
+    /**
      * token
      */
     public static final String AUTHORIZATION = "Authorization";
@@ -93,6 +98,10 @@ public class CommonConstant {
      */
     public static final Integer ZERO = 0;
     public static final Integer ONE = 1;
+    public static final Integer THIRTY = 30;
+    public static final Integer FIFTY = 50;
+    public static final Integer SIXTY = 60;
+    public static final Integer ONE_HUNDRED = 100;
 
     /**
      * IP地址相关常量
@@ -107,8 +116,11 @@ public class CommonConstant {
 
 
     /**
-     * 忽略租户id的表
+     * 线程池相关配置
      */
-    public static final List<String> IGNORE_TENANT_TABLE = List.of("user");
+    public final static String NORMAL_EXECUTOR_NAME = "normalThreadPoolExecutor";
+    public final static String LARGE_EXECUTOR_NAME = "largeThreadPoolExecutor";
+    public final static String EXECUTOR_NAME_PREFIX = "buni-cloud";
+    public final static Integer PROCESSORS = Runtime.getRuntime().availableProcessors();
 
 }

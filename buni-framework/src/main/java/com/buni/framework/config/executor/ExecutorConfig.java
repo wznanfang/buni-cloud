@@ -1,5 +1,6 @@
 package com.buni.framework.config.executor;
 
+import com.buni.framework.constant.CommonConstant;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,14 +16,31 @@ import java.util.concurrent.TimeUnit;
 @Configuration
 public class ExecutorConfig {
 
-    public final static String EXECUTOR_NAME = "threadPoolExecutor";
 
-    private final static Integer PROCESSORS = Runtime.getRuntime().availableProcessors();
+    /**
+     * 普通线程池
+     * 用于处理一般任务
+     *
+     * @return
+     */
+    @Bean(CommonConstant.NORMAL_EXECUTOR_NAME)
+    public ThreadPoolExecutor normalThreadPoolExecutor() {
+        ThreadFactory threadFactory = new NamedThreadFactory(CommonConstant.EXECUTOR_NAME_PREFIX);
+        return new ThreadPoolExecutor(CommonConstant.PROCESSORS, CommonConstant.PROCESSORS, 60, TimeUnit.SECONDS,
+                new ArrayBlockingQueue<>(256), threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
+    }
 
-    @Bean(EXECUTOR_NAME)
-    public ThreadPoolExecutor threadPoolExecutor() {
-        ThreadFactory threadFactory = new NamedThreadFactory("buni-cloud");
-        return new ThreadPoolExecutor(PROCESSORS, PROCESSORS * 2, 60, TimeUnit.SECONDS,
+
+    /**
+     * 大线程池
+     * 用于处理大批数据量的任务
+     *
+     * @return
+     */
+    @Bean(CommonConstant.LARGE_EXECUTOR_NAME)
+    public ThreadPoolExecutor largeThreadPoolExecutor() {
+        ThreadFactory threadFactory = new NamedThreadFactory(CommonConstant.EXECUTOR_NAME_PREFIX);
+        return new ThreadPoolExecutor(CommonConstant.PROCESSORS, CommonConstant.PROCESSORS * 2, 60, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
