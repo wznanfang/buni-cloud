@@ -3,10 +3,8 @@ package com.buni.user.service.impl;
 import cn.hutool.core.util.ObjUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.buni.framework.config.executor.ExecutorConfig;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
-import com.buni.framework.util.HeaderUtil;
 import com.buni.user.dto.AuthDTO;
 import com.buni.user.entity.Auth;
 import com.buni.user.mapper.AuthMapper;
@@ -37,7 +35,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
      *
      * @param authDTO 鉴权信息
      */
-    @Async(value = ExecutorConfig.EXECUTOR_NAME)
+    @Async(value = CommonConstant.NORMAL_EXECUTOR_NAME)
     @Override
     public void saveOrUpdate(AuthDTO authDTO) {
         // 判断该平台是否已经有对应的鉴权信息
