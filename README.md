@@ -11,14 +11,14 @@
 
 
 ## 简介
->buni-cloud —— 后端基础框架，用于框架快速搭建，功能快速开发
+>buni-cloud —— 基于Java的后端分布式基础框架，用于框架快速搭建，功能快速开发
 ## 项目架构
 > SpringCloud+Maven+Nacos+Dubbo+Mybatis-Plus+Mysql+Redis+Minio+RabbitMq+Hutool+Knife4j2
 ## 框架模块描述
 1. buni-framework
-> 基础框架模块——提供项目所需底层依赖以及异常拦截器，线程池，分布式锁，限流，缓存等全局相关工具类
+> 基础框架模块——提供项目所需底层依赖全局管理以及自定义异常拦截器，线程池，分布式锁，限流，缓存等全局相关工具类
 2. buni-gateway
-> 网关模块——权限校验等
+> 网关模块——接口鉴权、接口限流
 3. buni-user
 > 用户模块——用户管理，角色管理，权限管理，菜单管理, 部门管理(待开发...)
 4. buni-file
