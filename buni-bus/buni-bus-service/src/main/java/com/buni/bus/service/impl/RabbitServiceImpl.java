@@ -4,6 +4,7 @@ import com.buni.bus.dto.MessageDTO;
 import com.buni.bus.rabbitmq.RabbitMqProducer;
 import com.buni.bus.service.RabbitMqService;
 import com.buni.framework.config.executor.ExecutorConfig;
+import com.buni.framework.constant.CommonConstant;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +28,7 @@ public class RabbitServiceImpl implements RabbitMqService {
      *
      * @param messageDTO 消息
      */
-    @Async(ExecutorConfig.EXECUTOR_NAME)
+    @Async(CommonConstant.NORMAL_EXECUTOR_NAME)
     @Override
     public void directMessage(MessageDTO messageDTO) {
         rabbitMqProducer.directMessage(messageDTO);
@@ -36,14 +37,14 @@ public class RabbitServiceImpl implements RabbitMqService {
 
     /**
      * 发送消息
+     *
      * @param messageDTO
      */
-    @Async(ExecutorConfig.EXECUTOR_NAME)
+    @Async(CommonConstant.NORMAL_EXECUTOR_NAME)
     @Override
     public void fanoutMessage(MessageDTO messageDTO) {
         rabbitMqProducer.fanoutMessage(messageDTO);
     }
-
 
 
 }

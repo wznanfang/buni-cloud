@@ -3,7 +3,7 @@ package com.buni.bus.service.impl;
 import com.buni.bus.dto.MessageDTO;
 import com.buni.bus.rabbitmq.RabbitMqProducer;
 import com.buni.bus.service.RabbitMqDubboService;
-import com.buni.framework.config.executor.ExecutorConfig;
+import com.buni.framework.constant.CommonConstant;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +30,7 @@ public class RabbitMqDubboServiceImpl implements RabbitMqDubboService {
      * @param messageDTO 消息
      * @return boolean
      */
-    @Async(ExecutorConfig.EXECUTOR_NAME)
+    @Async(CommonConstant.NORMAL_EXECUTOR_NAME)
     @Override
     public boolean directMessage(MessageDTO messageDTO) {
         rabbitMqProducer.directMessage(messageDTO);
@@ -45,6 +45,7 @@ public class RabbitMqDubboServiceImpl implements RabbitMqDubboService {
      * @param messageDTO 消息
      * @return
      */
+    @Async(CommonConstant.NORMAL_EXECUTOR_NAME)
     @Override
     public boolean fanoutMessage(MessageDTO messageDTO) {
         rabbitMqProducer.fanoutMessage(messageDTO);
