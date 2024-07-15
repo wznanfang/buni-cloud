@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * @author zp.wei
@@ -73,12 +72,6 @@ public class UserLoginVO implements Serializable {
      */
     @Schema(description = "token信息")
     private TokenVO tokenVO;
-
-    /**
-     * 菜单权限信息
-     */
-    @Schema(description = "权限信息")
-    private List<AuthorityVO> authorityVOS;
 
 
 }
