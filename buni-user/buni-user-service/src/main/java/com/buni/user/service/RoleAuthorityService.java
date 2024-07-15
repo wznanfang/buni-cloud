@@ -3,7 +3,10 @@ package com.buni.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.RoleAuthority;
+import com.buni.user.vo.authority.AuthorityGetVO;
 import com.buni.user.vo.role.RoleAuthorityDTO;
+import com.buni.user.vo.roleauthority.AddVO;
+import com.buni.user.vo.roleauthority.UpdateVO;
 
 import java.util.List;
 
@@ -14,6 +17,30 @@ import java.util.List;
  */
 public interface RoleAuthorityService extends IService<RoleAuthority> {
 
+
+    /**
+     * 保存
+     *
+     * @param addVO
+     * @return
+     */
+    boolean save(AddVO addVO);
+
+    /**
+     * 修改
+     *
+     * @param updateVO
+     * @return
+     */
+    boolean update(UpdateVO updateVO);
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    List<Long> findById(Long id);
 
     /**
      * 查询roleAuthority
@@ -37,8 +64,6 @@ public interface RoleAuthorityService extends IService<RoleAuthority> {
      * @param roleIds 角色id集合
      */
     void deleteByRoleIds(List<Long> roleIds);
-
-
 
 
 }

@@ -6,9 +6,11 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.user.entity.RoleAuthority;
-import com.buni.user.vo.role.RoleAuthorityDTO;
 import com.buni.user.mapper.RoleAuthorityMapper;
 import com.buni.user.service.RoleAuthorityService;
+import com.buni.user.vo.role.RoleAuthorityDTO;
+import com.buni.user.vo.roleauthority.AddVO;
+import com.buni.user.vo.roleauthority.UpdateVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,70 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, RoleAuthority> implements RoleAuthorityService {
+
+
+    /**
+     * 保存角色权限
+     *
+     * @param addVO
+     * @return
+     */
+    @Override
+    public boolean save(AddVO addVO) {
+        if (CollUtil.isNotEmpty(addVO.getAuthorityIds())) {
+            List<RoleAuthority> list = new ArrayList<>();
+            Long roleId = addVO.getRoleId();
+            addVO.getAuthorityIds().forEach(authorityId -> {
+                RoleAuthority roleAuthority = new RoleAuthority();
+                roleAuthority.setAuthorityId(authorityId);
+                roleAuthority.setRoleId(roleId);
+                list.add(roleAuthority);
+            });
+            super.saveBatch(list);
+        }
+        return true;
+    }
+
+
+    /**
+     * 更新角色权限
+     *
+     * @param updateVO
+     * @return
+     */
+    @Override
+    public boolean update(UpdateVO updateVO) {
+        super.remove(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, updateVO.getRoleId()));
+        if (CollUtil.isNotEmpty(updateVO.getAuthorityIds())) {
+            List<RoleAuthority> list = new ArrayList<>();
+            Long roleId = updateVO.getRoleId();
+            updateVO.getAuthorityIds().forEach(authorityId -> {
+                RoleAuthority roleAuthority = new RoleAuthority();
+                roleAuthority.setAuthorityId(authorityId);
+                roleAuthority.setRoleId(roleId);
+                list.add(roleAuthority);
+            });
+            super.saveBatch(list);
+        }
+        return true;
+    }
+
+
+    /**
+     * 根据id查询角色权限
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public List<Long> findById(Long id) {
+        List<RoleAuthority> authorityGetVOS = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, id));
+        List<Long> authorityIds = new ArrayList<>();
+        if (CollUtil.isNotEmpty(authorityGetVOS)) {
+            authorityIds = authorityGetVOS.stream().map(RoleAuthority::getAuthorityId).toList();
+        }
+        return authorityIds;
+    }
 
 
     /**

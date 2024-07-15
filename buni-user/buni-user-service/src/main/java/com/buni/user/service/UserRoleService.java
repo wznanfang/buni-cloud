@@ -2,7 +2,10 @@ package com.buni.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.UserRole;
+import com.buni.user.vo.role.RoleGetVO;
 import com.buni.user.vo.role.UserRoleDTO;
+import com.buni.user.vo.userrole.AddVO;
+import com.buni.user.vo.userrole.UpdateVO;
 
 import java.util.List;
 
@@ -13,6 +16,30 @@ import java.util.List;
  */
 public interface UserRoleService extends IService<UserRole> {
 
+
+    /**
+     * 保存
+     *
+     * @param addVO
+     * @return
+     */
+    boolean save(AddVO addVO);
+
+    /**
+     * 修改
+     *
+     * @param updateVO
+     * @return
+     */
+    boolean update(UpdateVO updateVO);
+
+    /**
+     * 根据id查询
+     *
+     * @param id
+     * @return
+     */
+    List<Long> findById(Long id);
 
     /**
      * 查询用户角色列表

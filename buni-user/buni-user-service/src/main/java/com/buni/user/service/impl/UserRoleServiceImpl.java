@@ -8,7 +8,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.user.entity.UserRole;
 import com.buni.user.mapper.UserRoleMapper;
 import com.buni.user.service.UserRoleService;
+import com.buni.user.vo.role.RoleGetVO;
 import com.buni.user.vo.role.UserRoleDTO;
+import com.buni.user.vo.userrole.AddVO;
+import com.buni.user.vo.userrole.UpdateVO;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +28,68 @@ import java.util.List;
 @Service
 @AllArgsConstructor
 public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
+
+
+    /**
+     * 新增用户角色
+     *
+     * @param addVO 添加VO
+     * @return boolean
+     */
+    @Override
+    public boolean save(AddVO addVO) {
+        if (CollUtil.isNotEmpty(addVO.getRoleIds())) {
+            List<UserRole> userRoleList = new ArrayList<>();
+            addVO.getRoleIds().forEach(roleId -> {
+                UserRole userRole = new UserRole();
+                userRole.setRoleId(roleId);
+                userRole.setUserId(addVO.getUserId());
+                userRoleList.add(userRole);
+            });
+            super.saveBatch(userRoleList);
+        }
+        return true;
+    }
+
+
+    /**
+     * 更新用户角色
+     *
+     * @param updateVO 更新VO
+     * @return boolean
+     */
+    @Override
+    public boolean update(UpdateVO updateVO) {
+        super.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, updateVO.getUserId()));
+        if (CollUtil.isNotEmpty(updateVO.getRoleIds())) {
+            List<UserRole> userRoleList = new ArrayList<>();
+            updateVO.getRoleIds().forEach(roleId -> {
+                UserRole userRole = new UserRole();
+                userRole.setRoleId(roleId);
+                userRole.setUserId(updateVO.getUserId());
+                userRoleList.add(userRole);
+            });
+            super.saveBatch(userRoleList);
+        }
+        return true;
+    }
+
+
+    /**
+     * 根据用户id查询角色id集合
+     *
+     * @param id 用户id
+     * @return {@link List}<{@link Long}>
+     */
+    @Override
+    public List<Long> findById(Long id) {
+        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, id));
+        List<Long> roleIds = new ArrayList<>();
+        if (CollUtil.isNotEmpty(list)) {
+            roleIds = list.stream().map(UserRole::getRoleId).toList();
+        }
+        return roleIds;
+    }
 
 
     /**
