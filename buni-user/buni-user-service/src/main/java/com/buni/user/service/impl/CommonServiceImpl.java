@@ -63,7 +63,7 @@ public class CommonServiceImpl implements CommonService {
      * @param response response
      */
     @Override
-    public void CreateQrCode(QrCodeVO qrCodeVO, HttpServletResponse response) {
+    public void createQrCode(QrCodeVO qrCodeVO, HttpServletResponse response) {
         try (ServletOutputStream stream = response.getOutputStream()) {
             String logoPath = qrCodeVO.getLogoPath();
             if (ObjUtil.isEmpty(logoPath)) {

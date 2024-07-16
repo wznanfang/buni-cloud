@@ -11,8 +11,20 @@ import java.util.Map;
  */
 public interface CommonService {
 
+
+    /**
+     * 获取验证码
+     *
+     * @return
+     */
     Map<String, Object> getCode();
 
-    void CreateQrCode(QrCodeVO qrCodeVO, HttpServletResponse response);
+    /**
+     * 生成二维码
+     *
+     * @param qrCodeVO
+     * @param response
+     */
+    void createQrCode(QrCodeVO qrCodeVO, HttpServletResponse response);
 
 }
