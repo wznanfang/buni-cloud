@@ -11,7 +11,7 @@
 
 
 ## 简介
->buni-cloud —— 基于Java的后端分布式基础框架，用于框架快速搭建，功能快速开发
+>buni-cloud —— 基于SpringCloud的分布式基础框架，用于框架快速搭建，功能快速开发
 ## 项目架构
 > SpringCloud+Maven+Nacos+Dubbo+Mybatis-Plus+Mysql+Redis+Minio+RabbitMq+Hutool+Knife4j2
 ## 框架模块描述
