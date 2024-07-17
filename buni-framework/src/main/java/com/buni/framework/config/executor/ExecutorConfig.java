@@ -17,6 +17,9 @@ import java.util.concurrent.TimeUnit;
 public class ExecutorConfig {
 
 
+    private final static Integer PROCESSORS = Runtime.getRuntime().availableProcessors();
+
+
     /**
      * 普通线程池
      * 用于处理一般任务
@@ -26,7 +29,7 @@ public class ExecutorConfig {
     @Bean(CommonConstant.NORMAL_EXECUTOR_NAME)
     public ThreadPoolExecutor normalThreadPoolExecutor() {
         ThreadFactory threadFactory = new NamedThreadFactory(CommonConstant.EXECUTOR_NAME_PREFIX);
-        return new ThreadPoolExecutor(CommonConstant.PROCESSORS, CommonConstant.PROCESSORS, 60, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(PROCESSORS, PROCESSORS, 60, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(256), threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }
 
@@ -40,7 +43,7 @@ public class ExecutorConfig {
     @Bean(CommonConstant.LARGE_EXECUTOR_NAME)
     public ThreadPoolExecutor largeThreadPoolExecutor() {
         ThreadFactory threadFactory = new NamedThreadFactory(CommonConstant.EXECUTOR_NAME_PREFIX);
-        return new ThreadPoolExecutor(CommonConstant.PROCESSORS, CommonConstant.PROCESSORS * 2, 60, TimeUnit.SECONDS,
+        return new ThreadPoolExecutor(PROCESSORS, PROCESSORS * 2, 60, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<>(1024), threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }
 

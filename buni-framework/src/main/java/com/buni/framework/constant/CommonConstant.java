@@ -3,7 +3,6 @@ package com.buni.framework.constant;
 import lombok.Data;
 
 import java.io.File;
-import java.util.List;
 
 /**
  * @author zp.wei
@@ -121,6 +120,5 @@ public class CommonConstant {
     public final static String NORMAL_EXECUTOR_NAME = "normalThreadPoolExecutor";
     public final static String LARGE_EXECUTOR_NAME = "largeThreadPoolExecutor";
     public final static String EXECUTOR_NAME_PREFIX = "buni-cloud";
-    public final static Integer PROCESSORS = Runtime.getRuntime().availableProcessors();
 
 }
