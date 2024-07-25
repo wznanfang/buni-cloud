@@ -15,6 +15,12 @@ import lombok.Data;
 public class PageVO extends Page<Authority> {
 
 	/**
+	 * 父id
+	 */
+	@Schema(description = "父id")
+	private Long parentId;
+
+	/**
 	 * 名字
 	 */
 	@Schema(description = "名字")

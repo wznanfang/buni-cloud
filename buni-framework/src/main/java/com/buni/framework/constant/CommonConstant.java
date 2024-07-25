@@ -101,6 +101,7 @@ public class CommonConstant {
     public static final Integer FIFTY = 50;
     public static final Integer SIXTY = 60;
     public static final Integer ONE_HUNDRED = 100;
+    public static final String ZERO_STR = "0";
 
     /**
      * IP地址相关常量

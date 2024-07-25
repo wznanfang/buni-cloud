@@ -1,5 +1,6 @@
 package com.buni.user.controller;
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.framework.util.Result;
 import com.buni.user.constant.CommonConstant;
@@ -15,6 +16,8 @@ import lombok.AllArgsConstructor;
 import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * @author Administrator
@@ -111,6 +114,13 @@ public class AuthorityController {
     @GetMapping("/authority")
     public Result<IPage<AuthorityGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(authorityService.findPage(pageVO));
+    }
+
+
+    @Operation(summary = "菜单树结构列表", description = "返回树结构菜单")
+    @GetMapping("findMenuTree")
+    public Result<List<Tree<String>>> findMenuTree() {
+        return Result.ok(authorityService.findMenuTree());
     }
 
 

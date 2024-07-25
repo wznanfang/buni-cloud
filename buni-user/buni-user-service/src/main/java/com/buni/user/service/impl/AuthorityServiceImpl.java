@@ -2,6 +2,8 @@ package com.buni.user.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.lang.tree.Tree;
+import cn.hutool.core.lang.tree.TreeUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -11,17 +13,18 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
+import com.buni.framework.constant.CommonConstant;
 import com.buni.user.entity.Authority;
 import com.buni.user.enums.ErrorEnum;
-import com.buni.user.vo.IdVOs;
-import com.buni.user.vo.role.AuthorityDTO;
-import com.buni.user.vo.role.RoleAuthorityDTO;
-import com.buni.user.vo.role.UserRoleDTO;
 import com.buni.user.mapper.AuthorityMapper;
 import com.buni.user.service.AuthorityService;
 import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.service.UserRoleService;
+import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.authority.*;
+import com.buni.user.vo.role.AuthorityDTO;
+import com.buni.user.vo.role.RoleAuthorityDTO;
+import com.buni.user.vo.role.UserRoleDTO;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -132,7 +135,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     public boolean batchDelete(IdVOs idVOs) {
         List<Long> ids = idVOs.getIds();
         super.removeBatchByIds(ids);
-        //更新角色权限表，剔除拥有该权限的用户缓存
+        // 更新角色权限表，剔除拥有该权限的用户缓存
         List<String> keys = new ArrayList<>();
         ids.forEach(id -> {
             updateAuthority(id);
@@ -175,6 +178,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     public IPage<AuthorityGetVO> findPage(PageVO pageVO) {
         IPage<Authority> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<Authority> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(pageVO.getParentId()), Authority::getParentId, pageVO.getParentId());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Authority::getName, pageVO.getName());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), Authority::getType, pageVO.getType());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getCode()), Authority::getCode, pageVO.getCode());
@@ -190,6 +194,30 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
         }
         resultPage.setRecords(list);
         return resultPage;
+    }
+
+
+    /**
+     * 获取菜单树
+     *
+     * @return
+     */
+    @Override
+    public List<Tree<String>> findMenuTree() {
+        List<Authority> list = super.list();
+        List<Tree<String>> treeNodes = new ArrayList<>();
+        if (ObjUtil.isNotEmpty(list)) {
+            treeNodes = TreeUtil.build(list, CommonConstant.ZERO_STR, (treeNode, tree) -> {
+                tree.setId(String.valueOf(treeNode.getId()));
+                tree.setParentId(String.valueOf(treeNode.getParentId()));
+                tree.setName(treeNode.getName());
+                tree.putExtra("type", treeNode.getType());
+                tree.putExtra("code", treeNode.getCode());
+                tree.putExtra("sort", treeNode.getSort());
+                tree.putExtra("url", treeNode.getUrl());
+            });
+        }
+        return treeNodes;
     }
 
 

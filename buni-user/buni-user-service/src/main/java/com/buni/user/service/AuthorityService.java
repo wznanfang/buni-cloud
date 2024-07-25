@@ -1,6 +1,7 @@
 package com.buni.user.service;
 
 
+import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.Authority;
@@ -65,6 +66,13 @@ public interface AuthorityService extends IService<Authority> {
      * @return IPage<UserInfoVO>
      */
     IPage<AuthorityGetVO> findPage(PageVO pageVO);
+
+    /**
+     * 获取菜单树
+     *
+     * @return
+     */
+    List<Tree<String>> findMenuTree();
 
     /**
      * 根据id查询权限
