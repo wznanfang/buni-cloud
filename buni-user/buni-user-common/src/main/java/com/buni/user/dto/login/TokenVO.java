@@ -13,16 +13,16 @@ public class TokenVO {
 
 
     /**
-     * 有效期
-     */
-    @Schema(description = "有效期")
-    private Long expireTime;
-
-    /**
      * token
      */
     @Schema(description = "token")
     private String token;
+
+    /**
+     * 有效期
+     */
+    @Schema(description = "有效期")
+    private Long expireTime;
 
     /**
      * token前缀

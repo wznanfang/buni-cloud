@@ -81,11 +81,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     @Override
     public List<Long> findById(Long id) {
         List<RoleAuthority> authorityGetVoS = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, id));
-        List<Long> authorityIds = new ArrayList<>();
-        if (CollUtil.isNotEmpty(authorityGetVoS)) {
-            authorityIds = authorityGetVoS.stream().map(RoleAuthority::getAuthorityId).toList();
-        }
-        return authorityIds;
+        return Optional.ofNullable(authorityGetVoS).orElse(new ArrayList<>()).stream().map(RoleAuthority::getAuthorityId).toList();
     }
 
 

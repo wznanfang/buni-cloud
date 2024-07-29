@@ -45,13 +45,12 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     private void saveUserRole(Long userId, List<Long> roleIds) {
-        List<UserRole> userRoleList = new ArrayList<>();
-        roleIds.forEach(roleId -> {
+        List<UserRole> userRoleList = roleIds.stream().map(roleId -> {
             UserRole userRole = new UserRole();
             userRole.setRoleId(roleId);
             userRole.setUserId(userId);
-            userRoleList.add(userRole);
-        });
+            return userRole;
+        }).toList();
         super.saveBatch(userRoleList);
     }
 
@@ -81,11 +80,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Override
     public List<Long> findById(Long id) {
         List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, id));
-        List<Long> roleIds = new ArrayList<>();
-        if (CollUtil.isNotEmpty(list)) {
-            roleIds = list.stream().map(UserRole::getRoleId).toList();
-        }
-        return roleIds;
+        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(UserRole::getRoleId).toList();
     }
 
 
