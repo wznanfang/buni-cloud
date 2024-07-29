@@ -5,10 +5,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.entity.RoleAuthority;
 import com.buni.user.mapper.RoleAuthorityMapper;
 import com.buni.user.service.RoleAuthorityService;
-import com.buni.user.vo.role.RoleAuthorityDTO;
 import com.buni.user.vo.roleauthority.AddVO;
 import com.buni.user.vo.roleauthority.UpdateVO;
 import lombok.AllArgsConstructor;
@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Administrator
@@ -32,45 +33,40 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     /**
      * 保存角色权限
      *
-     * @param addVO
+     * @param addVO 新增数据Vo
      * @return
      */
     @Override
     public boolean save(AddVO addVO) {
         if (CollUtil.isNotEmpty(addVO.getAuthorityIds())) {
-            List<RoleAuthority> list = new ArrayList<>();
-            Long roleId = addVO.getRoleId();
-            addVO.getAuthorityIds().forEach(authorityId -> {
-                RoleAuthority roleAuthority = new RoleAuthority();
-                roleAuthority.setAuthorityId(authorityId);
-                roleAuthority.setRoleId(roleId);
-                list.add(roleAuthority);
-            });
-            super.saveBatch(list);
+            saveRoleAuthority(addVO.getRoleId(), addVO.getAuthorityIds());
         }
         return true;
+    }
+
+    private void saveRoleAuthority(Long roleId, List<Long> authorityIds) {
+        List<RoleAuthority> list = new ArrayList<>();
+        authorityIds.forEach(authorityId -> {
+            RoleAuthority roleAuthority = new RoleAuthority();
+            roleAuthority.setAuthorityId(authorityId);
+            roleAuthority.setRoleId(roleId);
+            list.add(roleAuthority);
+        });
+        super.saveBatch(list);
     }
 
 
     /**
      * 更新角色权限
      *
-     * @param updateVO
+     * @param updateVO 修改Vo
      * @return
      */
     @Override
     public boolean update(UpdateVO updateVO) {
         super.remove(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, updateVO.getRoleId()));
         if (CollUtil.isNotEmpty(updateVO.getAuthorityIds())) {
-            List<RoleAuthority> list = new ArrayList<>();
-            Long roleId = updateVO.getRoleId();
-            updateVO.getAuthorityIds().forEach(authorityId -> {
-                RoleAuthority roleAuthority = new RoleAuthority();
-                roleAuthority.setAuthorityId(authorityId);
-                roleAuthority.setRoleId(roleId);
-                list.add(roleAuthority);
-            });
-            super.saveBatch(list);
+            saveRoleAuthority(updateVO.getRoleId(), updateVO.getAuthorityIds());
         }
         return true;
     }
@@ -79,15 +75,15 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     /**
      * 根据id查询角色权限
      *
-     * @param id
+     * @param id 角色id
      * @return
      */
     @Override
     public List<Long> findById(Long id) {
-        List<RoleAuthority> authorityGetVOS = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, id));
+        List<RoleAuthority> authorityGetVoS = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, id));
         List<Long> authorityIds = new ArrayList<>();
-        if (CollUtil.isNotEmpty(authorityGetVOS)) {
-            authorityIds = authorityGetVOS.stream().map(RoleAuthority::getAuthorityId).toList();
+        if (CollUtil.isNotEmpty(authorityGetVoS)) {
+            authorityIds = authorityGetVoS.stream().map(RoleAuthority::getAuthorityId).toList();
         }
         return authorityIds;
     }
@@ -97,7 +93,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      * 查询roleAuthority
      *
      * @param roleIds 角色id集合
-     * @return {@link List}<{@link RoleAuthorityDTO}>
+     * @return
      */
     @Override
     public List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds) {
@@ -107,15 +103,11 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
 
 
     private static List<RoleAuthorityDTO> getRoleAuthorityDtoS(List<RoleAuthority> roleAuthorityList) {
-        List<RoleAuthorityDTO> roleAuthorityDtoS = new ArrayList<>();
-        if (CollUtil.isNotEmpty(roleAuthorityList)) {
-            roleAuthorityList.forEach(roleAuthority -> {
-                RoleAuthorityDTO roleAuthorityDto = new RoleAuthorityDTO();
-                BeanUtil.copyProperties(roleAuthority, roleAuthorityDto);
-                roleAuthorityDtoS.add(roleAuthorityDto);
-            });
-        }
-        return roleAuthorityDtoS;
+        return Optional.ofNullable(roleAuthorityList).orElse(new ArrayList<>()).stream().map(roleAuthority -> {
+            RoleAuthorityDTO roleAuthorityDto = new RoleAuthorityDTO();
+            BeanUtil.copyProperties(roleAuthority, roleAuthorityDto);
+            return roleAuthorityDto;
+        }).toList();
     }
 
 
@@ -123,7 +115,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      * 查询roleAuthority
      *
      * @param authorityId 权限id
-     * @return {@link List}<{@link RoleAuthorityDTO}>
+     * @return
      */
     @Override
     public List<RoleAuthorityDTO> findByAuthorityId(Long authorityId) {

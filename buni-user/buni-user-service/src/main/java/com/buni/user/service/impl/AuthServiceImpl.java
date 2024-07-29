@@ -5,7 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
-import com.buni.user.dto.AuthDTO;
+import com.buni.user.dto.auth.AuthDTO;
 import com.buni.user.entity.Auth;
 import com.buni.user.mapper.AuthMapper;
 import com.buni.user.service.AuthService;
@@ -40,18 +40,16 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
     public void saveOrUpdate(AuthDTO authDTO) {
         // 判断该平台是否已经有对应的鉴权信息
         Auth auth = super.getOne(Wrappers.<Auth>lambdaQuery().eq(Auth::getUserId, authDTO.getUserId()).eq(Auth::getClientIdentity, authDTO.getClientIdentity()));
-        Auth newAuth = new Auth();
         if (ObjUtil.isEmpty(auth)) {
-            BeanUtils.copyProperties(authDTO, newAuth);
-            super.save(newAuth);
+            auth = new Auth();
+            BeanUtils.copyProperties(authDTO, auth);
+            super.save(auth);
+            return;
         }
-        if (ObjUtil.isNotEmpty(auth)) {
-            newAuth.setId(auth.getId());
-            newAuth.setToken(authDTO.getToken());
-            super.updateById(newAuth);
-            // 移除redis中的旧token
-            redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + auth.getToken());
-        }
+        auth.setToken(authDTO.getToken());
+        super.updateById(auth);
+        // 移除redis中的旧token
+        redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + auth.getToken());
     }
 
 

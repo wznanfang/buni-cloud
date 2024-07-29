@@ -31,6 +31,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Administrator
@@ -89,7 +90,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        getUser(updateVO.getId());
+        User user = getUser(updateVO.getId());
+        User existUser = super.getOne(Wrappers.<User>lambdaQuery().eq(User::getTel, updateVO.getTel()));
+        if (ObjUtil.isNotEmpty(existUser) && !existUser.getId().equals(user.getId())) {
+            throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
+        }
         User updateUser = new User();
         BeanUtils.copyProperties(updateVO, updateUser);
         super.updateById(updateUser);
@@ -184,14 +189,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
         IPage<User> infoPage = super.page(ipage, queryWrapper);
         IPage<UserGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
-        List<UserGetVO> list = new ArrayList<>();
-        if (CollUtil.isNotEmpty(infoPage.getRecords())) {
-            infoPage.getRecords().forEach(user -> {
-                UserGetVO getVO = new UserGetVO();
-                BeanUtils.copyProperties(user, getVO);
-                list.add(getVO);
-            });
-        }
+        List<UserGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(user -> {
+            UserGetVO getVO = new UserGetVO();
+            BeanUtils.copyProperties(user, getVO);
+            return getVO;
+        }).toList();
         resultPage.setRecords(list);
         return resultPage;
     }

@@ -15,7 +15,7 @@ import com.buni.user.entity.Role;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.vo.IdVOs;
-import com.buni.user.vo.role.UserRoleDTO;
+import com.buni.user.dto.role.UserRoleDTO;
 import com.buni.user.mapper.RoleMapper;
 import com.buni.user.service.RoleService;
 import com.buni.user.service.UserRoleService;
@@ -27,9 +27,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * @author Administrator
@@ -106,7 +107,7 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             userRoleDtoS.forEach(userRole -> authorityKeys.add(Authority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
-        //删除角色权限关联
+        // 删除角色权限关联
         roleAuthorityService.deleteByRoleIds(roleIds);
         redisService.deleteKey(Role.REDIS_KEY + role.getId());
         return true;
@@ -123,14 +124,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     public boolean batchDelete(IdVOs idVOs) {
         List<Long> ids = idVOs.getIds();
         super.removeBatchByIds(ids);
-        //更新角色权限表，剔除拥有该权限的用户缓存
+        // 更新角色权限表，剔除拥有该权限的用户缓存
         List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(ids);
         if (CollUtil.isNotEmpty(userRoleDtoS)) {
             List<String> authorityKeys = new ArrayList<>();
             userRoleDtoS.forEach(userRole -> authorityKeys.add(Authority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
-        //删除角色权限关联
+        // 删除角色权限关联
         roleAuthorityService.deleteByRoleIds(ids);
         List<String> roleKeys = new ArrayList<>();
         ids.forEach(id -> roleKeys.add(Role.REDIS_KEY + id));
@@ -180,14 +181,11 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Role::getName, pageVO.getName());
         IPage<Role> infoPage = super.page(ipage, queryWrapper);
         IPage<RoleGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
-        List<RoleGetVO> list = new ArrayList<>();
-        if (CollUtil.isNotEmpty(infoPage.getRecords())) {
-            infoPage.getRecords().forEach(role -> {
-                RoleGetVO getVO = new RoleGetVO();
-                BeanUtils.copyProperties(role, getVO);
-                list.add(getVO);
-            });
-        }
+        List<RoleGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(role -> {
+            RoleGetVO getVO = new RoleGetVO();
+            BeanUtils.copyProperties(role, getVO);
+            return getVO;
+        }).toList();
         resultPage.setRecords(list);
         return resultPage;
     }

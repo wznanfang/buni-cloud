@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.Authority;
 import com.buni.user.vo.IdVOs;
-import com.buni.user.vo.role.AuthorityDTO;
+import com.buni.user.dto.role.AuthorityDTO;
 import com.buni.user.vo.authority.*;
 
 import java.util.List;

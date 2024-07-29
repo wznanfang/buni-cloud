@@ -2,7 +2,7 @@ package com.buni.user.util;
 
 import cn.hutool.core.util.RandomUtil;
 import com.buni.framework.constant.CommonConstant;
-import com.buni.user.vo.login.TokenVO;
+import com.buni.user.dto.login.TokenVO;
 
 import java.io.Serializable;
 

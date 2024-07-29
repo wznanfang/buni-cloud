@@ -1,4 +1,4 @@
-package com.buni.user.vo.login;
+package com.buni.user.dto.login;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -117,6 +117,11 @@ public class AuthorityController {
     }
 
 
+    /**
+     * 菜单树结构列表
+     *
+     * @return 菜单树结构列表
+     */
     @Operation(summary = "菜单树结构列表", description = "返回树结构菜单")
     @GetMapping("findMenuTree")
     public Result<List<Tree<String>>> findMenuTree() {

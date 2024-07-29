@@ -5,11 +5,10 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.buni.user.dto.role.UserRoleDTO;
 import com.buni.user.entity.UserRole;
 import com.buni.user.mapper.UserRoleMapper;
 import com.buni.user.service.UserRoleService;
-import com.buni.user.vo.role.RoleGetVO;
-import com.buni.user.vo.role.UserRoleDTO;
 import com.buni.user.vo.userrole.AddVO;
 import com.buni.user.vo.userrole.UpdateVO;
 import lombok.AllArgsConstructor;
@@ -18,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Administrator
@@ -39,16 +39,20 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     @Override
     public boolean save(AddVO addVO) {
         if (CollUtil.isNotEmpty(addVO.getRoleIds())) {
-            List<UserRole> userRoleList = new ArrayList<>();
-            addVO.getRoleIds().forEach(roleId -> {
-                UserRole userRole = new UserRole();
-                userRole.setRoleId(roleId);
-                userRole.setUserId(addVO.getUserId());
-                userRoleList.add(userRole);
-            });
-            super.saveBatch(userRoleList);
+            saveUserRole(addVO.getUserId(), addVO.getRoleIds());
         }
         return true;
+    }
+
+    private void saveUserRole(Long userId, List<Long> roleIds) {
+        List<UserRole> userRoleList = new ArrayList<>();
+        roleIds.forEach(roleId -> {
+            UserRole userRole = new UserRole();
+            userRole.setRoleId(roleId);
+            userRole.setUserId(userId);
+            userRoleList.add(userRole);
+        });
+        super.saveBatch(userRoleList);
     }
 
 
@@ -62,14 +66,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     public boolean update(UpdateVO updateVO) {
         super.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, updateVO.getUserId()));
         if (CollUtil.isNotEmpty(updateVO.getRoleIds())) {
-            List<UserRole> userRoleList = new ArrayList<>();
-            updateVO.getRoleIds().forEach(roleId -> {
-                UserRole userRole = new UserRole();
-                userRole.setRoleId(roleId);
-                userRole.setUserId(updateVO.getUserId());
-                userRoleList.add(userRole);
-            });
-            super.saveBatch(userRoleList);
+            saveUserRole(updateVO.getUserId(), updateVO.getRoleIds());
         }
         return true;
     }
@@ -106,15 +103,11 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
 
 
     private static List<UserRoleDTO> getUserRoleDtoS(List<UserRole> list) {
-        List<UserRoleDTO> userRoleDtoS = new ArrayList<>();
-        if (CollUtil.isNotEmpty(list)) {
-            list.forEach(userRole -> {
-                UserRoleDTO userRoleDTO = new UserRoleDTO();
-                BeanUtil.copyProperties(userRole, userRoleDTO);
-                userRoleDtoS.add(userRoleDTO);
-            });
-        }
-        return userRoleDtoS;
+        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(userRole -> {
+            UserRoleDTO userRoleDTO = new UserRoleDTO();
+            BeanUtil.copyProperties(userRole, userRoleDTO);
+            return userRoleDTO;
+        }).toList();
     }
 
 

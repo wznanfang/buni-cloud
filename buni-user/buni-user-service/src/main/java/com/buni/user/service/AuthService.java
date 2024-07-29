@@ -2,7 +2,7 @@ package com.buni.user.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.buni.user.dto.AuthDTO;
+import com.buni.user.dto.auth.AuthDTO;
 import com.buni.user.entity.Auth;
 
 /**

@@ -1,4 +1,4 @@
-package com.buni.user.vo.role;
+package com.buni.user.dto.role;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -1,6 +1,5 @@
 package com.buni.user.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.tree.Tree;
 import cn.hutool.core.lang.tree.TreeUtil;
@@ -14,6 +13,9 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
+import com.buni.user.dto.role.AuthorityDTO;
+import com.buni.user.dto.role.RoleAuthorityDTO;
+import com.buni.user.dto.role.UserRoleDTO;
 import com.buni.user.entity.Authority;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.AuthorityMapper;
@@ -22,9 +24,6 @@ import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.authority.*;
-import com.buni.user.vo.role.AuthorityDTO;
-import com.buni.user.vo.role.RoleAuthorityDTO;
-import com.buni.user.vo.role.UserRoleDTO;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +32,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Administrator
@@ -184,14 +184,11 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getCode()), Authority::getCode, pageVO.getCode());
         IPage<Authority> infoPage = super.page(ipage, queryWrapper);
         IPage<AuthorityGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
-        List<AuthorityGetVO> list = new ArrayList<>();
-        if (CollUtil.isNotEmpty(infoPage.getRecords())) {
-            infoPage.getRecords().forEach(authority -> {
-                AuthorityGetVO getVO = new AuthorityGetVO();
-                BeanUtils.copyProperties(authority, getVO);
-                list.add(getVO);
-            });
-        }
+        List<AuthorityGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(authority -> {
+            AuthorityGetVO getVO = new AuthorityGetVO();
+            BeanUtils.copyProperties(authority, getVO);
+            return getVO;
+        }).toList();
         resultPage.setRecords(list);
         return resultPage;
     }
@@ -230,14 +227,10 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     @Override
     public List<AuthorityDTO> findByIds(List<Long> ids) {
         List<Authority> list = super.list(Wrappers.<Authority>lambdaQuery().in(Authority::getId, ids));
-        List<AuthorityDTO> authorityDtoS = new ArrayList<>();
-        if (CollUtil.isNotEmpty(list)) {
-            list.forEach(authority -> {
-                AuthorityDTO authorityDTO = new AuthorityDTO();
-                BeanUtil.copyProperties(authority, authorityDTO);
-                authorityDtoS.add(authorityDTO);
-            });
-        }
-        return authorityDtoS;
+        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(authority -> {
+            AuthorityDTO authorityDTO = new AuthorityDTO();
+            BeanUtils.copyProperties(authority, authorityDTO);
+            return authorityDTO;
+        }).toList();
     }
 }

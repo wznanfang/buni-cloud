@@ -3,8 +3,7 @@ package com.buni.user.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.RoleAuthority;
-import com.buni.user.vo.authority.AuthorityGetVO;
-import com.buni.user.vo.role.RoleAuthorityDTO;
+import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.vo.roleauthority.AddVO;
 import com.buni.user.vo.roleauthority.UpdateVO;
 

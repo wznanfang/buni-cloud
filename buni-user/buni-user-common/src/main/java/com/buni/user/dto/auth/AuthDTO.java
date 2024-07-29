@@ -1,4 +1,4 @@
-package com.buni.user.dto;
+package com.buni.user.dto.auth;
 
 import lombok.Builder;
 import lombok.Data;

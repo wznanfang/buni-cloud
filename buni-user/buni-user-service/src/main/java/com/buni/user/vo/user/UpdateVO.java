@@ -2,6 +2,7 @@ package com.buni.user.vo.user;
 
 import com.buni.user.enums.SexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -39,6 +40,9 @@ public class UpdateVO implements Serializable {
      */
     @Schema(description = "年龄")
     private Integer age;
+
+    @Schema(description = "电话")
+    private String tel;
 
 
 }

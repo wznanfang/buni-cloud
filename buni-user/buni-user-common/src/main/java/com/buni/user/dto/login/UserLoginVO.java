@@ -1,4 +1,4 @@
-package com.buni.user.vo.login;
+package com.buni.user.dto.login;
 
 import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.BooleanEnum;
