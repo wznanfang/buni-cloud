@@ -50,6 +50,16 @@ spring:
                 redis-rate-limiter.replenishRate: 5
                 redis-rate-limiter.burstCapacity: 10
                 keyResolver: '#{@ipAddressKeyResolver}'
+        - id: buni-ai
+          uri: lb://buni-ai
+          predicates: Path=/ai/**
+          filters:
+            - StripPrefix=1
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter.replenishRate: 5
+                redis-rate-limiter.burstCapacity: 10
+                keyResolver: '#{@ipAddressKeyResolver}'
 
 # knife4j 网关接口文档配置
 knife4j:
@@ -81,6 +91,11 @@ knife4j:
         service-name: buni-bus
         context-path: /bus
         order: 3
+      - name: AI管理
+        url: /ai/v3/api-docs?group=AI管理
+        service-name: buni-ai
+        context-path: /ai
+        order: 4
 
 # 开放接口，不需要鉴权
 buni:
@@ -89,3 +104,4 @@ buni:
     - /v1/login/POST
     - /v1/getCode/GET
     - /v1/getQrCode/GET
+    - /v1/spark/talk/GET

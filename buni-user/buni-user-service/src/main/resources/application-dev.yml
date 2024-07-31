@@ -19,3 +19,17 @@ spring:
         server-addr: 127.0.0.1:8848
         namespace: buni
 
+# dubbo的配置
+dubbo:
+  application:
+    name: user_dubbo_service
+    qos-enable: false
+  registry:
+    id: user_dubbo_service
+    address: nacos://127.0.0.1:8848?namespace=buni
+  protocol:
+    name: dubbo
+    port: -1
+  consumer:
+    check: false
+

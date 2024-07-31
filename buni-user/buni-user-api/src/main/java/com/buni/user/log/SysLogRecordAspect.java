@@ -33,7 +33,7 @@ public class SysLogRecordAspect {
     @Resource
     private ObjectMapper objectMapper;
     @Resource
-    private ThreadPoolExecutor threadPoolExecutor;
+    private ThreadPoolExecutor normalThreadPoolExecutor;
 
 
     @Pointcut("@annotation(com.buni.user.log.SysLogRecord)")
@@ -70,7 +70,7 @@ public class SysLogRecordAspect {
             sysLog.setDescription(sysLogRecord.description());
             sysLog.setElapsedTime(System.currentTimeMillis() - startTime);
             // 异步保存日志
-            CompletableFuture.runAsync(() -> sysLogDubboService.save(sysLog), threadPoolExecutor);
+            CompletableFuture.runAsync(() -> sysLogDubboService.save(sysLog), normalThreadPoolExecutor);
         } catch (Exception e) {
             log.error("日志记录失败,失败原因是----------：{}", e.getMessage());
         }
