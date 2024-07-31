@@ -39,7 +39,7 @@ public class UserController {
      */
     @Operation(summary = "新增用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增用户")
-    @PostMapping("/save")
+    @PostMapping("/user")
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(userService.save(addVO));
     }
@@ -53,7 +53,7 @@ public class UserController {
      */
     @Operation(summary = "编辑用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "编辑用户")
-    @PutMapping("/update")
+    @PutMapping("/user")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(userService.update(updateVO));
     }
@@ -67,7 +67,7 @@ public class UserController {
      */
     @Operation(summary = "启用-禁用用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "启用-禁用用户")
-    @PutMapping("/forbidden")
+    @PutMapping("/user/forbidden")
     public Result<Boolean> forbidden(@RequestBody @Validated EnableVO enableVO) {
         return Result.ok(userService.enable(enableVO));
     }
@@ -81,7 +81,7 @@ public class UserController {
      */
     @Operation(summary = "删除用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除用户")
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/user/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(userService.delete(id));
     }
@@ -95,7 +95,7 @@ public class UserController {
      */
     @Operation(summary = "批量删除用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除用户")
-    @DeleteMapping("/batchDelete")
+    @DeleteMapping("/user/batchDelete")
     public Result<Boolean> batchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(userService.batchDelete(idVOs));
     }
@@ -108,7 +108,7 @@ public class UserController {
      * @return 用户信息
      */
     @Operation(summary = "查询用户信息")
-    @GetMapping("/findById/{id}")
+    @GetMapping("/user/{id}")
     public Result<UserInfoVO> findById(@PathVariable Long id) {
         return Result.ok(userService.findById(id));
     }
@@ -121,7 +121,7 @@ public class UserController {
      * @return 用户信息
      */
     @Operation(summary = "分页查询用户信息")
-    @GetMapping("/page")
+    @GetMapping("/user")
     public Result<IPage<UserGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(userService.findPage(pageVO));
     }

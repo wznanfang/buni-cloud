@@ -29,21 +29,21 @@ public class RoleAuthorityController {
 
 
     @Operation(summary = "新增角色权限")
-    @PostMapping("save")
+    @PostMapping("roleAuthority")
     public Result<Boolean> save(@RequestBody AddVO addVO) {
         return Result.ok(roleAuthorityService.save(addVO));
     }
 
 
     @Operation(summary = "编辑角色权限")
-    @PutMapping("update")
+    @PutMapping("roleAuthority")
     public Result<Boolean> update(@RequestBody UpdateVO updateVO) {
         return Result.ok(roleAuthorityService.update(updateVO));
     }
 
 
     @Operation(summary = "查询角色权限")
-    @GetMapping("findById/{id}")
+    @GetMapping("roleAuthority/{id}")
     public Result<List<Long>> findById(@PathVariable Long id) {
         return Result.ok(roleAuthorityService.findById(id));
     }

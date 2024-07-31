@@ -29,21 +29,21 @@ public class UserRoleController {
 
 
     @Operation(summary = "新增用户角色")
-    @PostMapping("save")
+    @PostMapping("userRole")
     public Result<Boolean> save(@RequestBody AddVO addVO) {
         return Result.ok(userRoleService.save(addVO));
     }
 
 
     @Operation(summary = "编辑用户角色")
-    @PutMapping("update")
+    @PutMapping("userRole")
     public Result<Boolean> update(@RequestBody UpdateVO updateVO) {
         return Result.ok(userRoleService.update(updateVO));
     }
 
 
     @Operation(summary = "查询用户角色")
-    @GetMapping("findById/{id}")
+    @GetMapping("userRole/{id}")
     public Result<List<Long>> findById(@PathVariable Long id) {
         return Result.ok(userRoleService.findById(id));
     }
