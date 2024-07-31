@@ -22,6 +22,7 @@
         <module>buni-user</module>
         <module>buni-file</module>
         <module>buni-bus</module>
+        <module>buni-ai</module>
     </modules>
 
     <properties>

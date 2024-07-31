@@ -12,14 +12,14 @@
     <artifactId>buni-file-api</artifactId>
 
     <properties>
-        <file-common-version>0.0.1-SNAPSHOT</file-common-version>
+        <file-common.version>0.0.1-SNAPSHOT</file-common.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-file-common</artifactId>
-            <version>${file-common-version}</version>
+            <version>${file-common.version}</version>
         </dependency>
     </dependencies>
 

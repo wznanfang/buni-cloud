@@ -12,14 +12,14 @@
     <artifactId>buni-gateway-api</artifactId>
 
     <properties>
-        <file-gateway-version>0.0.1-SNAPSHOT</file-gateway-version>
+        <gateway-common.version>0.0.1-SNAPSHOT</gateway-common.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-gateway-common</artifactId>
-            <version>${file-gateway-version}</version>
+            <version>${gateway-common.version}</version>
         </dependency>
     </dependencies>
 

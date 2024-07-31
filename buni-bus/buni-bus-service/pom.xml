@@ -11,19 +11,19 @@
     <artifactId>buni-bus-service</artifactId>
 
     <properties>
-        <bus-common-version>0.0.1-SNAPSHOT</bus-common-version>
-        <bus-api-version>0.0.1-SNAPSHOT</bus-api-version>
+        <bus-common.version>0.0.1-SNAPSHOT</bus-common.version>
+        <bus-api.version>0.0.1-SNAPSHOT</bus-api.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-bus-common</artifactId>
-            <version>${bus-common-version}</version>
+            <version>${bus-common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-bus-api</artifactId>
-            <version>${bus-api-version}</version>
+            <version>${bus-api.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

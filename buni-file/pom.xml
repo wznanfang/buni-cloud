@@ -19,14 +19,14 @@
     </modules>
 
     <properties>
-        <framework-version>0.0.1-SNAPSHOT</framework-version>
+        <framework.version>0.0.1-SNAPSHOT</framework.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.buni</groupId>
             <artifactId>buni-framework</artifactId>
-            <version>${framework-version}</version>
+            <version>${framework.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
