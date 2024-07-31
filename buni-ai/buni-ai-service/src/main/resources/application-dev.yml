@@ -1,0 +1,36 @@
+server:
+  port: 10004
+
+spring:
+  data:
+    redis:
+      host: 127.0.0.1
+      password: 123456
+      database: 1
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        namespace: buni
+
+# dubbo的配置
+dubbo:
+  application:
+    name: ai_dubbo_service
+    qos-enable: false
+  registry:
+    id: ai_dubbo_service
+    address: nacos://127.0.0.1:8848?namespace=buni
+  protocol:
+    name: dubbo
+    port: -1
+  consumer:
+    check: false
+
+buni:
+  ai:
+    spark:
+      appId: ffa4749a
+      apiKey: b45fb240f420c5319b895c804cef32ad
+      apiSecret: YzI4YjU0YzIzMDhiNTFkM2MwYzI1NzNm

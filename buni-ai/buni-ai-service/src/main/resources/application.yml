@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: buni-ai
+  profiles:
+    active: dev
+
+# knife4j接口文档配置
+knife4j:
+  enable: true
+springdoc:
+  group-configs:
+    - group: AI管理
+      packages-to-scan: com.buni.ai.controller

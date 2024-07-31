@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.wzp</groupId>
+        <artifactId>buni-cloud</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </parent>
+    <groupId>com.buni</groupId>
+    <artifactId>buni-ai</artifactId>
+    <packaging>pom</packaging>
+
+
+    <modules>
+        <module>buni-ai-service</module>
+        <module>buni-ai-api</module>
+        <module>buni-ai-common</module>
+    </modules>
+
+    <properties>
+        <framework.version>0.0.1-SNAPSHOT</framework.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.buni</groupId>
+            <artifactId>buni-framework</artifactId>
+            <version>${framework.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>mysql</groupId>
+                    <artifactId>mysql-connector-java</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>
+
+</project>
