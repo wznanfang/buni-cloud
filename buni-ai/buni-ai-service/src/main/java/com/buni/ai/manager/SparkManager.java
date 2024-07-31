@@ -1,6 +1,7 @@
 package com.buni.ai.manager;
 
 import com.buni.ai.constant.CommonConstant;
+import com.buni.ai.vo.spark.TalkVO;
 import io.github.briqt.spark4j.SparkClient;
 import io.github.briqt.spark4j.constant.SparkApiVersion;
 import io.github.briqt.spark4j.model.SparkMessage;
@@ -35,17 +36,18 @@ public class SparkManager {
     /**
      * 发送消息
      *
-     * @param content
+     * @param talkVO
      * @return
      */
-    public String talk(String content) {
-        log.info("问：{}", content);
-        messages.add(SparkMessage.userContent(content));
+    public String talk(TalkVO talkVO) {
+        log.info("问：{}", talkVO.getQuestion());
+        messages.add(SparkMessage.userContent(talkVO.getQuestion()));
         SparkRequest sparkRequest = SparkRequest.builder()
+                .uid(talkVO.getUid())
                 .messages(messages)
                 .maxTokens(CommonConstant.TOKENS)
                 .temperature(CommonConstant.TEMPERATURE)
-                .apiVersion(SparkApiVersion.V2_0).build();
+                .apiVersion(SparkApiVersion.V3_5).build();
         SparkSyncChatResponse chatResponse = sparkclient.chatSync(sparkRequest);
         String responseContent = chatResponse.getContent();
         log.info("答：{}", responseContent);

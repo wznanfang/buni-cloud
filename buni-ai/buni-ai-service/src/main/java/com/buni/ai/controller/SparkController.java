@@ -1,6 +1,7 @@
 package com.buni.ai.controller;
 
 import com.buni.ai.service.SparkService;
+import com.buni.ai.vo.spark.TalkVO;
 import com.buni.framework.util.Result;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,7 +10,6 @@ import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -29,8 +29,8 @@ public class SparkController {
 
     @Operation(summary = "讯飞星火对话")
     @GetMapping("/spark/talk")
-    public Result<String> talk(@RequestParam("content") String content) {
-        return Result.ok(sparkService.talk(content));
+    public Result<String> talk(TalkVO talkVO) {
+        return Result.ok(sparkService.talk(talkVO));
     }
 
 
