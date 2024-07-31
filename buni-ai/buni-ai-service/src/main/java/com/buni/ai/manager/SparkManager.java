@@ -1,5 +1,6 @@
 package com.buni.ai.manager;
 
+import com.buni.ai.constant.CommonConstant;
 import io.github.briqt.spark4j.SparkClient;
 import io.github.briqt.spark4j.constant.SparkApiVersion;
 import io.github.briqt.spark4j.model.SparkMessage;
@@ -42,17 +43,12 @@ public class SparkManager {
         messages.add(SparkMessage.userContent(content));
         SparkRequest sparkRequest = SparkRequest.builder()
                 .messages(messages)
-                .maxTokens(4096)
-                .temperature(0.2)
+                .maxTokens(CommonConstant.TOKENS)
+                .temperature(CommonConstant.TEMPERATURE)
                 .apiVersion(SparkApiVersion.V2_0).build();
         SparkSyncChatResponse chatResponse = sparkclient.chatSync(sparkRequest);
         String responseContent = chatResponse.getContent();
         log.info("答：{}", responseContent);
-        // 根据返回的结果，将答案中的科大讯飞星火认知大模型等替换掉
-        responseContent = responseContent.replace("科大讯飞", "不逆科技");
-        responseContent = responseContent.replace("讯飞星火", "不逆");
-        responseContent = responseContent.replace("讯飞星火认知", "不逆智能");
-        responseContent = responseContent.replace("认知大模型", "AI大模型");
         return responseContent;
     }
 
