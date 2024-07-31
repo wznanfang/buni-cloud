@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +30,7 @@ public class SparkController {
 
     @Operation(summary = "讯飞星火对话")
     @GetMapping("/spark/talk")
-    public Result<String> talk(TalkVO talkVO) {
+    public Result<String> talk(@ParameterObject TalkVO talkVO) {
         return Result.ok(sparkService.talk(talkVO));
     }
 
