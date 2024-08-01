@@ -1,10 +1,8 @@
 package com.buni.ai.service.impl;
 
 import com.buni.ai.manager.QianFanManager;
-import com.buni.ai.manager.SparkManager;
 import com.buni.ai.service.QianFanService;
-import com.buni.ai.service.SparkService;
-import com.buni.ai.vo.spark.TalkVO;
+import com.buni.ai.vo.qianfan.TalkVO;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

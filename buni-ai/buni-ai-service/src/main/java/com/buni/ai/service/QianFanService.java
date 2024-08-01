@@ -1,6 +1,6 @@
 package com.buni.ai.service;
 
-import com.buni.ai.vo.spark.TalkVO;
+import com.buni.ai.vo.qianfan.TalkVO;
 
 /**
  * @author zp.wei

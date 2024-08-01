@@ -1,7 +1,7 @@
 package com.buni.ai.controller;
 
 import com.buni.ai.service.QianFanService;
-import com.buni.ai.vo.spark.TalkVO;
+import com.buni.ai.vo.qianfan.TalkVO;
 import com.buni.framework.util.Result;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;

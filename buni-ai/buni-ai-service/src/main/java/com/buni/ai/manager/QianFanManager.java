@@ -5,7 +5,7 @@ import com.baidubce.qianfan.model.chat.ChatResponse;
 import com.baidubce.qianfan.model.chat.Message;
 import com.buni.ai.constant.CommonConstant;
 import com.buni.ai.enums.ErrorEnum;
-import com.buni.ai.vo.spark.TalkVO;
+import com.buni.ai.vo.qianfan.TalkVO;
 import com.buni.framework.config.exception.CustomException;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
