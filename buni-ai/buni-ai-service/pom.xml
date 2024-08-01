@@ -12,6 +12,7 @@
 
     <properties>
         <ai-common.version>0.0.1-SNAPSHOT</ai-common.version>
+        <qianfan.version>0.0.9</qianfan.version>
         <xunfei.version>1.2.0</xunfei.version>
     </properties>
 
@@ -20,6 +21,11 @@
             <groupId>com.buni</groupId>
             <artifactId>buni-ai-common</artifactId>
             <version>${ai-common.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.baidubce</groupId>
+            <artifactId>qianfan</artifactId>
+            <version>${qianfan.version}</version>
         </dependency>
         <dependency>
             <groupId>io.github.briqt</groupId>

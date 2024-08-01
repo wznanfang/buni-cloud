@@ -1,6 +1,6 @@
 package com.buni.ai.controller;
 
-import com.buni.ai.service.SparkService;
+import com.buni.ai.service.QianFanService;
 import com.buni.ai.vo.spark.TalkVO;
 import com.buni.framework.util.Result;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -15,23 +15,23 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * @author zp.wei
- * @date 2024/7/31 9:53
+ * @date 2024/8/1 9:11
  */
-@Tag(name = "讯飞星火大模型")
-@ApiSort(2)
+@Tag(name = "千帆大模型")
+@ApiSort(1)
 @AllArgsConstructor
 @RestController
-@RequestMapping("/v1")
-public class SparkController {
+@RequestMapping("v1")
+public class QianFanController {
 
     @Resource
-    private SparkService sparkService;
+    private QianFanService qianFanService;
 
 
-    @Operation(summary = "讯飞星火对话")
-    @GetMapping("/spark/talk")
+    @Operation(summary = "千帆对话")
+    @GetMapping("/qianfan/talk")
     public Result<String> talk(@ParameterObject TalkVO talkVO) {
-        return Result.ok(sparkService.talk(talkVO));
+        return Result.ok(qianFanService.talk(talkVO));
     }
 
 

@@ -30,6 +30,9 @@ dubbo:
 
 buni:
   ai:
+    qianfan:
+      apiKey: Mu6l3kLYN7s6XFLD18homgZn
+      secretKey: vrZc68YFLXq6xJCSQTEc1QAcQZKxIYeA
     spark:
       appId: ffa4749a
       apiKey: b45fb240f420c5319b895c804cef32ad
