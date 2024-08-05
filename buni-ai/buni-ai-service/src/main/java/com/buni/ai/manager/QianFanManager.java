@@ -10,6 +10,7 @@ import com.buni.framework.config.exception.CustomException;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +20,7 @@ import java.util.List;
  * @date 2024/8/1 9:13
  */
 @Slf4j
+@Component
 public class QianFanManager {
 
     @Resource

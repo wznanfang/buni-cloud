@@ -12,6 +12,7 @@ import io.github.briqt.spark4j.model.request.SparkRequest;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.List;
  * @date 2024/7/31 9:41
  */
 @Slf4j
+@Component
 public class SparkManager {
 
     @Resource
