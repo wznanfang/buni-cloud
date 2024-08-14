@@ -46,10 +46,11 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
             super.save(auth);
             return;
         }
+        String token = auth.getToken();
         auth.setToken(authDTO.getToken());
         super.updateById(auth);
         // 移除redis中的旧token
-        redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + auth.getToken());
+        redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + token);
     }
 
 

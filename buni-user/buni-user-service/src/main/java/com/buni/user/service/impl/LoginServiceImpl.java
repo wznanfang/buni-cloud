@@ -70,9 +70,11 @@ public class LoginServiceImpl implements LoginService {
         // 获取token
         TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);
-        // 查询用户的角色权限
-        getUserRole(user.getId());
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
+        // 查询用户的角色权限
+        if (!user.getAdmin().equals(BooleanEnum.YES)) {
+            getUserRole(user.getId());
+        }
         // 记录用户鉴权信息
         AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
         authService.saveOrUpdate(authDTO);

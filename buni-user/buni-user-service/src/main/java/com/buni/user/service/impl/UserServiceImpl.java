@@ -149,6 +149,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userRoleService.deleteByUserIds(ids);
         List<String> deleteKeys = ids.stream().map(id -> User.REDIS_KEY + id).toList();
         redisService.delAllByKeys(deleteKeys);
+        // todo 删除token，根据Auth表的userId来查询token，然后进行redis数据清除
         return true;
     }
 
