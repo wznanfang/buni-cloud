@@ -78,6 +78,18 @@ public class UserGetVO implements Serializable {
     private String tel;
 
     /**
+     * 是否是超级管理员(0:否，1：是)
+     */
+    @Schema(description = "是否是超级管理员(0:否，1：是)")
+    private BooleanEnum admin;
+
+    /**
+     * 是否启用(0:否，1：是)
+     */
+    @Schema(description = "是否启用(0:否，1：是)")
+    private BooleanEnum enable;
+
+    /**
      * 是否删除(0:否，1：是)
      */
     @Schema(description = "是否删除(0:否，1：是)")

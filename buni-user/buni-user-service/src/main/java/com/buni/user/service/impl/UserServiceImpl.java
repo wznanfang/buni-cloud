@@ -184,7 +184,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public IPage<UserGetVO> findPage(PageVO pageVO) {
         IPage<User> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(User::getDeleted, BooleanEnum.NO);
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), User::getUsername, pageVO.getUsername());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
         IPage<User> infoPage = super.page(ipage, queryWrapper);
