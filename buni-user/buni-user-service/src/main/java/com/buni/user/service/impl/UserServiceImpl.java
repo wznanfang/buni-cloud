@@ -167,7 +167,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             User user = getUser(id);
             userInfoVO = new UserInfoVO();
             BeanUtils.copyProperties(user, userInfoVO);
-            userInfoVO.setTel(DesensitizedUtil.mobilePhone(userInfoVO.getTel()));
             redisService.setOneDay(User.REDIS_KEY + user.getId(), userInfoVO);
         }
         return userInfoVO;
@@ -191,6 +190,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<UserGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(user -> {
             UserGetVO getVO = new UserGetVO();
             BeanUtils.copyProperties(user, getVO);
+            getVO.setTel(DesensitizedUtil.mobilePhone(getVO.getTel()));
             return getVO;
         }).toList();
         resultPage.setRecords(list);

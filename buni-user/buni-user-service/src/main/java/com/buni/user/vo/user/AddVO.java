@@ -1,5 +1,6 @@
 package com.buni.user.vo.user;
 
+import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.SexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -54,6 +55,12 @@ public class AddVO implements Serializable {
     @Schema(description = "电话")
     @NotBlank(message = "电话不能为空")
     private String tel;
+
+    /**
+     * 是否启用(0:否，1：是)
+     */
+    @Schema(description = "是否启用(0:否，1：是)")
+    private BooleanEnum enable;
 
 
 }
