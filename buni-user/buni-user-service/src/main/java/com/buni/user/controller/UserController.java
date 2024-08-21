@@ -74,6 +74,20 @@ public class UserController {
 
 
     /**
+     * 根据id集合批量启用-禁用用户
+     *
+     * @param batchEnableVO 用户id
+     * @return true/false
+     */
+    @Operation(summary = "批量启用-禁用用户")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "批量启用-禁用用户")
+    @PutMapping("/user/batchEnable")
+    public Result<Boolean> batchEnable(@RequestBody @Validated BatchEnableVO batchEnableVO) {
+        return Result.ok(userService.batchEnable(batchEnableVO));
+    }
+
+
+    /**
      * 根据id删除用户
      *
      * @param id 用户id

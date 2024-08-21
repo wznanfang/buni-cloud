@@ -16,6 +16,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author Administrator
  * @description 针对表【auth(用户鉴权)】的数据库操作Service实现
@@ -51,6 +53,18 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
         super.updateById(auth);
         // 移除redis中的旧token
         redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + token);
+    }
+
+
+    /**
+     * 根据用户id查询鉴权信息
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<String> findByUserId(List<Long> userId) {
+        return ObjUtil.isEmpty(userId) ? null : super.list(Wrappers.<Auth>lambdaQuery().in(Auth::getUserId, userId)).stream().map(Auth::getToken).toList();
     }
 
 

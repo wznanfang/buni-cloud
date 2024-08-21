@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.buni.user.entity.User;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * @author Administrator
@@ -36,6 +38,14 @@ public interface UserService extends IService<User> {
      * @return true/false
      */
     boolean enable(EnableVO enableVO);
+
+
+    /**
+     * 批量启用-禁用用户
+     * @param batchEnableVO
+     * @return
+     */
+    boolean batchEnable(BatchEnableVO batchEnableVO);
 
     /**
      * 根据id删除用户

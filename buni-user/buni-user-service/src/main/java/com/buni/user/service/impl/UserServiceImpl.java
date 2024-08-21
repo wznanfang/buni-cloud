@@ -12,11 +12,13 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
+import com.buni.framework.constant.CommonConstant;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.UserMapper;
 import com.buni.user.properties.UserProperties;
+import com.buni.user.service.AuthService;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.service.UserService;
 import com.buni.user.vo.IdVOs;
@@ -29,6 +31,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -48,6 +51,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private RedisService redisService;
     @Resource
     private UserRoleService userRoleService;
+    @Resource
+    private AuthService authService;
 
 
     /**
@@ -115,6 +120,42 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         BeanUtils.copyProperties(enableVO, forbiddenUser);
         super.updateById(forbiddenUser);
         redisService.deleteKey(User.REDIS_KEY + enableVO.getId());
+        if (BooleanEnum.NO.equals(enableVO.getEnable())) {
+            deleteToken(Collections.singletonList(enableVO.getId()));
+        }
+        return true;
+    }
+
+    private void deleteToken(List<Long> userIds) {
+        List<String> tokens = authService.findByUserId(userIds);
+        if (ObjUtil.isNotEmpty(tokens)) {
+            List<String> tokenKeys = new ArrayList<>();
+            tokens.forEach(token -> {
+                tokenKeys.add(CommonConstant.TOKEN_REDIS_KEY + token);
+            });
+            redisService.delAllByKeys(tokenKeys);
+        }
+    }
+
+
+    /**
+     * 批量启用/禁用用户
+     *
+     * @param batchEnableVO
+     * @return
+     */
+    @Override
+    public boolean batchEnable(BatchEnableVO batchEnableVO) {
+        if (ObjUtil.isEmpty(batchEnableVO.getIdVOs().getIds())) {
+            return true;
+        }
+        List<Long> userIds = batchEnableVO.getIdVOs().getIds();
+        super.update(Wrappers.<User>lambdaUpdate().in(User::getId, userIds).set(User::getEnable, batchEnableVO.getEnable()));
+        List<String> deleteKeys = userIds.stream().map(id -> User.REDIS_KEY + id).toList();
+        redisService.delAllByKeys(deleteKeys);
+        if (BooleanEnum.NO.equals(batchEnableVO.getEnable())) {
+            deleteToken(batchEnableVO.getIdVOs().getIds());
+        }
         return true;
     }
 
@@ -132,6 +173,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         super.removeById(id);
         userRoleService.deleteByUserId(id);
         redisService.deleteKey(User.REDIS_KEY + id);
+        deleteToken(Collections.singletonList(id));
         return true;
     }
 
@@ -149,7 +191,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         userRoleService.deleteByUserIds(ids);
         List<String> deleteKeys = ids.stream().map(id -> User.REDIS_KEY + id).toList();
         redisService.delAllByKeys(deleteKeys);
-        // todo 删除token，根据Auth表的userId来查询token，然后进行redis数据清除
+        deleteToken(ids);
         return true;
     }
 
