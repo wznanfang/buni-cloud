@@ -140,5 +140,11 @@ public class UserController {
         return Result.ok(userService.findPage(pageVO));
     }
 
+    @Operation(summary = "修改密码")
+    @PutMapping("/user/password")
+    public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO) {
+        return Result.ok(userService.updatePassword(updatePasswordVO));
+    }
+
 
 }

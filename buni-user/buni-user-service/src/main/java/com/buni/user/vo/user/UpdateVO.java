@@ -41,6 +41,9 @@ public class UpdateVO implements Serializable {
     @Schema(description = "年龄")
     private Integer age;
 
+    /**
+     * 电话
+     */
     @Schema(description = "电话")
     private String tel;
 

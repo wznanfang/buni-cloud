@@ -252,4 +252,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     }
 
 
+    /**
+     * 修改密码
+     *
+     * @param updatePasswordVO
+     * @return
+     */
+    @Override
+    public Boolean updatePassword(UpdatePasswordVO updatePasswordVO) {
+        User user = getUser(updatePasswordVO.getId());
+        if (!SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getOldPassword()).equals(user.getPassword())) {
+            throw new CustomException(ErrorEnum.OLD_PASSWORD_ERROR.getCode(), ErrorEnum.OLD_PASSWORD_ERROR.getMessage());
+        }
+        user.setPassword(SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()));
+        super.updateById(user);
+        redisService.deleteKey(User.REDIS_KEY + updatePasswordVO.getId());
+        deleteToken(Collections.singletonList(updatePasswordVO.getId()));
+        return true;
+    }
+
+
 }

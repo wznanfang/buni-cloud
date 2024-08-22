@@ -18,6 +18,7 @@ public enum ErrorEnum {
     USER_NOT_EXISTS(300003, "用户信息不存在"),
     USER_FORBIDDEN(300004, "用户已被禁用"),
     PHONE_ERROR(300005, "电话号码不正确"),
+    OLD_PASSWORD_ERROR(300006, "旧密码不正确"),
 
     /**
      * 权限相关提示

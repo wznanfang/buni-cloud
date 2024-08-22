@@ -87,5 +87,12 @@ public interface UserService extends IService<User> {
      */
     User findByUsername(String username);
 
+    /**
+     * 修改密码
+     * @param updatePasswordVO
+     * @return
+     */
+    Boolean updatePassword(UpdatePasswordVO updatePasswordVO);
+
 
 }
