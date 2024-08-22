@@ -19,6 +19,7 @@ public enum ErrorEnum {
     USER_FORBIDDEN(300004, "用户已被禁用"),
     PHONE_ERROR(300005, "电话号码不正确"),
     OLD_PASSWORD_ERROR(300006, "旧密码不正确"),
+    EQUALS_OLD_PASSWORD(300007, "与旧密码一致，请重新修改"),
 
     /**
      * 权限相关提示
