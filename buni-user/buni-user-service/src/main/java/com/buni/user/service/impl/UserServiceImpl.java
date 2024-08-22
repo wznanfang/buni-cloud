@@ -1,5 +1,6 @@
 package com.buni.user.service.impl;
 
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.ObjUtil;
@@ -13,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
+import com.buni.framework.util.DateUtil;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
@@ -30,10 +32,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * @author Administrator
@@ -272,6 +272,37 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         redisService.deleteKey(User.REDIS_KEY + updatePasswordVO.getId());
         deleteToken(Collections.singletonList(updatePasswordVO.getId()));
         return true;
+    }
+
+
+    /**
+     * 最近新增用户统计
+     *
+     * @return
+     */
+    @Override
+    public List<UserStatisticsVO> statistics(Integer days) {
+        days = days < CommonConstant.ONE ? CommonConstant.ZERO : days;
+        LocalDate startDate = LocalDate.now().minusDays(days - CommonConstant.ONE);
+        Map<LocalDate, Integer> dateCounts = new LinkedHashMap<>();
+        for (LocalDate date = startDate; !date.isAfter(LocalDate.now()); date = date.plusDays(CommonConstant.ONE)) {
+            dateCounts.put(date, CommonConstant.ZERO);
+        }
+        List<User> userList = super.list(Wrappers.<User>lambdaQuery().ge(User::getCreateTime, DateUtil.getDayZeroTime(days)));
+        if (CollUtil.isNotEmpty(userList)) {
+            for (User user : userList) {
+                LocalDate createTime = user.getCreateTime().toLocalDate();
+                if (dateCounts.containsKey(createTime)) {
+                    dateCounts.merge(createTime, CommonConstant.ONE, Integer::sum);
+                }
+            }
+        }
+        return dateCounts.entrySet().stream().map(entry -> {
+            UserStatisticsVO vo = new UserStatisticsVO();
+            vo.setCreateTime(entry.getKey());
+            vo.setNewUserCount(entry.getValue());
+            return vo;
+        }).toList();
     }
 
 

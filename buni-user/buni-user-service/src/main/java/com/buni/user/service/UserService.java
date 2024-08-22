@@ -8,6 +8,8 @@ import com.buni.user.vo.user.*;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.util.List;
+
 /**
  * @author Administrator
  * @description 针对表【user】的数据库操作Service
@@ -42,6 +44,7 @@ public interface UserService extends IService<User> {
 
     /**
      * 批量启用-禁用用户
+     *
      * @param batchEnableVO
      * @return
      */
@@ -89,10 +92,18 @@ public interface UserService extends IService<User> {
 
     /**
      * 修改密码
+     *
      * @param updatePasswordVO
      * @return
      */
     Boolean updatePassword(UpdatePasswordVO updatePasswordVO);
+
+    /**
+     * 最近新增用户统计
+     *
+     * @return
+     */
+    List<UserStatisticsVO> statistics(Integer days);
 
 
 }

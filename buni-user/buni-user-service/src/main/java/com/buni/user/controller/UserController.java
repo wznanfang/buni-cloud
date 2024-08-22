@@ -16,6 +16,8 @@ import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * @author zp.wei
  * @date 2023/9/18 17:17
@@ -144,6 +146,12 @@ public class UserController {
     @PutMapping("/user/password")
     public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO) {
         return Result.ok(userService.updatePassword(updatePasswordVO));
+    }
+
+    @Operation(summary = "最近新增用户统计")
+    @GetMapping("/user/statistics")
+    public Result<List<UserStatisticsVO>> statistics(@RequestParam(value = "days") Integer days) {
+        return Result.ok(userService.statistics(days));
     }
 
 
