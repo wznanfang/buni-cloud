@@ -91,6 +91,17 @@ public class CommonConstant {
      */
     public static final String RATE_LIMITER = "rate:limit:";
 
+    /**
+     * 管理员id
+     */
+    public static final Long ADMIN_ID = 1L;
+
+    /**
+     * AES加解密参数
+     */
+    public static final String AES_KEY = "buni123456789012";
+    public static final String AES_IV = "1234567890123456";
+
 
     /**
      * 普通常量

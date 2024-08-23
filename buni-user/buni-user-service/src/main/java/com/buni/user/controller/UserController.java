@@ -142,12 +142,39 @@ public class UserController {
         return Result.ok(userService.findPage(pageVO));
     }
 
+
+    /**
+     * 修改密码
+     *
+     * @param updatePasswordVO
+     * @return
+     */
     @Operation(summary = "修改密码")
     @PutMapping("/user/password")
     public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO) {
         return Result.ok(userService.updatePassword(updatePasswordVO));
     }
 
+
+    /**
+     * 重置密码
+     *
+     * @param id
+     * @return
+     */
+    @Operation(summary = "重置密码")
+    @PutMapping("/user/resetPassword/{id}")
+    public Result<Boolean> resetPassword(@PathVariable Long id) {
+        return Result.ok(userService.resetPassword(id));
+    }
+
+
+    /**
+     * 最近新增用户统计
+     *
+     * @param days
+     * @return
+     */
     @Operation(summary = "最近新增用户统计")
     @GetMapping("/user/statistics")
     public Result<List<UserStatisticsVO>> statistics(@RequestParam(value = "days") Integer days) {

@@ -17,4 +17,6 @@ public class UserProperties {
 
     private String salt;
 
+    private String password;
+
 }

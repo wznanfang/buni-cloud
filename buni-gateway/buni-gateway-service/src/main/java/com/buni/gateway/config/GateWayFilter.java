@@ -24,7 +24,9 @@ import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
+import org.springframework.http.MediaType;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
@@ -164,7 +166,7 @@ public class GateWayFilter implements GlobalFilter {
      */
     public Mono<Void> returnMsg(ServerWebExchange exchange, ResultEnum resultEnum) {
         ServerHttpResponse response = exchange.getResponse();
-        Result<Object> result = Result.error(resultEnum);
+        Result<ResultEnum> result = Result.error(resultEnum);
         byte[] data = new byte[CommonConstant.ZERO];
         try {
             ObjectMapper objectMapper = new ObjectMapper();
@@ -173,7 +175,9 @@ public class GateWayFilter implements GlobalFilter {
             log.error("json转换失败{}", e.getMessage());
         }
         DataBuffer buffer = response.bufferFactory().wrap(data);
-        response.setStatusCode(HttpStatusCode.valueOf(resultEnum.getCode()));
+        response.getHeaders().setContentType(MediaType.APPLICATION_JSON);
+        response.getHeaders().setContentLength(data.length);
+        response.setStatusCode(HttpStatus.valueOf(resultEnum.getCode()));
         return response.writeWith(Mono.just(buffer));
     }
 

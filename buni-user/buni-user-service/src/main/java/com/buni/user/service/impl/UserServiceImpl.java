@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
+import com.buni.framework.util.EncryptUtil;
 import com.buni.framework.util.DateUtil;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
@@ -72,7 +73,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         User user = new User();
         BeanUtils.copyProperties(addVO, user);
-        user.setPassword(SmUtil.sm3(userProperties.getSalt() + addVO.getPassword()));
+        String password = EncryptUtil.decrypt(addVO.getPassword());
+        user.setPassword(SmUtil.sm3(userProperties.getSalt() + password));
         return super.save(user);
     }
 
@@ -225,6 +227,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public IPage<UserGetVO> findPage(PageVO pageVO) {
         IPage<User> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().ne(User::getId, CommonConstant.ADMIN_ID);
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), User::getUsername, pageVO.getUsername());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
         IPage<User> infoPage = super.page(ipage, queryWrapper);
@@ -276,8 +279,26 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     /**
+     * 重置密码
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public Boolean resetPassword(Long id) {
+        User user = getUser(id);
+        user.setPassword(SmUtil.sm3(userProperties.getSalt() + userProperties.getPassword()));
+        super.updateById(user);
+        redisService.deleteKey(User.REDIS_KEY + id);
+        deleteToken(Collections.singletonList(id));
+        return true;
+    }
+
+
+    /**
      * 最近新增用户统计
      *
+     * @param days
      * @return
      */
     @Override

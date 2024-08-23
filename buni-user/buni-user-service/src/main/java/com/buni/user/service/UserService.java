@@ -99,8 +99,17 @@ public interface UserService extends IService<User> {
     Boolean updatePassword(UpdatePasswordVO updatePasswordVO);
 
     /**
+     * 重置密码
+     *
+     * @param id
+     * @return
+     */
+    Boolean resetPassword(Long id);
+
+    /**
      * 最近新增用户统计
      *
+     * @param days
      * @return
      */
     List<UserStatisticsVO> statistics(Integer days);

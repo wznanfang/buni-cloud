@@ -26,3 +26,4 @@ springdoc:
 # 自定义配置
 buni:
   salt: buni
+  password: 123456
