@@ -107,6 +107,13 @@ public interface UserService extends IService<User> {
     Boolean resetPassword(Long id);
 
     /**
+     * 修改头像
+     * @param updateAvatarVO
+     * @return
+     */
+    Boolean updateAvatar(UpdateAvatarVO updateAvatarVO);
+
+    /**
      * 最近新增用户统计
      *
      * @param days

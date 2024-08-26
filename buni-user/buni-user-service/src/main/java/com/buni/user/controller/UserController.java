@@ -168,6 +168,12 @@ public class UserController {
         return Result.ok(userService.resetPassword(id));
     }
 
+    @Operation(summary = "修改头像")
+    @PutMapping("/user/avatar")
+    public Result<Boolean> updateAvatar(@RequestBody @Validated UpdateAvatarVO updateAvatarVO) {
+        return Result.ok(userService.updateAvatar(updateAvatarVO));
+    }
+
 
     /**
      * 最近新增用户统计

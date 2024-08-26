@@ -3,6 +3,7 @@ package com.buni.user.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.crypto.SmUtil;
+import com.buni.file.FileDubboService;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
@@ -25,6 +26,7 @@ import com.buni.user.vo.login.LoginVO;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -49,6 +51,8 @@ public class LoginServiceImpl implements LoginService {
     private AuthorityService authorityService;
     @Resource
     private UserService userService;
+    @DubboReference
+    private FileDubboService fileDubboService;
 
 
     /**
@@ -72,6 +76,8 @@ public class LoginServiceImpl implements LoginService {
         // 获取token
         TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);
+        //获取用户头像
+        userLoginVO.setAvatar(fileDubboService.preview(user.getAvatar()));
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
         // 查询用户的角色权限
         if (!user.getAdmin().equals(BooleanEnum.YES)) {

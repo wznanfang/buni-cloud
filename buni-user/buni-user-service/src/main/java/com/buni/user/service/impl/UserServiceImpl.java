@@ -14,8 +14,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
-import com.buni.framework.util.EncryptUtil;
 import com.buni.framework.util.DateUtil;
+import com.buni.framework.util.EncryptUtil;
 import com.buni.user.entity.User;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
@@ -291,6 +291,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         super.updateById(user);
         redisService.deleteKey(User.REDIS_KEY + id);
         deleteToken(Collections.singletonList(id));
+        return true;
+    }
+
+
+    /**
+     * 修改头像
+     *
+     * @param updateAvatarVO
+     * @return
+     */
+    @Override
+    public Boolean updateAvatar(UpdateAvatarVO updateAvatarVO) {
+        User user = getUser(updateAvatarVO.getId());
+        user.setAvatar(updateAvatarVO.getAvatar());
+        super.updateById(user);
         return true;
     }
 

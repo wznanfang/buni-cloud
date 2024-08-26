@@ -78,6 +78,12 @@ public class UserInfoVO implements Serializable {
     private String tel;
 
     /**
+     * 头像
+     */
+    @Schema(description = "头像")
+    private String avatar;
+
+    /**
      * 是否是超级管理员(0:否，1：是)
      */
     @Schema(description = "是否是超级管理员(0:否，1：是)")

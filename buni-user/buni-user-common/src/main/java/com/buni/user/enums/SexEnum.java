@@ -18,6 +18,7 @@ public enum SexEnum implements BaseEnum {
 
     FEMALE(0, "女"),
     MALE(1, "男"),
+    UNKNOWN(2, "未知"),
     ;
 
     @EnumValue
