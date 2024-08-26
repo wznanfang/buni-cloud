@@ -174,7 +174,7 @@ public class MinioUtil {
             url = minioClient.getPresignedObjectUrl(GetPresignedObjectUrlArgs.builder()
                     .bucket(bucketName)
                     .object(objectName)
-                    .expiry(expires, TimeUnit.HOURS)
+                    .expiry(expires, TimeUnit.DAYS)
                     .method(Method.GET)
                     .build());
         } catch (Exception e) {

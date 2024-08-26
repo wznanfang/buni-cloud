@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.buni.file.FileDubboService;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
@@ -29,6 +30,7 @@ import com.buni.user.vo.user.*;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,6 +56,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     private UserRoleService userRoleService;
     @Resource
     private AuthService authService;
+    @DubboReference
+    private FileDubboService fileDubboService;
 
 
     /**
@@ -211,6 +215,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             User user = getUser(id);
             userInfoVO = new UserInfoVO();
             BeanUtils.copyProperties(user, userInfoVO);
+            userInfoVO.setAvatar(ObjUtil.isEmpty(user.getAvatar()) ? "" : fileDubboService.preview(user.getAvatar()));
             redisService.setOneDay(User.REDIS_KEY + user.getId(), userInfoVO);
         }
         return userInfoVO;
