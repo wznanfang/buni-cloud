@@ -146,8 +146,8 @@ public class UserController {
     /**
      * 修改密码
      *
-     * @param updatePasswordVO
-     * @return
+     * @param updatePasswordVO 修改密码vo
+     * @return true/false
      */
     @Operation(summary = "修改密码")
     @PutMapping("/user/password")
@@ -159,8 +159,8 @@ public class UserController {
     /**
      * 重置密码
      *
-     * @param id
-     * @return
+     * @param id 用户id
+     * @return true/false
      */
     @Operation(summary = "重置密码")
     @PutMapping("/user/resetPassword/{id}")
@@ -168,6 +168,13 @@ public class UserController {
         return Result.ok(userService.resetPassword(id));
     }
 
+
+    /**
+     * 修改头像
+     *
+     * @param updateAvatarVO 修改头像vo
+     * @return true/false
+     */
     @Operation(summary = "修改头像")
     @PutMapping("/user/avatar")
     public Result<Boolean> updateAvatar(@RequestBody @Validated UpdateAvatarVO updateAvatarVO) {
@@ -178,8 +185,8 @@ public class UserController {
     /**
      * 最近新增用户统计
      *
-     * @param days
-     * @return
+     * @param days 天数
+     * @return 统计数据
      */
     @Operation(summary = "最近新增用户统计")
     @GetMapping("/user/statistics")
