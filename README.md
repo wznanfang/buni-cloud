@@ -1,11 +1,11 @@
 <h1 align="center">不逆-基础开发框架</h1>
     <p align="center">
-    	<img src ="https://img.shields.io/github/languages/code-size/wznanfang/buni-cloud" alt="codesize"/>
+    	<img src="https://img.shields.io/badge/Author-wznanfang-orange" alt="Author"/><br>
     	<img src="https://img.shields.io/badge/SpringBoot-3.3.0-brightgreen" alt="SpringBoot"/>
-    	<img src="https://img.shields.io/github/languages/count/wznanfang/buni-cloud" alt="languages"/>
         <img src="https://img.shields.io/badge/Java-17-skyblue" alt="Java"/>
-    	<img src="https://img.shields.io/github/last-commit/wznanfang/buni-cloud" alt="lastcommit"/><br>
-    	<img src="https://img.shields.io/badge/Author-wznanfang-orange" alt="Author"/>
+    	<img src="https://img.shields.io/github/languages/count/wznanfang/buni-cloud" alt="languages"/>
+    	<img src="https://img.shields.io/github/last-commit/wznanfang/buni-cloud" alt="lastcommit"/>
+    	<img src ="https://img.shields.io/github/languages/code-size/wznanfang/buni-cloud" alt="codesize"/>
     </p>
 <hr>
 
