@@ -45,8 +45,8 @@ public interface UserService extends IService<User> {
     /**
      * 批量启用-禁用用户
      *
-     * @param batchEnableVO
-     * @return
+     * @param batchEnableVO 批量启用-禁用信息
+     * @return true/false
      */
     boolean batchEnable(BatchEnableVO batchEnableVO);
 
@@ -85,39 +85,39 @@ public interface UserService extends IService<User> {
     /**
      * 根据用户名查询用户
      *
-     * @param username
-     * @return
+     * @param username 用户名
+     * @return 用户信息
      */
     User findByUsername(String username);
 
     /**
      * 修改密码
      *
-     * @param updatePasswordVO
-     * @return
+     * @param updatePasswordVO 修改密码信息
+     * @return true/false
      */
     Boolean updatePassword(UpdatePasswordVO updatePasswordVO);
 
     /**
      * 重置密码
      *
-     * @param id
-     * @return
+     * @param id 用户id
+     * @return  true/false
      */
     Boolean resetPassword(Long id);
 
     /**
      * 修改头像
-     * @param updateAvatarVO
-     * @return
+     * @param updateAvatarVO 头像信息
+     * @return true/false
      */
     Boolean updateAvatar(UpdateAvatarVO updateAvatarVO);
 
     /**
      * 最近新增用户统计
      *
-     * @param days
-     * @return
+     * @param days 天数
+     * @return 数据信息
      */
     List<UserStatisticsVO> statistics(Integer days);
 

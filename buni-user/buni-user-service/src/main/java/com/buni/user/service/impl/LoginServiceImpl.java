@@ -76,8 +76,6 @@ public class LoginServiceImpl implements LoginService {
         // 获取token
         TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);
-        //获取用户头像
-        userLoginVO.setAvatar(fileDubboService.preview(user.getAvatar()));
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
         // 查询用户的角色权限
         if (!user.getAdmin().equals(BooleanEnum.YES)) {

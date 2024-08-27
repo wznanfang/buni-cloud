@@ -3,6 +3,10 @@ spring:
     name: buni-file
   profiles:
     active: dev
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
 
 # 以下为固定配置
 # mybatis-plus配置
