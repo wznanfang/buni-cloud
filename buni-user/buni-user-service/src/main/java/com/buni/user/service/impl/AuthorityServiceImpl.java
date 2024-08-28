@@ -17,6 +17,7 @@ import com.buni.user.dto.role.AuthorityDTO;
 import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.dto.role.UserRoleDTO;
 import com.buni.user.entity.Authority;
+import com.buni.user.enums.AuthTypeEnum;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.AuthorityMapper;
 import com.buni.user.service.AuthorityService;
@@ -31,6 +32,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -178,6 +180,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     public IPage<AuthorityGetVO> findPage(PageVO pageVO) {
         IPage<Authority> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<Authority> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(Authority::getParentId, CommonConstant.ONE);
         queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(pageVO.getParentId()), Authority::getParentId, pageVO.getParentId());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Authority::getName, pageVO.getName());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), Authority::getType, pageVO.getType());
@@ -201,10 +204,10 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public List<Tree<String>> findMenuTree() {
-        List<Authority> list = super.list();
+        List<Authority> list = super.list(Wrappers.<Authority>lambdaQuery().ne(Authority::getType, AuthTypeEnum.BUTTON));
         List<Tree<String>> treeNodes = new ArrayList<>();
         if (ObjUtil.isNotEmpty(list)) {
-            treeNodes = TreeUtil.build(list, CommonConstant.ZERO_STR, (treeNode, tree) -> {
+            treeNodes = TreeUtil.build(list, String.valueOf(CommonConstant.ZERO), (treeNode, tree) -> {
                 tree.setId(String.valueOf(treeNode.getId()));
                 tree.setParentId(String.valueOf(treeNode.getParentId()));
                 tree.setName(treeNode.getName());
@@ -215,6 +218,27 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
             });
         }
         return treeNodes;
+    }
+
+
+    /**
+     * 根据父级id查询子集权限
+     *
+     * @param id
+     * @return
+     */
+    @Override
+    public List<AuthorityGetVO> findByParentId(Long id) {
+        List<Authority> list = super.list(Wrappers.<Authority>lambdaQuery().eq(Authority::getParentId, id));
+        List<AuthorityGetVO> getVos = new ArrayList<>();
+        if (CollUtil.isNotEmpty(list)) {
+            list.forEach(authority -> {
+                AuthorityGetVO getVO = new AuthorityGetVO();
+                BeanUtils.copyProperties(authority, getVO);
+                getVos.add(getVO);
+            });
+        }
+        return getVos;
     }
 
 

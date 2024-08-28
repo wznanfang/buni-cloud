@@ -4,6 +4,8 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.framework.util.Result;
 import com.buni.user.constant.CommonConstant;
+import com.buni.user.dto.role.AuthorityDTO;
+import com.buni.user.enums.AuthTypeEnum;
 import com.buni.user.log.SysLogRecord;
 import com.buni.user.service.AuthorityService;
 import com.buni.user.vo.IdVOs;
@@ -126,6 +128,19 @@ public class AuthorityController {
     @GetMapping("findMenuTree")
     public Result<List<Tree<String>>> findMenuTree() {
         return Result.ok(authorityService.findMenuTree());
+    }
+
+
+    /**
+     * 根据父级id查询子集权限
+     *
+     * @param id
+     * @return
+     */
+    @Operation(summary = "根据父级id查询子集权限")
+    @GetMapping("/authority/findByParent/{id}")
+    public Result<List<AuthorityGetVO>> findByParentId(@PathVariable("id") Long id) {
+        return Result.ok(authorityService.findByParentId(id));
     }
 
 

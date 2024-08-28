@@ -8,6 +8,7 @@ import com.buni.user.entity.Authority;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.dto.role.AuthorityDTO;
 import com.buni.user.vo.authority.*;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -73,6 +74,14 @@ public interface AuthorityService extends IService<Authority> {
      * @return
      */
     List<Tree<String>> findMenuTree();
+
+    /**
+     * 根据父级id查询子集权限
+     *
+     * @param id
+     * @return
+     */
+    List<AuthorityGetVO> findByParentId(Long id);
 
     /**
      * 根据id查询权限
