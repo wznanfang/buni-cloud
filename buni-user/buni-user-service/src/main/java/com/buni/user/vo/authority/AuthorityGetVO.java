@@ -1,12 +1,18 @@
 package com.buni.user.vo.authority;
 
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.AuthTypeEnum;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author zp.wei
@@ -22,6 +28,13 @@ public class AuthorityGetVO implements Serializable {
 	@Schema(description = "id")
 	@JsonSerialize(using = StringSerializer.class)
 	private Long id;
+
+	/**
+	 * 创建时间
+	 */
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	private LocalDateTime createTime;
 
 	/**
 	 * 名字
