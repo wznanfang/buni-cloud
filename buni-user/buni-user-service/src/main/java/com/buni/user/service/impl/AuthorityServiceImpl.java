@@ -81,8 +81,8 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().ne(Authority::getId, updateVO.getId()).eq(Authority::getCode, updateVO.getCode())
-                .or().eq(Authority::getUrl, updateVO.getUrl()));
+        Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().ne(Authority::getId, updateVO.getId()).ne(Authority::getParentId, updateVO.getParentId())
+                .eq(Authority::getCode, updateVO.getCode()).or().eq(Authority::getUrl, updateVO.getUrl()));
         if (ObjUtil.isNotEmpty(authority) && !updateVO.getId().equals(authority.getId())) {
             throw new CustomException(ErrorEnum.AUTHORITY_EXISTS.getCode(), ErrorEnum.AUTHORITY_EXISTS.getMessage());
         }

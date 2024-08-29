@@ -33,6 +33,13 @@ public class UpdateVO implements Serializable {
 	private String name;
 
 	/**
+	 * 父级id
+	 */
+	@Schema(description = "父级id")
+	@NotNull(message = "父级id不能为空")
+	private Long parentId;
+
+	/**
 	 * 0：模块，1：菜单，2：按钮
 	 */
 	@Schema(description = "权限类型（0：模块，1：菜单，2：按钮）")
