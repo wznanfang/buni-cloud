@@ -83,7 +83,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
     public boolean update(UpdateVO updateVO) {
         Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().ne(Authority::getId, updateVO.getId()).eq(Authority::getCode, updateVO.getCode())
                 .or().eq(Authority::getUrl, updateVO.getUrl()));
-        if (ObjUtil.isNotEmpty(authority)) {
+        if (ObjUtil.isNotEmpty(authority) && !updateVO.getId().equals(authority.getId())) {
             throw new CustomException(ErrorEnum.AUTHORITY_EXISTS.getCode(), ErrorEnum.AUTHORITY_EXISTS.getMessage());
         }
         Authority updateAuthority = new Authority();
@@ -185,6 +185,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Authority::getName, pageVO.getName());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), Authority::getType, pageVO.getType());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getCode()), Authority::getCode, pageVO.getCode());
+        queryWrapper.lambda().orderByAsc(Authority::getSort);
         IPage<Authority> infoPage = super.page(ipage, queryWrapper);
         IPage<AuthorityGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
         List<AuthorityGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(authority -> {
