@@ -205,7 +205,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public List<Tree<String>> findMenuTree() {
-        List<Authority> list = super.list(Wrappers.<Authority>lambdaQuery().ne(Authority::getType, AuthTypeEnum.BUTTON));
+        List<Authority> list = super.list();
         List<Tree<String>> treeNodes = new ArrayList<>();
         if (ObjUtil.isNotEmpty(list)) {
             treeNodes = TreeUtil.build(list, String.valueOf(CommonConstant.ZERO), (treeNode, tree) -> {
