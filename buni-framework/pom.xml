@@ -23,6 +23,7 @@
         <aspectj.version>1.9.22</aspectj.version>
         <dubbo.version>3.2.13</dubbo.version>
         <knife4j.version>4.5.0</knife4j.version>
+        <poi.version>4.1.2</poi.version>
     </properties>
 
     <!-- 依赖管理 -->
@@ -119,6 +120,16 @@
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
             <version>${knife4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>${poi.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml-schemas</artifactId>
+            <version>${poi.version}</version>
         </dependency>
     </dependencies>
 
