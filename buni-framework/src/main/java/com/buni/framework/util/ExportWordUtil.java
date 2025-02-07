@@ -6,26 +6,27 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xwpf.usermodel.*;
 import org.openxmlformats.schemas.wordprocessingml.x2006.main.STMerge;
 
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.*;
 
 @Slf4j
 public class ExportWordUtil {
 
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    @Resource
+    private ObjectMapper objectMapper;
 
 
     /**
-     * 生成Word模板。
+     * 生成Word模板
      *
-     * @param headStr word表头数据
+     * @param headStr      word表头数据
      * @param templateData 填充数据
-     * @param filePath 存储路径
+     * @param filePath     存储路径
      */
     public void getWordTemplate(String headStr, JSONObject templateData, String filePath) {
         try {
@@ -196,7 +197,7 @@ public class ExportWordUtil {
         }
     }
 
-    private static void setCellData(XWPFTable table, List<String> cellList, JSONObject templateData){
+    private static void setCellData(XWPFTable table, List<String> cellList, JSONObject templateData) {
         // 获取表头行以确定列数
         XWPFTableRow headerRow = table.getRow(0);
         int columnCount = headerRow.getTableCells().size();
