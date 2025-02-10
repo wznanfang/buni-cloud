@@ -28,10 +28,10 @@ public class ExportWordUtil {
      * @param templateData 填充数据
      * @param filePath     存储路径
      */
-    public void getWordTemplate(String headStr, JSONObject templateData, String filePath) {
+    public void wordExport(String headStr, JSONObject templateData, String filePath) {
         try {
             // 解析JSON为数据结构
-            TypeReference<List<Map<String, Object>>> typeRef = new TypeReference<List<Map<String, Object>>>() {
+            TypeReference<List<Map<String, Object>>> typeRef = new TypeReference<>() {
             };
             List<Map<String, Object>> headData = objectMapper.readValue(headStr, typeRef);
             headData.sort(Comparator.comparingInt(o -> Integer.parseInt((String) o.get("sort"))));
