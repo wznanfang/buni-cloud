@@ -32,6 +32,12 @@ public enum ErrorEnum {
      */
     ROLE_EXISTS(320001, "角色已存在"),
     ROLE_NOT_EXISTS(320002, "角色不存在"),
+
+    /**
+     * 部门
+     */
+    DEPT_EXISTS(330001, "部门已存在"),
+    DEPT_NOT_EXISTS(330002, "部门不存在"),
     ;
 
     private Integer code;

@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @ApiSort(3)
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/role")
 public class SysRoleController {
 
     @Resource
@@ -40,7 +40,7 @@ public class SysRoleController {
      */
     @Operation(summary = "新增角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增角色")
-    @PostMapping("/role")
+    @PostMapping()
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(sysRoleService.save(addVO));
     }
@@ -54,7 +54,7 @@ public class SysRoleController {
      */
     @Operation(summary = "修改角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改角色")
-    @PutMapping("/role")
+    @PutMapping()
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(sysRoleService.update(updateVO));
     }
@@ -68,7 +68,7 @@ public class SysRoleController {
      */
     @Operation(summary = "删除角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除角色")
-    @DeleteMapping("/role/{id:\\d+}")
+    @DeleteMapping("/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(sysRoleService.delete(id));
     }
@@ -82,7 +82,7 @@ public class SysRoleController {
      */
     @Operation(summary = "批量删除角色")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除角色")
-    @DeleteMapping("/role")
+    @DeleteMapping()
     public Result<Boolean> BatchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(sysRoleService.batchDelete(idVOs));
     }
@@ -95,7 +95,7 @@ public class SysRoleController {
      * @return
      */
     @Operation(summary = "根据id查询角色")
-    @GetMapping("/role/{id:\\d+}")
+    @GetMapping("/{id:\\d+}")
     public Result<RoleInfoVO> findById(@PathVariable Long id) {
         return Result.ok(sysRoleService.findById(id));
     }
@@ -108,7 +108,7 @@ public class SysRoleController {
      * @return 角色信息
      */
     @Operation(summary = "分页查询角色")
-    @GetMapping("/role")
+    @GetMapping()
     public Result<IPage<RoleGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(sysRoleService.findPage(pageVO));
     }

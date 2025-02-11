@@ -21,7 +21,7 @@ import java.util.List;
 @ApiSort(4)
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/roleAuthority")
 public class SysRoleAuthorityController {
 
     @Resource
@@ -29,21 +29,21 @@ public class SysRoleAuthorityController {
 
 
     @Operation(summary = "新增角色权限")
-    @PostMapping("roleAuthority")
+    @PostMapping()
     public Result<Boolean> save(@RequestBody AddVO addVO) {
         return Result.ok(sysRoleAuthorityService.save(addVO));
     }
 
 
     @Operation(summary = "编辑角色权限")
-    @PutMapping("roleAuthority")
+    @PutMapping()
     public Result<Boolean> update(@RequestBody UpdateVO updateVO) {
         return Result.ok(sysRoleAuthorityService.update(updateVO));
     }
 
 
     @Operation(summary = "查询角色权限")
-    @GetMapping("roleAuthority/{id}")
+    @GetMapping("/{id:\\d+}")
     public Result<List<Long>> findById(@PathVariable Long id) {
         return Result.ok(sysRoleAuthorityService.findById(id));
     }

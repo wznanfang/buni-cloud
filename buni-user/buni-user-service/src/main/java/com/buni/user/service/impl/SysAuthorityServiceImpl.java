@@ -178,7 +178,6 @@ public class SysAuthorityServiceImpl extends ServiceImpl<SysAuthorityMapper, Sys
     public IPage<AuthorityGetVO> findPage(PageVO pageVO) {
         IPage<SysAuthority> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
         QueryWrapper<SysAuthority> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(SysAuthority::getParentId, CommonConstant.ONE);
         queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(pageVO.getParentId()), SysAuthority::getParentId, pageVO.getParentId());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), SysAuthority::getName, pageVO.getName());
         queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), SysAuthority::getType, pageVO.getType());

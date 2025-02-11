@@ -26,7 +26,7 @@ import java.util.List;
 @ApiSort(2)
 @AllArgsConstructor
 @RestController
-@RequestMapping(value = "/v1")
+@RequestMapping(value = "/v1/user")
 public class SysUserController {
 
     @Resource
@@ -41,7 +41,7 @@ public class SysUserController {
      */
     @Operation(summary = "新增用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增用户")
-    @PostMapping("/user")
+    @PostMapping()
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(sysUserService.save(addVO));
     }
@@ -55,7 +55,7 @@ public class SysUserController {
      */
     @Operation(summary = "编辑用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "编辑用户")
-    @PutMapping("/user")
+    @PutMapping()
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(sysUserService.update(updateVO));
     }
@@ -69,7 +69,7 @@ public class SysUserController {
      */
     @Operation(summary = "启用-禁用用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "启用-禁用用户")
-    @PutMapping("/user/forbidden")
+    @PutMapping("/forbidden")
     public Result<Boolean> forbidden(@RequestBody @Validated EnableVO enableVO) {
         return Result.ok(sysUserService.enable(enableVO));
     }
@@ -83,7 +83,7 @@ public class SysUserController {
      */
     @Operation(summary = "批量启用-禁用用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量启用-禁用用户")
-    @PutMapping("/user/batchEnable")
+    @PutMapping("/batchEnable")
     public Result<Boolean> batchEnable(@RequestBody @Validated BatchEnableVO batchEnableVO) {
         return Result.ok(sysUserService.batchEnable(batchEnableVO));
     }
@@ -97,7 +97,7 @@ public class SysUserController {
      */
     @Operation(summary = "删除用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除用户")
-    @DeleteMapping("/user/{id}")
+    @DeleteMapping("/{id}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(sysUserService.delete(id));
     }
@@ -111,7 +111,7 @@ public class SysUserController {
      */
     @Operation(summary = "批量删除用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除用户")
-    @DeleteMapping("/user/batchDelete")
+    @DeleteMapping("/batchDelete")
     public Result<Boolean> batchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(sysUserService.batchDelete(idVOs));
     }
@@ -124,7 +124,7 @@ public class SysUserController {
      * @return 用户信息
      */
     @Operation(summary = "查询用户信息")
-    @GetMapping("/user/{id}")
+    @GetMapping("/{id:\\d+}")
     public Result<UserInfoVO> findById(@PathVariable Long id) {
         return Result.ok(sysUserService.findById(id));
     }
@@ -137,7 +137,7 @@ public class SysUserController {
      * @return 用户信息
      */
     @Operation(summary = "分页查询用户信息")
-    @GetMapping("/user")
+    @GetMapping()
     public Result<IPage<UserGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(sysUserService.findPage(pageVO));
     }
@@ -150,7 +150,7 @@ public class SysUserController {
      * @return true/false
      */
     @Operation(summary = "修改密码")
-    @PutMapping("/user/password")
+    @PutMapping("/password")
     public Result<Boolean> updatePassword(@RequestBody @Validated UpdatePasswordVO updatePasswordVO) {
         return Result.ok(sysUserService.updatePassword(updatePasswordVO));
     }
@@ -163,7 +163,7 @@ public class SysUserController {
      * @return true/false
      */
     @Operation(summary = "重置密码")
-    @PutMapping("/user/resetPassword/{id}")
+    @PutMapping("/resetPassword/{id}")
     public Result<Boolean> resetPassword(@PathVariable Long id) {
         return Result.ok(sysUserService.resetPassword(id));
     }
@@ -176,7 +176,7 @@ public class SysUserController {
      * @return true/false
      */
     @Operation(summary = "修改头像")
-    @PutMapping("/user/avatar")
+    @PutMapping("/avatar")
     public Result<Boolean> updateAvatar(@RequestBody @Validated UpdateAvatarVO updateAvatarVO) {
         return Result.ok(sysUserService.updateAvatar(updateAvatarVO));
     }
@@ -189,7 +189,7 @@ public class SysUserController {
      * @return 统计数据
      */
     @Operation(summary = "最近新增用户统计")
-    @GetMapping("/user/statistics")
+    @GetMapping("/statistics")
     public Result<List<UserStatisticsVO>> statistics(@RequestParam(value = "days") Integer days) {
         return Result.ok(sysUserService.statistics(days));
     }

@@ -28,7 +28,7 @@ import java.util.List;
 @ApiSort(4)
 @RestController
 @AllArgsConstructor
-@RequestMapping("/v1")
+@RequestMapping("/v1/authority")
 public class SysAuthorityController {
 
     @Resource
@@ -43,7 +43,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "新增权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
-    @PostMapping("/authority")
+    @PostMapping()
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(sysAuthorityService.save(addVO));
     }
@@ -57,7 +57,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "修改权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
-    @PutMapping("/authority")
+    @PutMapping()
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(sysAuthorityService.update(updateVO));
     }
@@ -71,7 +71,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除权限")
-    @DeleteMapping("/authority/{id:\\d+}")
+    @DeleteMapping("/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
         return Result.ok(sysAuthorityService.delete(id));
     }
@@ -85,7 +85,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "批量删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
-    @DeleteMapping("/authority")
+    @DeleteMapping()
     public Result<Boolean> BatchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(sysAuthorityService.batchDelete(idVOs));
     }
@@ -98,7 +98,7 @@ public class SysAuthorityController {
      * @return 权限信息
      */
     @Operation(summary = "根据id查询权限")
-    @GetMapping("/authority/{id:\\d+}")
+    @GetMapping("/{id:\\d+}")
     public Result<AuthorityInfoVO> findById(@PathVariable Long id) {
         return Result.ok(sysAuthorityService.findById(id));
     }
@@ -111,7 +111,7 @@ public class SysAuthorityController {
      * @return 权限信息
      */
     @Operation(summary = "分页查询")
-    @GetMapping("/authority")
+    @GetMapping()
     public Result<IPage<AuthorityGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(sysAuthorityService.findPage(pageVO));
     }
@@ -123,7 +123,7 @@ public class SysAuthorityController {
      * @return 菜单树结构列表
      */
     @Operation(summary = "菜单树结构列表", description = "返回树结构菜单")
-    @GetMapping("findMenuTree")
+    @GetMapping("/findMenuTree")
     public Result<List<Tree<String>>> findMenuTree() {
         return Result.ok(sysAuthorityService.findMenuTree());
     }
@@ -136,7 +136,7 @@ public class SysAuthorityController {
      * @return
      */
     @Operation(summary = "根据父级id查询子集权限")
-    @GetMapping("/authority/findByParent/{id}")
+    @GetMapping("/findByParent/{id}")
     public Result<List<AuthorityGetVO>> findByParentId(@PathVariable("id") Long id) {
         return Result.ok(sysAuthorityService.findByParentId(id));
     }
