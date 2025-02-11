@@ -9,7 +9,7 @@ import com.buni.user.entity.SysAuthority;
  * @createDate 2023-09-25 13:45:26
  * @Entity generator.domain.Authority;
  */
-public interface AuthorityMapper extends BaseMapper<SysAuthority> {
+public interface SysAuthorityMapper extends BaseMapper<SysAuthority> {
 
 
 }

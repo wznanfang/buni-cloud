@@ -1,7 +1,7 @@
 package com.buni.user.controller;
 
 import com.buni.framework.util.Result;
-import com.buni.user.service.UserRoleService;
+import com.buni.user.service.SysUserRoleService;
 import com.buni.user.vo.userrole.AddVO;
 import com.buni.user.vo.userrole.UpdateVO;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -22,30 +22,30 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1")
-public class UserRoleController {
+public class SysUserRoleController {
 
     @Resource
-    private UserRoleService userRoleService;
+    private SysUserRoleService sysUserRoleService;
 
 
     @Operation(summary = "新增用户角色")
     @PostMapping("userRole")
     public Result<Boolean> save(@RequestBody AddVO addVO) {
-        return Result.ok(userRoleService.save(addVO));
+        return Result.ok(sysUserRoleService.save(addVO));
     }
 
 
     @Operation(summary = "编辑用户角色")
     @PutMapping("userRole")
     public Result<Boolean> update(@RequestBody UpdateVO updateVO) {
-        return Result.ok(userRoleService.update(updateVO));
+        return Result.ok(sysUserRoleService.update(updateVO));
     }
 
 
     @Operation(summary = "查询用户角色")
     @GetMapping("userRole/{id}")
     public Result<List<Long>> findById(@PathVariable Long id) {
-        return Result.ok(userRoleService.findById(id));
+        return Result.ok(sysUserRoleService.findById(id));
     }
 
 

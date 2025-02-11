@@ -13,7 +13,7 @@ import com.buni.user.vo.role.*;
  * )】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface RoleService extends IService<SysRole> {
+public interface SysRoleService extends IService<SysRole> {
 
 	/**
 	 * 新增角色

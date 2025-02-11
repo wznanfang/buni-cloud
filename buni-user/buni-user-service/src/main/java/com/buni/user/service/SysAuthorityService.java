@@ -16,7 +16,7 @@ import java.util.List;
  * @description 针对表【authority(角色)】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface AuthorityService extends IService<SysAuthority> {
+public interface SysAuthorityService extends IService<SysAuthority> {
 
 
     /**

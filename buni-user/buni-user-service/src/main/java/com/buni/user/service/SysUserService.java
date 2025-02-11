@@ -13,7 +13,7 @@ import java.util.List;
  * @description 针对表【user】的数据库操作Service
  * @createDate 2023-09-19 10:52:51
  */
-public interface UserService extends IService<SysUser> {
+public interface SysUserService extends IService<SysUser> {
 
     /**
      * 新增

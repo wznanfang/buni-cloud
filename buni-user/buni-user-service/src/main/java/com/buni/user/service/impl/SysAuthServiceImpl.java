@@ -7,8 +7,8 @@ import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.user.dto.auth.AuthDTO;
 import com.buni.user.entity.SysAuth;
-import com.buni.user.mapper.AuthMapper;
-import com.buni.user.service.AuthService;
+import com.buni.user.mapper.SysAuthMapper;
+import com.buni.user.service.SysAuthService;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AuthServiceImpl extends ServiceImpl<AuthMapper, SysAuth> implements AuthService {
+public class SysAuthServiceImpl extends ServiceImpl<SysAuthMapper, SysAuth> implements SysAuthService {
 
     @Resource
     private RedisService redisService;

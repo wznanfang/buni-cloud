@@ -18,10 +18,10 @@ import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.dto.role.UserRoleDTO;
 import com.buni.user.entity.SysAuthority;
 import com.buni.user.enums.ErrorEnum;
-import com.buni.user.mapper.AuthorityMapper;
-import com.buni.user.service.AuthorityService;
-import com.buni.user.service.RoleAuthorityService;
-import com.buni.user.service.UserRoleService;
+import com.buni.user.mapper.SysAuthorityMapper;
+import com.buni.user.service.SysAuthorityService;
+import com.buni.user.service.SysRoleAuthorityService;
+import com.buni.user.service.SysUserRoleService;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.authority.*;
 import jakarta.annotation.Resource;
@@ -42,14 +42,14 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, SysAuthority> implements AuthorityService {
+public class SysAuthorityServiceImpl extends ServiceImpl<SysAuthorityMapper, SysAuthority> implements SysAuthorityService {
 
     @Resource
     private RedisService redisService;
     @Resource
-    private RoleAuthorityService roleAuthorityService;
+    private SysRoleAuthorityService sysRoleAuthorityService;
     @Resource
-    private UserRoleService userRoleService;
+    private SysUserRoleService sysUserRoleService;
 
 
     /**
@@ -95,10 +95,10 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, SysAuthor
 
 
     private void updateAuthority(Long id) {
-        List<RoleAuthorityDTO> roleAuthorityDtoS = roleAuthorityService.findByAuthorityId(id);
+        List<RoleAuthorityDTO> roleAuthorityDtoS = sysRoleAuthorityService.findByAuthorityId(id);
         if (CollUtil.isNotEmpty(roleAuthorityDtoS)) {
             List<Long> roleIds = roleAuthorityDtoS.stream().map(RoleAuthorityDTO::getRoleId).distinct().toList();
-            List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(roleIds);
+            List<UserRoleDTO> userRoleDtoS = sysUserRoleService.findByRoleIds(roleIds);
             List<String> keys = new ArrayList<>();
             if (CollUtil.isNotEmpty(userRoleDtoS)) {
                 userRoleDtoS.forEach(userRole -> keys.add(SysAuthority.REDIS_KEY + userRole.getUserId()));

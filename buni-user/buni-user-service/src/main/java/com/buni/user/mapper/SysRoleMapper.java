@@ -11,7 +11,7 @@ import com.buni.user.entity.SysRole;
  * @createDate 2023-09-25 13:45:26
  * @Entity generator.domain.Role;
  */
-public interface RoleMapper extends BaseMapper<SysRole> {
+public interface SysRoleMapper extends BaseMapper<SysRole> {
 
 
 }

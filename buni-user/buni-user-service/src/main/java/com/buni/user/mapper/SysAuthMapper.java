@@ -9,7 +9,7 @@ import com.buni.user.entity.SysAuth;
  * @createDate 2023-09-22 16:55:29
  * @Entity generator.domain.Auth;
  */
-public interface AuthMapper extends BaseMapper<SysAuth> {
+public interface SysAuthMapper extends BaseMapper<SysAuth> {
 
 
 }

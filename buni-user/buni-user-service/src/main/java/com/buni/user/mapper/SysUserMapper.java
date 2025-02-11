@@ -10,7 +10,7 @@ import com.buni.user.entity.SysUser;
  * @createDate 2023-09-19 10:52:51
  * @Entity generator.domain.User;
  */
-public interface UserMapper extends BaseMapper<SysUser> {
+public interface SysUserMapper extends BaseMapper<SysUser> {
 
 }
 

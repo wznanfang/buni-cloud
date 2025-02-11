@@ -3,7 +3,7 @@ package com.buni.user.service;
 import com.buni.user.vo.login.LoginVO;
 import com.buni.user.dto.login.UserLoginVO;
 
-public interface LoginService {
+public interface SysLoginService {
 
     /**
      * 登录

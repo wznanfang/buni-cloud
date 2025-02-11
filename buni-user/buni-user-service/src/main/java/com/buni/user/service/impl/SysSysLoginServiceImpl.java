@@ -33,22 +33,22 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class LoginServiceImpl implements LoginService {
+public class SysSysLoginServiceImpl implements SysLoginService {
 
     @Resource
     private UserProperties userProperties;
     @Resource
     private RedisService redisService;
     @Resource
-    private AuthService authService;
+    private SysAuthService sysAuthService;
     @Resource
-    private UserRoleService userRoleService;
+    private SysUserRoleService sysUserRoleService;
     @Resource
-    private RoleAuthorityService roleAuthorityService;
+    private SysRoleAuthorityService sysRoleAuthorityService;
     @Resource
-    private AuthorityService authorityService;
+    private SysAuthorityService sysAuthorityService;
     @Resource
-    private UserService userService;
+    private SysUserService sysUserService;
 
 
     /**
@@ -59,7 +59,7 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public UserLoginVO login(LoginVO loginVO) {
-        SysUser sysUser = userService.findByUsername(loginVO.getUsername());
+        SysUser sysUser = sysUserService.findByUsername(loginVO.getUsername());
         String password = EncryptUtil.decrypt(loginVO.getPassword());
         if (ObjUtil.isEmpty(sysUser) || sysUser.getDeleted().equals(BooleanEnum.YES) || !SmUtil.sm3(userProperties.getSalt() + password).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
@@ -79,17 +79,17 @@ public class LoginServiceImpl implements LoginService {
         }
         // 记录用户鉴权信息
         AuthDTO authDTO = AuthDTO.builder().userId(sysUser.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
-        authService.saveOrUpdate(authDTO);
+        sysAuthService.saveOrUpdate(authDTO);
         return userLoginVO;
     }
 
     private void getUserRole(Long userId) {
-        List<UserRoleDTO> userRoles = userRoleService.findByUserId(userId);
+        List<UserRoleDTO> userRoles = sysUserRoleService.findByUserId(userId);
         if (CollUtil.isNotEmpty(userRoles)) {
             List<Long> roleIds = userRoles.stream().map(UserRoleDTO::getRoleId).toList();
-            List<RoleAuthorityDTO> roleAuthList = roleAuthorityService.findByRoleIds(roleIds);
+            List<RoleAuthorityDTO> roleAuthList = sysRoleAuthorityService.findByRoleIds(roleIds);
             List<Long> authorityIds = roleAuthList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
-            List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
+            List<AuthorityDTO> authorityList = sysAuthorityService.findByIds(authorityIds);
             redisService.setOneHour(SysAuthority.REDIS_KEY + userId, authorityList);
         }
     }

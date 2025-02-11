@@ -7,8 +7,8 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.user.dto.role.UserRoleDTO;
 import com.buni.user.entity.SysUserRole;
-import com.buni.user.mapper.UserRoleMapper;
-import com.buni.user.service.UserRoleService;
+import com.buni.user.mapper.SysUserRoleMapper;
+import com.buni.user.service.SysUserRoleService;
 import com.buni.user.vo.userrole.AddVO;
 import com.buni.user.vo.userrole.UpdateVO;
 import lombok.AllArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, SysUserRole> implements UserRoleService {
+public class SysUserRoleServiceImpl extends ServiceImpl<SysUserRoleMapper, SysUserRole> implements SysUserRoleService {
 
 
     /**

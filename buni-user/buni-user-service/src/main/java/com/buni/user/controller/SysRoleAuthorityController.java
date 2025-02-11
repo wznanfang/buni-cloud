@@ -1,7 +1,7 @@
 package com.buni.user.controller;
 
 import com.buni.framework.util.Result;
-import com.buni.user.service.RoleAuthorityService;
+import com.buni.user.service.SysRoleAuthorityService;
 import com.buni.user.vo.roleauthority.AddVO;
 import com.buni.user.vo.roleauthority.UpdateVO;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -22,30 +22,30 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1")
-public class RoleAuthorityController {
+public class SysRoleAuthorityController {
 
     @Resource
-    private RoleAuthorityService roleAuthorityService;
+    private SysRoleAuthorityService sysRoleAuthorityService;
 
 
     @Operation(summary = "新增角色权限")
     @PostMapping("roleAuthority")
     public Result<Boolean> save(@RequestBody AddVO addVO) {
-        return Result.ok(roleAuthorityService.save(addVO));
+        return Result.ok(sysRoleAuthorityService.save(addVO));
     }
 
 
     @Operation(summary = "编辑角色权限")
     @PutMapping("roleAuthority")
     public Result<Boolean> update(@RequestBody UpdateVO updateVO) {
-        return Result.ok(roleAuthorityService.update(updateVO));
+        return Result.ok(sysRoleAuthorityService.update(updateVO));
     }
 
 
     @Operation(summary = "查询角色权限")
     @GetMapping("roleAuthority/{id}")
     public Result<List<Long>> findById(@PathVariable Long id) {
-        return Result.ok(roleAuthorityService.findById(id));
+        return Result.ok(sysRoleAuthorityService.findById(id));
     }
 
 

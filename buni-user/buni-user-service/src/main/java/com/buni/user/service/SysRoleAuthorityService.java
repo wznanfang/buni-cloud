@@ -14,7 +14,7 @@ import java.util.List;
  * @description 针对表【role_authority(角色权限)】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface RoleAuthorityService extends IService<SysRoleAuthority> {
+public interface SysRoleAuthorityService extends IService<SysRoleAuthority> {
 
 
     /**

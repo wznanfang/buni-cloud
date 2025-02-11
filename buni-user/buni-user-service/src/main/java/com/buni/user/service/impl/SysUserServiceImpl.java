@@ -20,11 +20,11 @@ import com.buni.framework.util.EncryptUtil;
 import com.buni.user.entity.SysUser;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
-import com.buni.user.mapper.UserMapper;
+import com.buni.user.mapper.SysUserMapper;
 import com.buni.user.properties.UserProperties;
-import com.buni.user.service.AuthService;
-import com.buni.user.service.UserRoleService;
-import com.buni.user.service.UserService;
+import com.buni.user.service.SysAuthService;
+import com.buni.user.service.SysUserRoleService;
+import com.buni.user.service.SysUserService;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
 import jakarta.annotation.Resource;
@@ -46,16 +46,16 @@ import java.util.*;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements UserService {
+public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     @Resource
     private UserProperties userProperties;
     @Resource
     private RedisService redisService;
     @Resource
-    private UserRoleService userRoleService;
+    private SysUserRoleService sysUserRoleService;
     @Resource
-    private AuthService authService;
+    private SysAuthService sysAuthService;
     @DubboReference
     private FileDubboService fileDubboService;
 
@@ -133,7 +133,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     }
 
     private void deleteToken(List<Long> userIds) {
-        List<String> tokens = authService.findByUserId(userIds);
+        List<String> tokens = sysAuthService.findByUserId(userIds);
         if (ObjUtil.isNotEmpty(tokens)) {
             List<String> tokenKeys = new ArrayList<>();
             tokens.forEach(token -> {
@@ -177,7 +177,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     public boolean delete(Long id) {
         getUser(id);
         super.removeById(id);
-        userRoleService.deleteByUserId(id);
+        sysUserRoleService.deleteByUserId(id);
         redisService.deleteKey(SysUser.REDIS_KEY + id);
         deleteToken(Collections.singletonList(id));
         return true;
@@ -194,7 +194,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements
     public Boolean batchDelete(IdVOs idVOs) {
         List<Long> ids = idVOs.getIds();
         super.removeByIds(ids);
-        userRoleService.deleteByUserIds(ids);
+        sysUserRoleService.deleteByUserIds(ids);
         List<String> deleteKeys = ids.stream().map(id -> SysUser.REDIS_KEY + id).toList();
         redisService.delAllByKeys(deleteKeys);
         deleteToken(ids);

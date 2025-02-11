@@ -13,12 +13,12 @@ import com.buni.framework.config.redis.RedisService;
 import com.buni.user.entity.SysAuthority;
 import com.buni.user.entity.SysRole;
 import com.buni.user.enums.ErrorEnum;
-import com.buni.user.service.RoleAuthorityService;
+import com.buni.user.service.SysRoleAuthorityService;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.dto.role.UserRoleDTO;
-import com.buni.user.mapper.RoleMapper;
-import com.buni.user.service.RoleService;
-import com.buni.user.service.UserRoleService;
+import com.buni.user.mapper.SysRoleMapper;
+import com.buni.user.service.SysRoleService;
+import com.buni.user.service.SysUserRoleService;
 import com.buni.user.vo.role.*;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
@@ -39,14 +39,14 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements RoleService {
+public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> implements SysRoleService {
 
     @Resource
     private RedisService redisService;
     @Resource
-    private UserRoleService userRoleService;
+    private SysUserRoleService sysUserRoleService;
     @Resource
-    private RoleAuthorityService roleAuthorityService;
+    private SysRoleAuthorityService sysRoleAuthorityService;
 
 
     /**
@@ -100,14 +100,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
         super.removeById(sysRole.getId());
         // 剔除拥有该角色的用户缓存
         List<Long> roleIds = new ArrayList<>(Collections.singletonList(sysRole.getId()));
-        List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(roleIds);
+        List<UserRoleDTO> userRoleDtoS = sysUserRoleService.findByRoleIds(roleIds);
         if (CollUtil.isNotEmpty(userRoleDtoS)) {
             List<String> authorityKeys = new ArrayList<>();
             userRoleDtoS.forEach(userRole -> authorityKeys.add(SysAuthority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
         // 删除角色权限关联
-        roleAuthorityService.deleteByRoleIds(roleIds);
+        sysRoleAuthorityService.deleteByRoleIds(roleIds);
         redisService.deleteKey(SysRole.REDIS_KEY + sysRole.getId());
         return true;
     }
@@ -124,14 +124,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements
         List<Long> ids = idVOs.getIds();
         super.removeBatchByIds(ids);
         // 更新角色权限表，剔除拥有该权限的用户缓存
-        List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(ids);
+        List<UserRoleDTO> userRoleDtoS = sysUserRoleService.findByRoleIds(ids);
         if (CollUtil.isNotEmpty(userRoleDtoS)) {
             List<String> authorityKeys = new ArrayList<>();
             userRoleDtoS.forEach(userRole -> authorityKeys.add(SysAuthority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
         // 删除角色权限关联
-        roleAuthorityService.deleteByRoleIds(ids);
+        sysRoleAuthorityService.deleteByRoleIds(ids);
         List<String> roleKeys = new ArrayList<>();
         ids.forEach(id -> roleKeys.add(SysRole.REDIS_KEY + id));
         redisService.delAllByKeys(roleKeys);

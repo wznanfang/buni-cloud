@@ -13,7 +13,7 @@ import java.util.List;
  * @description 针对表【user_role(用户角色)】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface UserRoleService extends IService<SysUserRole> {
+public interface SysUserRoleService extends IService<SysUserRole> {
 
 
     /**

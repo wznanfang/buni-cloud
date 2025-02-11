@@ -12,7 +12,7 @@ import java.util.List;
  * @description 针对表【auth(用户鉴权)】的数据库操作Service
  * @createDate 2023-09-22 16:55:29
  */
-public interface AuthService extends IService<SysAuth> {
+public interface SysAuthService extends IService<SysAuth> {
 
 
     /**

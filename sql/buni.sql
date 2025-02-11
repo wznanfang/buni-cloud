@@ -75,10 +75,8 @@ CREATE TABLE `sys_dept`  (
                              `create_time` datetime NULL DEFAULT NULL COMMENT '创建时间',
                              `update_time` datetime NULL DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '修改时间',
                              `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NULL DEFAULT NULL COMMENT '名字',
-                             `dept_type` tinyint NULL DEFAULT NULL COMMENT '部门类型',
                              `parent_id` bigint NULL DEFAULT NULL COMMENT '父级id',
                              `leader_user_id` bigint NULL DEFAULT NULL COMMENT '负责人',
-                             `enable` tinyint NULL DEFAULT 1 COMMENT '是否启用(0:否，1：是)',
                              `deleted` tinyint NULL DEFAULT 0 COMMENT '是否删除(0:否，1：是)',
                              PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB CHARACTER SET = utf8mb4 COLLATE = utf8mb4_bin COMMENT = '部门' ROW_FORMAT = Dynamic;

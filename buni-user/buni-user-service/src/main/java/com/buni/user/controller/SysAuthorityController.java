@@ -4,10 +4,8 @@ import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.buni.framework.util.Result;
 import com.buni.user.constant.CommonConstant;
-import com.buni.user.dto.role.AuthorityDTO;
-import com.buni.user.enums.AuthTypeEnum;
 import com.buni.user.log.SysLogRecord;
-import com.buni.user.service.AuthorityService;
+import com.buni.user.service.SysAuthorityService;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.authority.*;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
@@ -31,10 +29,10 @@ import java.util.List;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/v1")
-public class AuthorityController {
+public class SysAuthorityController {
 
     @Resource
-    private AuthorityService authorityService;
+    private SysAuthorityService sysAuthorityService;
 
 
     /**
@@ -47,7 +45,7 @@ public class AuthorityController {
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
     @PostMapping("/authority")
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
-        return Result.ok(authorityService.save(addVO));
+        return Result.ok(sysAuthorityService.save(addVO));
     }
 
 
@@ -61,7 +59,7 @@ public class AuthorityController {
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
     @PutMapping("/authority")
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
-        return Result.ok(authorityService.update(updateVO));
+        return Result.ok(sysAuthorityService.update(updateVO));
     }
 
 
@@ -75,7 +73,7 @@ public class AuthorityController {
     @SysLogRecord(description = CommonConstant.USER_MODEL + "删除权限")
     @DeleteMapping("/authority/{id:\\d+}")
     public Result<Boolean> delete(@PathVariable Long id) {
-        return Result.ok(authorityService.delete(id));
+        return Result.ok(sysAuthorityService.delete(id));
     }
 
 
@@ -89,7 +87,7 @@ public class AuthorityController {
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
     @DeleteMapping("/authority")
     public Result<Boolean> BatchDelete(@RequestBody @Validated IdVOs idVOs) {
-        return Result.ok(authorityService.batchDelete(idVOs));
+        return Result.ok(sysAuthorityService.batchDelete(idVOs));
     }
 
 
@@ -102,7 +100,7 @@ public class AuthorityController {
     @Operation(summary = "根据id查询权限")
     @GetMapping("/authority/{id:\\d+}")
     public Result<AuthorityInfoVO> findById(@PathVariable Long id) {
-        return Result.ok(authorityService.findById(id));
+        return Result.ok(sysAuthorityService.findById(id));
     }
 
 
@@ -115,7 +113,7 @@ public class AuthorityController {
     @Operation(summary = "分页查询")
     @GetMapping("/authority")
     public Result<IPage<AuthorityGetVO>> page(@ParameterObject PageVO pageVO) {
-        return Result.ok(authorityService.findPage(pageVO));
+        return Result.ok(sysAuthorityService.findPage(pageVO));
     }
 
 
@@ -127,7 +125,7 @@ public class AuthorityController {
     @Operation(summary = "菜单树结构列表", description = "返回树结构菜单")
     @GetMapping("findMenuTree")
     public Result<List<Tree<String>>> findMenuTree() {
-        return Result.ok(authorityService.findMenuTree());
+        return Result.ok(sysAuthorityService.findMenuTree());
     }
 
 
@@ -140,7 +138,7 @@ public class AuthorityController {
     @Operation(summary = "根据父级id查询子集权限")
     @GetMapping("/authority/findByParent/{id}")
     public Result<List<AuthorityGetVO>> findByParentId(@PathVariable("id") Long id) {
-        return Result.ok(authorityService.findByParentId(id));
+        return Result.ok(sysAuthorityService.findByParentId(id));
     }
 
 
