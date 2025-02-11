@@ -2,11 +2,9 @@ package com.buni.user.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.buni.user.entity.User;
+import com.buni.user.entity.SysUser;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.user.*;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
  * @description 针对表【user】的数据库操作Service
  * @createDate 2023-09-19 10:52:51
  */
-public interface UserService extends IService<User> {
+public interface UserService extends IService<SysUser> {
 
     /**
      * 新增
@@ -88,7 +86,7 @@ public interface UserService extends IService<User> {
      * @param username 用户名
      * @return 用户信息
      */
-    User findByUsername(String username);
+    SysUser findByUsername(String username);
 
     /**
      * 修改密码

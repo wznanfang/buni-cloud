@@ -1,34 +1,38 @@
 package com.buni.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.buni.user.enums.AuthTypeEnum;
 import com.buni.user.enums.BooleanEnum;
-import com.buni.user.enums.SexEnum;
+import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * @TableName user
+ * 角色
+ *
+ * @TableName authority
  */
-@TableName(value = "user")
+@TableName(value = "sys_authority")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class User implements Serializable {
+public class SysAuthority implements Serializable {
 
     /**
      * redis缓存KEY
      */
-    public static final String REDIS_KEY = "user:";
+    public static final String REDIS_KEY = "authority:";
 
     /**
      * id
@@ -54,58 +58,41 @@ public class User implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 用户名
-     */
-    @Size(max = 20, message = "用户名不能超过20")
-    private String username;
-
-    /**
-     * 密码
-     */
-    @Size(max = 255, message = "密码不能超过255")
-    private String password;
-
-    /**
      * 名字
      */
-    @Size(max = 100, message = "名字不能超过100")
+    @Size(max = 50, message = "名字不能超过50")
     private String name;
 
     /**
-     * 年龄
+     * 父级id
      */
-    private Integer age;
+    private Long parentId;
 
     /**
-     * 性别
+     * 0：模块，1：菜单，2：按钮
      */
-    private SexEnum sex;
+    private AuthTypeEnum type;
 
     /**
-     * 电话
+     * 标识码
      */
-    private String tel;
+    private String code;
 
     /**
-     * 头像
+     * 序号
      */
-    private String avatar;
+    private Integer sort;
 
     /**
-     * 是否是超级管理员(0:否，1：是)
+     * 接口url
      */
-    private BooleanEnum admin;
-
-    /**
-     * 是否启用(0:否，1：是)
-     */
-    private BooleanEnum enable;
+    @Size(max = 255, message = "接口url不能超过255")
+    private String url;
 
     /**
      * 是否删除(0:否，1：是)
      */
     @TableLogic
     private BooleanEnum deleted;
-
 
 }

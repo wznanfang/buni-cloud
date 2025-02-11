@@ -6,7 +6,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.user.dto.role.UserRoleDTO;
-import com.buni.user.entity.UserRole;
+import com.buni.user.entity.SysUserRole;
 import com.buni.user.mapper.UserRoleMapper;
 import com.buni.user.service.UserRoleService;
 import com.buni.user.vo.userrole.AddVO;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> implements UserRoleService {
+public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, SysUserRole> implements UserRoleService {
 
 
     /**
@@ -45,13 +45,13 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
     }
 
     private void saveUserRole(Long userId, List<Long> roleIds) {
-        List<UserRole> userRoleList = roleIds.stream().map(roleId -> {
-            UserRole userRole = new UserRole();
-            userRole.setRoleId(roleId);
-            userRole.setUserId(userId);
-            return userRole;
+        List<SysUserRole> sysUserRoleList = roleIds.stream().map(roleId -> {
+            SysUserRole sysUserRole = new SysUserRole();
+            sysUserRole.setRoleId(roleId);
+            sysUserRole.setUserId(userId);
+            return sysUserRole;
         }).toList();
-        super.saveBatch(userRoleList);
+        super.saveBatch(sysUserRoleList);
     }
 
 
@@ -63,7 +63,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        super.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, updateVO.getUserId()));
+        super.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, updateVO.getUserId()));
         if (CollUtil.isNotEmpty(updateVO.getRoleIds())) {
             saveUserRole(updateVO.getUserId(), updateVO.getRoleIds());
         }
@@ -79,8 +79,8 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      */
     @Override
     public List<Long> findById(Long id) {
-        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, id));
-        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(UserRole::getRoleId).toList();
+        List<SysUserRole> list = super.list(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, id));
+        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(SysUserRole::getRoleId).toList();
     }
 
 
@@ -92,15 +92,15 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      */
     @Override
     public List<UserRoleDTO> findByUserId(Long userId) {
-        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
+        List<SysUserRole> list = super.list(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, userId));
         return getUserRoleDtoS(list);
     }
 
 
-    private static List<UserRoleDTO> getUserRoleDtoS(List<UserRole> list) {
-        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(userRole -> {
+    private static List<UserRoleDTO> getUserRoleDtoS(List<SysUserRole> list) {
+        return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(sysUserRole -> {
             UserRoleDTO userRoleDTO = new UserRoleDTO();
-            BeanUtil.copyProperties(userRole, userRoleDTO);
+            BeanUtil.copyProperties(sysUserRole, userRoleDTO);
             return userRoleDTO;
         }).toList();
     }
@@ -114,7 +114,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      */
     @Override
     public List<UserRoleDTO> findByRoleIds(List<Long> roleIds) {
-        List<UserRole> list = super.list(Wrappers.<UserRole>lambdaQuery().in(UserRole::getRoleId, roleIds));
+        List<SysUserRole> list = super.list(Wrappers.<SysUserRole>lambdaQuery().in(SysUserRole::getRoleId, roleIds));
         return getUserRoleDtoS(list);
     }
 
@@ -126,7 +126,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      */
     @Override
     public void deleteByUserId(Long userId) {
-        super.remove(Wrappers.<UserRole>lambdaQuery().eq(UserRole::getUserId, userId));
+        super.remove(Wrappers.<SysUserRole>lambdaQuery().eq(SysUserRole::getUserId, userId));
     }
 
 
@@ -137,7 +137,7 @@ public class UserRoleServiceImpl extends ServiceImpl<UserRoleMapper, UserRole> i
      */
     @Override
     public void deleteByUserIds(List<Long> userIds) {
-        super.remove(Wrappers.<UserRole>lambdaQuery().in(UserRole::getUserId, userIds));
+        super.remove(Wrappers.<SysUserRole>lambdaQuery().in(SysUserRole::getUserId, userIds));
     }
 
 

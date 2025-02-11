@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
-import com.buni.user.entity.Authority;
-import com.buni.user.entity.Role;
+import com.buni.user.entity.SysAuthority;
+import com.buni.user.entity.SysRole;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.vo.IdVOs;
@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * @author Administrator
@@ -40,7 +39,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements RoleService {
+public class RoleServiceImpl extends ServiceImpl<RoleMapper, SysRole> implements RoleService {
 
     @Resource
     private RedisService redisService;
@@ -58,13 +57,13 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public boolean save(AddVO addVO) {
-        Role role = super.getOne(Wrappers.<Role>lambdaQuery().eq(Role::getName, addVO.getName()));
-        if (ObjUtil.isNotEmpty(role)) {
+        SysRole sysRole = super.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getName, addVO.getName()));
+        if (ObjUtil.isNotEmpty(sysRole)) {
             throw new CustomException(ErrorEnum.ROLE_EXISTS.getCode(), ErrorEnum.ROLE_EXISTS.getMessage());
         }
-        Role addRole = new Role();
-        BeanUtils.copyProperties(addVO, addRole);
-        super.save(addRole);
+        SysRole addSysRole = new SysRole();
+        BeanUtils.copyProperties(addVO, addSysRole);
+        super.save(addSysRole);
         return true;
     }
 
@@ -77,14 +76,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        Role role = super.getOne(Wrappers.<Role>lambdaQuery().eq(Role::getName, updateVO.getName()).ne(Role::getId, updateVO.getId()));
-        if (ObjUtil.isNotEmpty(role)) {
+        SysRole sysRole = super.getOne(Wrappers.<SysRole>lambdaQuery().eq(SysRole::getName, updateVO.getName()).ne(SysRole::getId, updateVO.getId()));
+        if (ObjUtil.isNotEmpty(sysRole)) {
             throw new CustomException(ErrorEnum.ROLE_EXISTS.getCode(), ErrorEnum.ROLE_EXISTS.getMessage());
         }
-        Role updateRole = new Role();
-        BeanUtils.copyProperties(updateVO, updateRole);
-        super.updateById(updateRole);
-        redisService.deleteKey(Role.REDIS_KEY + updateVO.getId());
+        SysRole updateSysRole = new SysRole();
+        BeanUtils.copyProperties(updateVO, updateSysRole);
+        super.updateById(updateSysRole);
+        redisService.deleteKey(SysRole.REDIS_KEY + updateVO.getId());
         return true;
     }
 
@@ -97,19 +96,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public boolean delete(Long id) {
-        Role role = getRole(id);
-        super.removeById(role.getId());
+        SysRole sysRole = getRole(id);
+        super.removeById(sysRole.getId());
         // 剔除拥有该角色的用户缓存
-        List<Long> roleIds = new ArrayList<>(Collections.singletonList(role.getId()));
+        List<Long> roleIds = new ArrayList<>(Collections.singletonList(sysRole.getId()));
         List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(roleIds);
         if (CollUtil.isNotEmpty(userRoleDtoS)) {
             List<String> authorityKeys = new ArrayList<>();
-            userRoleDtoS.forEach(userRole -> authorityKeys.add(Authority.REDIS_KEY + userRole.getUserId()));
+            userRoleDtoS.forEach(userRole -> authorityKeys.add(SysAuthority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
         // 删除角色权限关联
         roleAuthorityService.deleteByRoleIds(roleIds);
-        redisService.deleteKey(Role.REDIS_KEY + role.getId());
+        redisService.deleteKey(SysRole.REDIS_KEY + sysRole.getId());
         return true;
     }
 
@@ -128,24 +127,24 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(ids);
         if (CollUtil.isNotEmpty(userRoleDtoS)) {
             List<String> authorityKeys = new ArrayList<>();
-            userRoleDtoS.forEach(userRole -> authorityKeys.add(Authority.REDIS_KEY + userRole.getUserId()));
+            userRoleDtoS.forEach(userRole -> authorityKeys.add(SysAuthority.REDIS_KEY + userRole.getUserId()));
             redisService.delAllByKeys(authorityKeys);
         }
         // 删除角色权限关联
         roleAuthorityService.deleteByRoleIds(ids);
         List<String> roleKeys = new ArrayList<>();
-        ids.forEach(id -> roleKeys.add(Role.REDIS_KEY + id));
+        ids.forEach(id -> roleKeys.add(SysRole.REDIS_KEY + id));
         redisService.delAllByKeys(roleKeys);
         return true;
     }
 
 
-    private Role getRole(Long id) {
-        Role role = super.getById(id);
-        if (ObjUtil.isEmpty(role)) {
+    private SysRole getRole(Long id) {
+        SysRole sysRole = super.getById(id);
+        if (ObjUtil.isEmpty(sysRole)) {
             throw new CustomException(ErrorEnum.ROLE_NOT_EXISTS.getCode(), ErrorEnum.ROLE_NOT_EXISTS.getMessage());
         }
-        return role;
+        return sysRole;
     }
 
 
@@ -157,12 +156,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public RoleInfoVO findById(Long id) {
-        RoleInfoVO roleInfoVO = (RoleInfoVO) redisService.get(Role.REDIS_KEY + id);
+        RoleInfoVO roleInfoVO = (RoleInfoVO) redisService.get(SysRole.REDIS_KEY + id);
         if (ObjUtil.isEmpty(roleInfoVO)) {
-            Role role = getRole(id);
+            SysRole sysRole = getRole(id);
             roleInfoVO = new RoleInfoVO();
-            BeanUtils.copyProperties(role, roleInfoVO);
-            redisService.setOneHour(Role.REDIS_KEY + role.getId(), roleInfoVO);
+            BeanUtils.copyProperties(sysRole, roleInfoVO);
+            redisService.setOneHour(SysRole.REDIS_KEY + sysRole.getId(), roleInfoVO);
         }
         return roleInfoVO;
     }
@@ -176,14 +175,14 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
      */
     @Override
     public IPage<RoleGetVO> findPage(PageVO pageVO) {
-        IPage<Role> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
-        QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Role::getName, pageVO.getName());
-        IPage<Role> infoPage = super.page(ipage, queryWrapper);
+        IPage<SysRole> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
+        QueryWrapper<SysRole> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), SysRole::getName, pageVO.getName());
+        IPage<SysRole> infoPage = super.page(ipage, queryWrapper);
         IPage<RoleGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
-        List<RoleGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(role -> {
+        List<RoleGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(sysRole -> {
             RoleGetVO getVO = new RoleGetVO();
-            BeanUtils.copyProperties(role, getVO);
+            BeanUtils.copyProperties(sysRole, getVO);
             return getVO;
         }).toList();
         resultPage.setRecords(list);

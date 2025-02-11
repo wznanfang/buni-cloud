@@ -17,7 +17,7 @@ import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.framework.util.DateUtil;
 import com.buni.framework.util.EncryptUtil;
-import com.buni.user.entity.User;
+import com.buni.user.entity.SysUser;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.UserMapper;
@@ -46,7 +46,7 @@ import java.util.*;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, SysUser> implements UserService {
 
     @Resource
     private UserProperties userProperties;
@@ -71,24 +71,24 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (!Validator.isMobile(addVO.getTel())) {
             throw new CustomException(ErrorEnum.PHONE_ERROR.getCode(), ErrorEnum.PHONE_ERROR.getMessage());
         }
-        User existUser = super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, addVO.getUsername()).or().eq(User::getTel, addVO.getTel()));
-        if (ObjUtil.isNotEmpty(existUser)) {
+        SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, addVO.getUsername()).or().eq(SysUser::getTel, addVO.getTel()));
+        if (ObjUtil.isNotEmpty(existSysUser)) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
-        User user = new User();
-        BeanUtils.copyProperties(addVO, user);
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(addVO, sysUser);
         String password = EncryptUtil.decrypt(addVO.getPassword());
-        user.setPassword(SmUtil.sm3(userProperties.getSalt() + password));
-        return super.save(user);
+        sysUser.setPassword(SmUtil.sm3(userProperties.getSalt() + password));
+        return super.save(sysUser);
     }
 
 
-    private User getUser(Long id) {
-        User user = super.getById(id);
-        if (ObjUtil.isEmpty(user)) {
+    private SysUser getUser(Long id) {
+        SysUser sysUser = super.getById(id);
+        if (ObjUtil.isEmpty(sysUser)) {
             throw new CustomException(ErrorEnum.USER_NOT_EXISTS.getCode(), ErrorEnum.USER_NOT_EXISTS.getMessage());
         }
-        return user;
+        return sysUser;
     }
 
 
@@ -100,15 +100,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        User user = getUser(updateVO.getId());
-        User existUser = super.getOne(Wrappers.<User>lambdaQuery().eq(User::getTel, updateVO.getTel()));
-        if (ObjUtil.isNotEmpty(existUser) && !existUser.getId().equals(user.getId())) {
+        SysUser sysUser = getUser(updateVO.getId());
+        SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getTel, updateVO.getTel()));
+        if (ObjUtil.isNotEmpty(existSysUser) && !existSysUser.getId().equals(sysUser.getId())) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
-        User updateUser = new User();
-        BeanUtils.copyProperties(updateVO, updateUser);
-        super.updateById(updateUser);
-        redisService.deleteKey(User.REDIS_KEY + updateVO.getId());
+        SysUser updateSysUser = new SysUser();
+        BeanUtils.copyProperties(updateVO, updateSysUser);
+        super.updateById(updateSysUser);
+        redisService.deleteKey(SysUser.REDIS_KEY + updateVO.getId());
         return true;
     }
 
@@ -122,10 +122,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public boolean enable(EnableVO enableVO) {
         getUser(enableVO.getId());
-        User forbiddenUser = new User();
-        BeanUtils.copyProperties(enableVO, forbiddenUser);
-        super.updateById(forbiddenUser);
-        redisService.deleteKey(User.REDIS_KEY + enableVO.getId());
+        SysUser forbiddenSysUser = new SysUser();
+        BeanUtils.copyProperties(enableVO, forbiddenSysUser);
+        super.updateById(forbiddenSysUser);
+        redisService.deleteKey(SysUser.REDIS_KEY + enableVO.getId());
         if (BooleanEnum.NO.equals(enableVO.getEnable())) {
             deleteToken(Collections.singletonList(enableVO.getId()));
         }
@@ -156,8 +156,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return true;
         }
         List<Long> userIds = batchEnableVO.getIdVOs().getIds();
-        super.update(Wrappers.<User>lambdaUpdate().in(User::getId, userIds).set(User::getEnable, batchEnableVO.getEnable()));
-        List<String> deleteKeys = userIds.stream().map(id -> User.REDIS_KEY + id).toList();
+        super.update(Wrappers.<SysUser>lambdaUpdate().in(SysUser::getId, userIds).set(SysUser::getEnable, batchEnableVO.getEnable()));
+        List<String> deleteKeys = userIds.stream().map(id -> SysUser.REDIS_KEY + id).toList();
         redisService.delAllByKeys(deleteKeys);
         if (BooleanEnum.NO.equals(batchEnableVO.getEnable())) {
             deleteToken(batchEnableVO.getIdVOs().getIds());
@@ -178,7 +178,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         getUser(id);
         super.removeById(id);
         userRoleService.deleteByUserId(id);
-        redisService.deleteKey(User.REDIS_KEY + id);
+        redisService.deleteKey(SysUser.REDIS_KEY + id);
         deleteToken(Collections.singletonList(id));
         return true;
     }
@@ -195,7 +195,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         List<Long> ids = idVOs.getIds();
         super.removeByIds(ids);
         userRoleService.deleteByUserIds(ids);
-        List<String> deleteKeys = ids.stream().map(id -> User.REDIS_KEY + id).toList();
+        List<String> deleteKeys = ids.stream().map(id -> SysUser.REDIS_KEY + id).toList();
         redisService.delAllByKeys(deleteKeys);
         deleteToken(ids);
         return true;
@@ -210,13 +210,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public UserInfoVO findById(Long id) {
-        UserInfoVO userInfoVO = (UserInfoVO) redisService.get(User.REDIS_KEY + id);
+        UserInfoVO userInfoVO = (UserInfoVO) redisService.get(SysUser.REDIS_KEY + id);
         if (ObjUtil.isEmpty(userInfoVO)) {
-            User user = getUser(id);
+            SysUser sysUser = getUser(id);
             userInfoVO = new UserInfoVO();
-            BeanUtils.copyProperties(user, userInfoVO);
-            userInfoVO.setAvatar(ObjUtil.isEmpty(user.getAvatar()) ? "" : fileDubboService.preview(user.getAvatar()));
-            redisService.setOneDay(User.REDIS_KEY + user.getId(), userInfoVO);
+            BeanUtils.copyProperties(sysUser, userInfoVO);
+            userInfoVO.setAvatar(ObjUtil.isEmpty(sysUser.getAvatar()) ? "" : fileDubboService.preview(sysUser.getAvatar()));
+            redisService.setOneDay(SysUser.REDIS_KEY + sysUser.getId(), userInfoVO);
         }
         return userInfoVO;
     }
@@ -230,12 +230,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public IPage<UserGetVO> findPage(PageVO pageVO) {
-        IPage<User> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
-        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().ne(User::getId, CommonConstant.ADMIN_ID);
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), User::getUsername, pageVO.getUsername());
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), User::getName, pageVO.getName());
-        IPage<User> infoPage = super.page(ipage, queryWrapper);
+        IPage<SysUser> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
+        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().ne(SysUser::getId, CommonConstant.ADMIN_ID);
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), SysUser::getUsername, pageVO.getUsername());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), SysUser::getName, pageVO.getName());
+        IPage<SysUser> infoPage = super.page(ipage, queryWrapper);
         IPage<UserGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
         List<UserGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(user -> {
             UserGetVO getVO = new UserGetVO();
@@ -252,11 +252,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 根据用户名查询用户
      *
      * @param username 用户名
-     * @return {@link User}
+     * @return {@link SysUser}
      */
     @Override
-    public User findByUsername(String username) {
-        return super.getOne(Wrappers.<User>lambdaQuery().eq(User::getUsername, username).eq(User::getDeleted, BooleanEnum.NO));
+    public SysUser findByUsername(String username) {
+        return super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username).eq(SysUser::getDeleted, BooleanEnum.NO));
     }
 
 
@@ -268,16 +268,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Boolean updatePassword(UpdatePasswordVO updatePasswordVO) {
-        User user = getUser(updatePasswordVO.getId());
-        if (!SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getOldPassword()).equals(user.getPassword())) {
+        SysUser sysUser = getUser(updatePasswordVO.getId());
+        if (!SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getOldPassword()).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.OLD_PASSWORD_ERROR.getCode(), ErrorEnum.OLD_PASSWORD_ERROR.getMessage());
         }
-        if (SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()).equals(user.getPassword())) {
+        if (SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.EQUALS_OLD_PASSWORD.getCode(), ErrorEnum.EQUALS_OLD_PASSWORD.getMessage());
         }
-        user.setPassword(SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()));
-        super.updateById(user);
-        redisService.deleteKey(User.REDIS_KEY + updatePasswordVO.getId());
+        sysUser.setPassword(SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()));
+        super.updateById(sysUser);
+        redisService.deleteKey(SysUser.REDIS_KEY + updatePasswordVO.getId());
         deleteToken(Collections.singletonList(updatePasswordVO.getId()));
         return true;
     }
@@ -291,10 +291,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Boolean resetPassword(Long id) {
-        User user = getUser(id);
-        user.setPassword(SmUtil.sm3(userProperties.getSalt() + userProperties.getPassword()));
-        super.updateById(user);
-        redisService.deleteKey(User.REDIS_KEY + id);
+        SysUser sysUser = getUser(id);
+        sysUser.setPassword(SmUtil.sm3(userProperties.getSalt() + userProperties.getPassword()));
+        super.updateById(sysUser);
+        redisService.deleteKey(SysUser.REDIS_KEY + id);
         deleteToken(Collections.singletonList(id));
         return true;
     }
@@ -308,10 +308,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Override
     public Boolean updateAvatar(UpdateAvatarVO updateAvatarVO) {
-        User user = getUser(updateAvatarVO.getId());
-        user.setAvatar(updateAvatarVO.getAvatar());
-        super.updateById(user);
-        redisService.deleteKey(User.REDIS_KEY + updateAvatarVO.getId());
+        SysUser sysUser = getUser(updateAvatarVO.getId());
+        sysUser.setAvatar(updateAvatarVO.getAvatar());
+        super.updateById(sysUser);
+        redisService.deleteKey(SysUser.REDIS_KEY + updateAvatarVO.getId());
         return true;
     }
 
@@ -330,10 +330,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         for (LocalDate date = startDate; !date.isAfter(LocalDate.now()); date = date.plusDays(CommonConstant.ONE)) {
             dateCounts.put(date, CommonConstant.ZERO);
         }
-        List<User> userList = super.list(Wrappers.<User>lambdaQuery().ge(User::getCreateTime, DateUtil.getDayZeroTime(days)));
-        if (CollUtil.isNotEmpty(userList)) {
-            for (User user : userList) {
-                LocalDate createTime = user.getCreateTime().toLocalDate();
+        List<SysUser> sysUserList = super.list(Wrappers.<SysUser>lambdaQuery().ge(SysUser::getCreateTime, DateUtil.getDayZeroTime(days)));
+        if (CollUtil.isNotEmpty(sysUserList)) {
+            for (SysUser sysUser : sysUserList) {
+                LocalDate createTime = sysUser.getCreateTime().toLocalDate();
                 if (dateCounts.containsKey(createTime)) {
                     dateCounts.merge(createTime, CommonConstant.ONE, Integer::sum);
                 }

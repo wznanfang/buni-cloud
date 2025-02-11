@@ -2,7 +2,7 @@ package com.buni.user.mapper;
 
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.buni.user.entity.Role;
+import com.buni.user.entity.SysRole;
 
 /**
  * @author Administrator
@@ -11,7 +11,7 @@ import com.buni.user.entity.Role;
  * @createDate 2023-09-25 13:45:26
  * @Entity generator.domain.Role;
  */
-public interface RoleMapper extends BaseMapper<Role> {
+public interface RoleMapper extends BaseMapper<SysRole> {
 
 
 }

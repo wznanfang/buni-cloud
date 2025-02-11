@@ -13,7 +13,7 @@ import com.buni.framework.util.Result;
 import com.buni.gateway.properties.PublicUrlProperties;
 import com.buni.user.dto.login.UserLoginVO;
 import com.buni.user.dto.role.AuthorityDTO;
-import com.buni.user.entity.Authority;
+import com.buni.user.entity.SysAuthority;
 import com.buni.user.enums.BooleanEnum;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -123,7 +123,7 @@ public class GateWayFilter implements GlobalFilter {
      */
     private List<String> getUrls(Long userId) {
         List<String> urlList = new ArrayList<>();
-        List<AuthorityDTO> authorityList = (List<AuthorityDTO>) redisService.get(Authority.REDIS_KEY + userId);
+        List<AuthorityDTO> authorityList = (List<AuthorityDTO>) redisService.get(SysAuthority.REDIS_KEY + userId);
         if (CollUtil.isNotEmpty(authorityList)) {
             ObjectMapper mapper = new ObjectMapper();
             try {

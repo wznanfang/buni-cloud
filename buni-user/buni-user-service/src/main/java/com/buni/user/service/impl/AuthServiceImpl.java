@@ -6,7 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.user.dto.auth.AuthDTO;
-import com.buni.user.entity.Auth;
+import com.buni.user.entity.SysAuth;
 import com.buni.user.mapper.AuthMapper;
 import com.buni.user.service.AuthService;
 import jakarta.annotation.Resource;
@@ -26,7 +26,7 @@ import java.util.List;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements AuthService {
+public class AuthServiceImpl extends ServiceImpl<AuthMapper, SysAuth> implements AuthService {
 
     @Resource
     private RedisService redisService;
@@ -41,16 +41,16 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
     @Override
     public void saveOrUpdate(AuthDTO authDTO) {
         // 判断该平台是否已经有对应的鉴权信息
-        Auth auth = super.getOne(Wrappers.<Auth>lambdaQuery().eq(Auth::getUserId, authDTO.getUserId()).eq(Auth::getClientIdentity, authDTO.getClientIdentity()));
-        if (ObjUtil.isEmpty(auth)) {
-            auth = new Auth();
-            BeanUtils.copyProperties(authDTO, auth);
-            super.save(auth);
+        SysAuth sysAuth = super.getOne(Wrappers.<SysAuth>lambdaQuery().eq(SysAuth::getUserId, authDTO.getUserId()).eq(SysAuth::getClientIdentity, authDTO.getClientIdentity()));
+        if (ObjUtil.isEmpty(sysAuth)) {
+            sysAuth = new SysAuth();
+            BeanUtils.copyProperties(authDTO, sysAuth);
+            super.save(sysAuth);
             return;
         }
-        String token = auth.getToken();
-        auth.setToken(authDTO.getToken());
-        super.updateById(auth);
+        String token = sysAuth.getToken();
+        sysAuth.setToken(authDTO.getToken());
+        super.updateById(sysAuth);
         // 移除redis中的旧token
         redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + token);
     }
@@ -64,7 +64,7 @@ public class AuthServiceImpl extends ServiceImpl<AuthMapper, Auth> implements Au
      */
     @Override
     public List<String> findByUserId(List<Long> userId) {
-        return ObjUtil.isEmpty(userId) ? null : super.list(Wrappers.<Auth>lambdaQuery().in(Auth::getUserId, userId)).stream().map(Auth::getToken).toList();
+        return ObjUtil.isEmpty(userId) ? null : super.list(Wrappers.<SysAuth>lambdaQuery().in(SysAuth::getUserId, userId)).stream().map(SysAuth::getToken).toList();
     }
 
 

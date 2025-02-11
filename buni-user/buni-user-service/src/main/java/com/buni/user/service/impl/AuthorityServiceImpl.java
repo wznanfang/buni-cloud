@@ -16,8 +16,7 @@ import com.buni.framework.constant.CommonConstant;
 import com.buni.user.dto.role.AuthorityDTO;
 import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.dto.role.UserRoleDTO;
-import com.buni.user.entity.Authority;
-import com.buni.user.enums.AuthTypeEnum;
+import com.buni.user.entity.SysAuthority;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.AuthorityMapper;
 import com.buni.user.service.AuthorityService;
@@ -32,7 +31,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,7 +42,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority> implements AuthorityService {
+public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, SysAuthority> implements AuthorityService {
 
     @Resource
     private RedisService redisService;
@@ -62,13 +60,13 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public boolean save(AddVO addVO) {
-        Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().eq(Authority::getCode, addVO.getCode()).or().eq(Authority::getUrl, addVO.getUrl()));
-        if (ObjUtil.isNotEmpty(authority)) {
+        SysAuthority sysAuthority = super.getOne(Wrappers.<SysAuthority>lambdaQuery().eq(SysAuthority::getCode, addVO.getCode()).or().eq(SysAuthority::getUrl, addVO.getUrl()));
+        if (ObjUtil.isNotEmpty(sysAuthority)) {
             throw new CustomException(ErrorEnum.AUTHORITY_EXISTS.getCode(), ErrorEnum.AUTHORITY_EXISTS.getMessage());
         }
-        Authority addAuthority = new Authority();
-        BeanUtils.copyProperties(addVO, addAuthority);
-        super.save(addAuthority);
+        SysAuthority addSysAuthority = new SysAuthority();
+        BeanUtils.copyProperties(addVO, addSysAuthority);
+        super.save(addSysAuthority);
         return true;
     }
 
@@ -81,17 +79,17 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        Authority authority = super.getOne(Wrappers.<Authority>lambdaQuery().ne(Authority::getId, updateVO.getId()).ne(Authority::getParentId, updateVO.getParentId())
-                .eq(Authority::getCode, updateVO.getCode()).or().eq(Authority::getUrl, updateVO.getUrl()));
-        if (ObjUtil.isNotEmpty(authority) && !updateVO.getId().equals(authority.getId())) {
+        SysAuthority sysAuthority = super.getOne(Wrappers.<SysAuthority>lambdaQuery().ne(SysAuthority::getId, updateVO.getId()).ne(SysAuthority::getParentId, updateVO.getParentId())
+                .eq(SysAuthority::getCode, updateVO.getCode()).or().eq(SysAuthority::getUrl, updateVO.getUrl()));
+        if (ObjUtil.isNotEmpty(sysAuthority) && !updateVO.getId().equals(sysAuthority.getId())) {
             throw new CustomException(ErrorEnum.AUTHORITY_EXISTS.getCode(), ErrorEnum.AUTHORITY_EXISTS.getMessage());
         }
-        Authority updateAuthority = new Authority();
-        BeanUtils.copyProperties(updateVO, updateAuthority);
-        super.updateById(updateAuthority);
+        SysAuthority updateSysAuthority = new SysAuthority();
+        BeanUtils.copyProperties(updateVO, updateSysAuthority);
+        super.updateById(updateSysAuthority);
         // 更新角色权限表，剔除拥有该权限的用户缓存
         updateAuthority(updateVO.getId());
-        redisService.deleteKey(Authority.REDIS_KEY + updateVO.getId());
+        redisService.deleteKey(SysAuthority.REDIS_KEY + updateVO.getId());
         return true;
     }
 
@@ -103,7 +101,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
             List<UserRoleDTO> userRoleDtoS = userRoleService.findByRoleIds(roleIds);
             List<String> keys = new ArrayList<>();
             if (CollUtil.isNotEmpty(userRoleDtoS)) {
-                userRoleDtoS.forEach(userRole -> keys.add(Authority.REDIS_KEY + userRole.getUserId()));
+                userRoleDtoS.forEach(userRole -> keys.add(SysAuthority.REDIS_KEY + userRole.getUserId()));
             }
             redisService.delAllByKeys(keys);
         }
@@ -118,11 +116,11 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public boolean delete(Long id) {
-        Authority authority = getAuthority(id);
-        super.removeById(authority);
+        SysAuthority sysAuthority = getAuthority(id);
+        super.removeById(sysAuthority);
         // 更新角色权限表，剔除拥有该权限的用户缓存
         updateAuthority(id);
-        redisService.deleteKey(Authority.REDIS_KEY + id);
+        redisService.deleteKey(SysAuthority.REDIS_KEY + id);
         return true;
     }
 
@@ -141,30 +139,30 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
         List<String> keys = new ArrayList<>();
         ids.forEach(id -> {
             updateAuthority(id);
-            keys.add(Authority.REDIS_KEY + id);
+            keys.add(SysAuthority.REDIS_KEY + id);
         });
         redisService.delAllByKeys(keys);
         return true;
     }
 
 
-    private Authority getAuthority(Long id) {
-        Authority authority = super.getById(id);
-        if (ObjUtil.isEmpty(authority)) {
+    private SysAuthority getAuthority(Long id) {
+        SysAuthority sysAuthority = super.getById(id);
+        if (ObjUtil.isEmpty(sysAuthority)) {
             throw new CustomException(ErrorEnum.AUTHORITY_NOT_EXISTS.getCode(), ErrorEnum.AUTHORITY_NOT_EXISTS.getMessage());
         }
-        return authority;
+        return sysAuthority;
     }
 
 
     @Override
     public AuthorityInfoVO findById(Long id) {
-        AuthorityInfoVO infoVO = (AuthorityInfoVO) redisService.get(Authority.REDIS_KEY + id);
+        AuthorityInfoVO infoVO = (AuthorityInfoVO) redisService.get(SysAuthority.REDIS_KEY + id);
         if (ObjUtil.isEmpty(infoVO)) {
-            Authority authority = getAuthority(id);
+            SysAuthority sysAuthority = getAuthority(id);
             infoVO = new AuthorityInfoVO();
-            BeanUtils.copyProperties(authority, infoVO);
-            redisService.setOneHour(Authority.REDIS_KEY + id, infoVO);
+            BeanUtils.copyProperties(sysAuthority, infoVO);
+            redisService.setOneHour(SysAuthority.REDIS_KEY + id, infoVO);
         }
         return infoVO;
     }
@@ -178,15 +176,15 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public IPage<AuthorityGetVO> findPage(PageVO pageVO) {
-        IPage<Authority> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
-        QueryWrapper<Authority> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().eq(Authority::getParentId, CommonConstant.ONE);
-        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(pageVO.getParentId()), Authority::getParentId, pageVO.getParentId());
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), Authority::getName, pageVO.getName());
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), Authority::getType, pageVO.getType());
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getCode()), Authority::getCode, pageVO.getCode());
-        queryWrapper.lambda().orderByAsc(Authority::getSort);
-        IPage<Authority> infoPage = super.page(ipage, queryWrapper);
+        IPage<SysAuthority> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
+        QueryWrapper<SysAuthority> queryWrapper = new QueryWrapper<>();
+        queryWrapper.lambda().eq(SysAuthority::getParentId, CommonConstant.ONE);
+        queryWrapper.lambda().eq(ObjectUtil.isNotEmpty(pageVO.getParentId()), SysAuthority::getParentId, pageVO.getParentId());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), SysAuthority::getName, pageVO.getName());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getType()), SysAuthority::getType, pageVO.getType());
+        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getCode()), SysAuthority::getCode, pageVO.getCode());
+        queryWrapper.lambda().orderByAsc(SysAuthority::getSort);
+        IPage<SysAuthority> infoPage = super.page(ipage, queryWrapper);
         IPage<AuthorityGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
         List<AuthorityGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(authority -> {
             AuthorityGetVO getVO = new AuthorityGetVO();
@@ -205,7 +203,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public List<Tree<String>> findMenuTree() {
-        List<Authority> list = super.list();
+        List<SysAuthority> list = super.list();
         List<Tree<String>> treeNodes = new ArrayList<>();
         if (ObjUtil.isNotEmpty(list)) {
             treeNodes = TreeUtil.build(list, String.valueOf(CommonConstant.ZERO), (treeNode, tree) -> {
@@ -230,7 +228,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public List<AuthorityGetVO> findByParentId(Long id) {
-        List<Authority> list = super.list(Wrappers.<Authority>lambdaQuery().eq(Authority::getParentId, id));
+        List<SysAuthority> list = super.list(Wrappers.<SysAuthority>lambdaQuery().eq(SysAuthority::getParentId, id));
         List<AuthorityGetVO> getVos = new ArrayList<>();
         if (CollUtil.isNotEmpty(list)) {
             list.forEach(authority -> {
@@ -251,7 +249,7 @@ public class AuthorityServiceImpl extends ServiceImpl<AuthorityMapper, Authority
      */
     @Override
     public List<AuthorityDTO> findByIds(List<Long> ids) {
-        List<Authority> list = super.list(Wrappers.<Authority>lambdaQuery().in(Authority::getId, ids));
+        List<SysAuthority> list = super.list(Wrappers.<SysAuthority>lambdaQuery().in(SysAuthority::getId, ids));
         return Optional.ofNullable(list).orElse(new ArrayList<>()).stream().map(authority -> {
             AuthorityDTO authorityDTO = new AuthorityDTO();
             BeanUtils.copyProperties(authority, authorityDTO);

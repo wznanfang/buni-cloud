@@ -2,7 +2,7 @@ package com.buni.user.service;
 
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.buni.user.entity.RoleAuthority;
+import com.buni.user.entity.SysRoleAuthority;
 import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.vo.roleauthority.AddVO;
 import com.buni.user.vo.roleauthority.UpdateVO;
@@ -14,7 +14,7 @@ import java.util.List;
  * @description 针对表【role_authority(角色权限)】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface RoleAuthorityService extends IService<RoleAuthority> {
+public interface RoleAuthorityService extends IService<SysRoleAuthority> {
 
 
     /**

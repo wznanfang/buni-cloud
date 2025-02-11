@@ -4,11 +4,10 @@ package com.buni.user.service;
 import cn.hutool.core.lang.tree.Tree;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.buni.user.entity.Authority;
+import com.buni.user.entity.SysAuthority;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.dto.role.AuthorityDTO;
 import com.buni.user.vo.authority.*;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ import java.util.List;
  * @description 针对表【authority(角色)】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface AuthorityService extends IService<Authority> {
+public interface AuthorityService extends IService<SysAuthority> {
 
 
     /**

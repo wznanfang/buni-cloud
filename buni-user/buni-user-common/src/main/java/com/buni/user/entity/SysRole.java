@@ -1,17 +1,14 @@
 package com.buni.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.buni.user.enums.AuthTypeEnum;
 import com.buni.user.enums.BooleanEnum;
-import lombok.*;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -19,20 +16,20 @@ import java.time.LocalDateTime;
 /**
  * 角色
  *
- * @TableName authority
+ * @TableName role
  */
-@TableName(value = "authority")
+@TableName(value = "sys_role")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Authority implements Serializable {
+public class SysRole implements Serializable {
 
     /**
      * redis缓存KEY
      */
-    public static final String REDIS_KEY = "authority:";
+    public static final String REDIS_KEY = "role:";
 
     /**
      * id
@@ -58,41 +55,16 @@ public class Authority implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 名字
+     * 角色名字
      */
-    @Size(max = 50, message = "名字不能超过50")
+    @Size(max = 50, message = "角色名字不能超过50")
     private String name;
-
-    /**
-     * 父级id
-     */
-    private Long parentId;
-
-    /**
-     * 0：模块，1：菜单，2：按钮
-     */
-    private AuthTypeEnum type;
-
-    /**
-     * 标识码
-     */
-    private String code;
-
-    /**
-     * 序号
-     */
-    private Integer sort;
-
-    /**
-     * 接口url
-     */
-    @Size(max = 255, message = "接口url不能超过255")
-    private String url;
 
     /**
      * 是否删除(0:否，1：是)
      */
     @TableLogic
     private BooleanEnum deleted;
+
 
 }

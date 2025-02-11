@@ -1,7 +1,7 @@
 package com.buni.user.vo.user;
 
 import com.buni.framework.page.Page;
-import com.buni.user.entity.User;
+import com.buni.user.entity.SysUser;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 @Schema(description = "分页查询用户信息VO")
-public class PageVO extends Page<User> {
+public class PageVO extends Page<SysUser> {
 
 
     /**

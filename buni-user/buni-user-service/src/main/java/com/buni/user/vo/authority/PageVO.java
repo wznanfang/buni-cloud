@@ -1,7 +1,7 @@
 package com.buni.user.vo.authority;
 
 import com.buni.framework.page.Page;
-import com.buni.user.entity.Authority;
+import com.buni.user.entity.SysAuthority;
 import com.buni.user.enums.AuthTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Schema(description = "分页查询权限信息VO")
 @Data
-public class PageVO extends Page<Authority> {
+public class PageVO extends Page<SysAuthority> {
 
 	/**
 	 * 父id

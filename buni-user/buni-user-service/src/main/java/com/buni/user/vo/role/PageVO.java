@@ -1,7 +1,7 @@
 package com.buni.user.vo.role;
 
 import com.buni.framework.page.Page;
-import com.buni.user.entity.Authority;
+import com.buni.user.entity.SysAuthority;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Schema(description = "分页查询角色VO")
 @Data
-public class PageVO extends Page<Authority> {
+public class PageVO extends Page<SysAuthority> {
 
 	/**
 	 * 名字

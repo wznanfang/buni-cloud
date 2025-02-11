@@ -13,22 +13,22 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 角色权限
+ * 用户角色
  *
- * @TableName role_authority
+ * @TableName user_role
  */
-@TableName(value = "role_authority")
+@TableName(value = "sys_user_role")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoleAuthority implements Serializable {
+public class SysUserRole implements Serializable {
 
     /**
      * redis缓存KEY
      */
-    public static final String REDIS_KEY = "role_authority:";
+    public static final String REDIS_KEY = "user_role:";
 
     /**
      * id
@@ -54,14 +54,14 @@ public class RoleAuthority implements Serializable {
     private LocalDateTime updateTime;
 
     /**
+     * 用户id
+     */
+    private Long userId;
+
+    /**
      * 角色id
      */
     private Long roleId;
-
-    /**
-     * 权限id
-     */
-    private Long authorityId;
 
     /**
      * 是否删除(0:否，1：是)

@@ -1,7 +1,7 @@
 package com.buni.user.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.buni.user.entity.Auth;
+import com.buni.user.entity.SysAuth;
 
 /**
  * @author Administrator
@@ -9,7 +9,7 @@ import com.buni.user.entity.Auth;
  * @createDate 2023-09-22 16:55:29
  * @Entity generator.domain.Auth;
  */
-public interface AuthMapper extends BaseMapper<Auth> {
+public interface AuthMapper extends BaseMapper<SysAuth> {
 
 
 }

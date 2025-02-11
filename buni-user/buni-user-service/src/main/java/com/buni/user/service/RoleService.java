@@ -3,7 +3,7 @@ package com.buni.user.service;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.buni.user.entity.Role;
+import com.buni.user.entity.SysRole;
 import com.buni.user.vo.IdVOs;
 import com.buni.user.vo.role.*;
 
@@ -13,7 +13,7 @@ import com.buni.user.vo.role.*;
  * )】的数据库操作Service
  * @createDate 2023-09-25 13:45:26
  */
-public interface RoleService extends IService<Role> {
+public interface RoleService extends IService<SysRole> {
 
 	/**
 	 * 新增角色

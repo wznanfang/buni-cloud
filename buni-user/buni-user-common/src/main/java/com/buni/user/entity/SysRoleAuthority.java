@@ -7,29 +7,28 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 角色
+ * 角色权限
  *
- * @TableName role
+ * @TableName role_authority
  */
-@TableName(value = "role")
+@TableName(value = "sys_role_authority")
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Role implements Serializable {
+public class SysRoleAuthority implements Serializable {
 
     /**
      * redis缓存KEY
      */
-    public static final String REDIS_KEY = "role:";
+    public static final String REDIS_KEY = "role_authority:";
 
     /**
      * id
@@ -55,10 +54,14 @@ public class Role implements Serializable {
     private LocalDateTime updateTime;
 
     /**
-     * 角色名字
+     * 角色id
      */
-    @Size(max = 50, message = "角色名字不能超过50")
-    private String name;
+    private Long roleId;
+
+    /**
+     * 权限id
+     */
+    private Long authorityId;
 
     /**
      * 是否删除(0:否，1：是)

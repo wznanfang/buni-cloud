@@ -3,7 +3,6 @@ package com.buni.user.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.crypto.SmUtil;
-import com.buni.file.FileDubboService;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
@@ -15,8 +14,8 @@ import com.buni.user.dto.login.UserLoginVO;
 import com.buni.user.dto.role.AuthorityDTO;
 import com.buni.user.dto.role.RoleAuthorityDTO;
 import com.buni.user.dto.role.UserRoleDTO;
-import com.buni.user.entity.Authority;
-import com.buni.user.entity.User;
+import com.buni.user.entity.SysAuthority;
+import com.buni.user.entity.SysUser;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.properties.UserProperties;
@@ -26,7 +25,6 @@ import com.buni.user.vo.login.LoginVO;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -51,8 +49,6 @@ public class LoginServiceImpl implements LoginService {
     private AuthorityService authorityService;
     @Resource
     private UserService userService;
-    @DubboReference
-    private FileDubboService fileDubboService;
 
 
     /**
@@ -63,26 +59,26 @@ public class LoginServiceImpl implements LoginService {
      */
     @Override
     public UserLoginVO login(LoginVO loginVO) {
-        User user = userService.findByUsername(loginVO.getUsername());
+        SysUser sysUser = userService.findByUsername(loginVO.getUsername());
         String password = EncryptUtil.decrypt(loginVO.getPassword());
-        if (ObjUtil.isEmpty(user) || user.getDeleted().equals(BooleanEnum.YES) || !SmUtil.sm3(userProperties.getSalt() + password).equals(user.getPassword())) {
+        if (ObjUtil.isEmpty(sysUser) || sysUser.getDeleted().equals(BooleanEnum.YES) || !SmUtil.sm3(userProperties.getSalt() + password).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
         }
-        if (user.getEnable().equals(BooleanEnum.NO)) {
+        if (sysUser.getEnable().equals(BooleanEnum.NO)) {
             throw new CustomException(ErrorEnum.USER_FORBIDDEN.getCode(), ErrorEnum.USER_FORBIDDEN.getMessage());
         }
         UserLoginVO userLoginVO = new UserLoginVO();
-        BeanUtils.copyProperties(user, userLoginVO);
+        BeanUtils.copyProperties(sysUser, userLoginVO);
         // 获取token
         TokenVO tokenVO = TokenUtil.getToken();
         userLoginVO.setTokenVO(tokenVO);
         redisService.setOneHour(CommonConstant.TOKEN_REDIS_KEY + tokenVO.getToken(), userLoginVO);
         // 查询用户的角色权限
-        if (!user.getAdmin().equals(BooleanEnum.YES)) {
-            getUserRole(user.getId());
+        if (!sysUser.getAdmin().equals(BooleanEnum.YES)) {
+            getUserRole(sysUser.getId());
         }
         // 记录用户鉴权信息
-        AuthDTO authDTO = AuthDTO.builder().userId(user.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
+        AuthDTO authDTO = AuthDTO.builder().userId(sysUser.getId()).clientIdentity(HeaderUtil.getIdentity()).token(tokenVO.getToken()).build();
         authService.saveOrUpdate(authDTO);
         return userLoginVO;
     }
@@ -94,7 +90,7 @@ public class LoginServiceImpl implements LoginService {
             List<RoleAuthorityDTO> roleAuthList = roleAuthorityService.findByRoleIds(roleIds);
             List<Long> authorityIds = roleAuthList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
             List<AuthorityDTO> authorityList = authorityService.findByIds(authorityIds);
-            redisService.setOneHour(Authority.REDIS_KEY + userId, authorityList);
+            redisService.setOneHour(SysAuthority.REDIS_KEY + userId, authorityList);
         }
     }
 
@@ -108,7 +104,7 @@ public class LoginServiceImpl implements LoginService {
     public Boolean loginOut() {
         Long userId = HeaderUtil.getUserId();
         redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
-        redisService.deleteKey(Authority.REDIS_KEY + userId);
+        redisService.deleteKey(SysAuthority.REDIS_KEY + userId);
         return true;
     }
 

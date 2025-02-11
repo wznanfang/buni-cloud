@@ -6,7 +6,7 @@ import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.buni.user.dto.role.RoleAuthorityDTO;
-import com.buni.user.entity.RoleAuthority;
+import com.buni.user.entity.SysRoleAuthority;
 import com.buni.user.mapper.RoleAuthorityMapper;
 import com.buni.user.service.RoleAuthorityService;
 import com.buni.user.vo.roleauthority.AddVO;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @AllArgsConstructor
-public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, RoleAuthority> implements RoleAuthorityService {
+public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, SysRoleAuthority> implements RoleAuthorityService {
 
 
     /**
@@ -45,12 +45,12 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
     }
 
     private void saveRoleAuthority(Long roleId, List<Long> authorityIds) {
-        List<RoleAuthority> list = new ArrayList<>();
+        List<SysRoleAuthority> list = new ArrayList<>();
         authorityIds.forEach(authorityId -> {
-            RoleAuthority roleAuthority = new RoleAuthority();
-            roleAuthority.setAuthorityId(authorityId);
-            roleAuthority.setRoleId(roleId);
-            list.add(roleAuthority);
+            SysRoleAuthority sysRoleAuthority = new SysRoleAuthority();
+            sysRoleAuthority.setAuthorityId(authorityId);
+            sysRoleAuthority.setRoleId(roleId);
+            list.add(sysRoleAuthority);
         });
         super.saveBatch(list);
     }
@@ -64,7 +64,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      */
     @Override
     public boolean update(UpdateVO updateVO) {
-        super.remove(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, updateVO.getRoleId()));
+        super.remove(Wrappers.<SysRoleAuthority>lambdaQuery().eq(SysRoleAuthority::getRoleId, updateVO.getRoleId()));
         if (CollUtil.isNotEmpty(updateVO.getAuthorityIds())) {
             saveRoleAuthority(updateVO.getRoleId(), updateVO.getAuthorityIds());
         }
@@ -80,8 +80,8 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      */
     @Override
     public List<Long> findById(Long id) {
-        List<RoleAuthority> authorityGetVoS = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getRoleId, id));
-        return Optional.ofNullable(authorityGetVoS).orElse(new ArrayList<>()).stream().map(RoleAuthority::getAuthorityId).toList();
+        List<SysRoleAuthority> authorityGetVoS = super.list(Wrappers.<SysRoleAuthority>lambdaQuery().eq(SysRoleAuthority::getRoleId, id));
+        return Optional.ofNullable(authorityGetVoS).orElse(new ArrayList<>()).stream().map(SysRoleAuthority::getAuthorityId).toList();
     }
 
 
@@ -93,15 +93,15 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      */
     @Override
     public List<RoleAuthorityDTO> findByRoleIds(List<Long> roleIds) {
-        List<RoleAuthority> roleAuthorityList = super.list(Wrappers.<RoleAuthority>lambdaQuery().in(RoleAuthority::getRoleId, roleIds));
-        return getRoleAuthorityDtoS(roleAuthorityList);
+        List<SysRoleAuthority> sysRoleAuthorityList = super.list(Wrappers.<SysRoleAuthority>lambdaQuery().in(SysRoleAuthority::getRoleId, roleIds));
+        return getRoleAuthorityDtoS(sysRoleAuthorityList);
     }
 
 
-    private static List<RoleAuthorityDTO> getRoleAuthorityDtoS(List<RoleAuthority> roleAuthorityList) {
-        return Optional.ofNullable(roleAuthorityList).orElse(new ArrayList<>()).stream().map(roleAuthority -> {
+    private static List<RoleAuthorityDTO> getRoleAuthorityDtoS(List<SysRoleAuthority> sysRoleAuthorityList) {
+        return Optional.ofNullable(sysRoleAuthorityList).orElse(new ArrayList<>()).stream().map(sysRoleAuthority -> {
             RoleAuthorityDTO roleAuthorityDto = new RoleAuthorityDTO();
-            BeanUtil.copyProperties(roleAuthority, roleAuthorityDto);
+            BeanUtil.copyProperties(sysRoleAuthority, roleAuthorityDto);
             return roleAuthorityDto;
         }).toList();
     }
@@ -115,7 +115,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      */
     @Override
     public List<RoleAuthorityDTO> findByAuthorityId(Long authorityId) {
-        List<RoleAuthority> roleAuthList = super.list(Wrappers.<RoleAuthority>lambdaQuery().eq(RoleAuthority::getAuthorityId, authorityId));
+        List<SysRoleAuthority> roleAuthList = super.list(Wrappers.<SysRoleAuthority>lambdaQuery().eq(SysRoleAuthority::getAuthorityId, authorityId));
         return getRoleAuthorityDtoS(roleAuthList);
     }
 
@@ -127,7 +127,7 @@ public class RoleAuthorityServiceImpl extends ServiceImpl<RoleAuthorityMapper, R
      */
     @Override
     public void deleteByRoleIds(List<Long> roleIds) {
-        super.remove(Wrappers.<RoleAuthority>lambdaQuery().in(RoleAuthority::getRoleId, roleIds));
+        super.remove(Wrappers.<SysRoleAuthority>lambdaQuery().in(SysRoleAuthority::getRoleId, roleIds));
     }
 
 
