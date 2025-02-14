@@ -13,8 +13,10 @@ import java.util.Date;
  */
 public class DateUtil {
 
+    private static final String patternStr = "yyyy-MM-dd HH:mm:ss";
 
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern(patternStr);
 
     /**
      * 获取当前系统时间
@@ -62,7 +64,7 @@ public class DateUtil {
      * @return 格式化后的时间 yyyy-MM-dd HH:mm:ss
      */
     public static String formatSysTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patternStr);
         return simpleDateFormat.format(new Date(sysTime()));
     }
 
@@ -74,7 +76,7 @@ public class DateUtil {
      * @return 格式化后的时间 yyyy-MM-dd HH:mm:ss
      */
     public static String formatSysTime(Long timestamp) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(patternStr);
         return simpleDateFormat.format(new Date(timestamp));
     }
 
