@@ -167,7 +167,7 @@ CREATE TABLE `sys_user`  (
 -- ----------------------------
 -- Records of sys_user
 -- ----------------------------
-INSERT INTO `sys_user` VALUES (1, '2023-09-26 10:25:43', '2024-06-21 10:20:39', 'buni', '2499b16d3cb8b6d49e3e76dcd072a1afc68c7706123c423426f450a27f71d4f8', '不逆', 18, 1, '1', 0, 1, 0);
+INSERT INTO `sys_user` VALUES (1, '2023-09-26 10:25:43', '2024-06-21 10:20:39', 'buni', '2499b16d3cb8b6d49e3e76dcd072a1afc68c7706123c423426f450a27f71d4f8', '不逆', 18, 1, '1',NULL, 0, 1, 0);
 
 -- ----------------------------
 -- Table structure for sys_user_role
