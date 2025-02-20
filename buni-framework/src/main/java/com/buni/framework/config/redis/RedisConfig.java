@@ -25,7 +25,7 @@ public class RedisConfig {
         redisTemplate.setConnectionFactory(factory);
         // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        // 设置value的序列化方式json，使用GenericJackson2JsonRedisSerializer替换默认序列化，RedisSerializer.json() 等价于 new GenericJackson2JsonRedisSerializer()
+        // 设置value的序列化方式json，RedisSerializer.json() 等价于 new GenericJackson2JsonRedisSerializer()
         redisTemplate.setValueSerializer(RedisSerializer.json());
         // 设置hash的key的序列化方式
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
