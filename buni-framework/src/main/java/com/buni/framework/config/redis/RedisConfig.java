@@ -19,8 +19,8 @@ public class RedisConfig {
      * @param factory {@link LettuceConnectionFactory}
      * @return {@link RedisTemplate}<{@link String}, {@link Object}>
      */
-    @Bean(name = "customRedisService")
-    public RedisTemplate<String, Object> customRedisService(LettuceConnectionFactory factory) {
+    @Bean
+    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory factory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
         // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
