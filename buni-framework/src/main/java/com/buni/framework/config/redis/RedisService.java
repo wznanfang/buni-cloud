@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
 
     @Resource
-    private RedisTemplate redisTemplate;
+    private RedisTemplate customRedisTemplate;
 
 
     /********************************************* String *********************************************/
@@ -65,7 +65,7 @@ public class RedisService {
      * @param val
      */
     public void set(String key, Object val) {
-        redisTemplate.opsForValue().set(key, val);
+        customRedisTemplate.opsForValue().set(key, val);
     }
 
 
@@ -78,7 +78,7 @@ public class RedisService {
      * @param timeUnit 时间单位
      */
     public void set(String key, Object val, Long time, TimeUnit timeUnit) {
-        redisTemplate.opsForValue().set(key, val, time, timeUnit);
+        customRedisTemplate.opsForValue().set(key, val, time, timeUnit);
     }
 
 
@@ -90,7 +90,7 @@ public class RedisService {
      * @return
      */
     public Long incr(String key, long min) {
-        return redisTemplate.opsForValue().increment(key, ObjUtil.isEmpty(key) || min < CommonConstant.ZERO ? CommonConstant.ZERO : min);
+        return customRedisTemplate.opsForValue().increment(key, ObjUtil.isEmpty(key) || min < CommonConstant.ZERO ? CommonConstant.ZERO : min);
     }
 
 
@@ -102,7 +102,7 @@ public class RedisService {
      * @return
      */
     public Long decr(String key, long min) {
-        return redisTemplate.opsForValue().decrement(key, ObjUtil.isEmpty(key) || min < CommonConstant.ZERO ? CommonConstant.ZERO : min);
+        return customRedisTemplate.opsForValue().decrement(key, ObjUtil.isEmpty(key) || min < CommonConstant.ZERO ? CommonConstant.ZERO : min);
     }
 
 
@@ -116,7 +116,7 @@ public class RedisService {
      * @param value 值
      */
     public Long listLeftPush(String key, Object value) {
-        return redisTemplate.opsForList().leftPush(key, value);
+        return customRedisTemplate.opsForList().leftPush(key, value);
     }
 
 
@@ -127,7 +127,7 @@ public class RedisService {
      * @param value 值
      */
     public Long listRightPush(String key, Object value) {
-        return redisTemplate.opsForList().rightPush(key, value);
+        return customRedisTemplate.opsForList().rightPush(key, value);
     }
 
 
@@ -138,7 +138,7 @@ public class RedisService {
      * @param value 值
      */
     public Long listLeftPushAll(String key, List<Object> value) {
-        return redisTemplate.opsForList().leftPushAll(key, value);
+        return customRedisTemplate.opsForList().leftPushAll(key, value);
     }
 
 
@@ -149,7 +149,7 @@ public class RedisService {
      * @param value 值
      */
     public Long listRightPushAll(String key, List<Object> value) {
-        return redisTemplate.opsForList().rightPushAll(key, value);
+        return customRedisTemplate.opsForList().rightPushAll(key, value);
     }
 
 
@@ -161,7 +161,7 @@ public class RedisService {
      * @param value 值
      */
     public void listSet(String key, long index, Object value) {
-        redisTemplate.opsForList().set(key, index, value);
+        customRedisTemplate.opsForList().set(key, index, value);
     }
 
 
@@ -174,7 +174,7 @@ public class RedisService {
      * @return boolean
      */
     public Object listRange(String key, long start, long end) {
-        return redisTemplate.opsForList().range(key, start, end);
+        return customRedisTemplate.opsForList().range(key, start, end);
     }
 
 
@@ -185,7 +185,7 @@ public class RedisService {
      * @return 结果数组对象
      */
     public Object listPopLeftKey(String key) {
-        return redisTemplate.opsForList().leftPop(key);
+        return customRedisTemplate.opsForList().leftPop(key);
     }
 
 
@@ -196,7 +196,7 @@ public class RedisService {
      * @return 结果数组
      */
     public Object listPopRightKey(String key) {
-        return redisTemplate.opsForList().rightPop(key);
+        return customRedisTemplate.opsForList().rightPop(key);
     }
 
 
@@ -207,7 +207,7 @@ public class RedisService {
      * @return 列表长度
      */
     public Long listLen(String key) {
-        return redisTemplate.opsForList().size(key);
+        return customRedisTemplate.opsForList().size(key);
     }
 
 
@@ -219,7 +219,7 @@ public class RedisService {
      * @return 列表中的元素
      */
     public Object listIndex(String key, long index) {
-        return redisTemplate.opsForList().index(key, index);
+        return customRedisTemplate.opsForList().index(key, index);
     }
 
 
@@ -232,7 +232,7 @@ public class RedisService {
      * @return 成功移除的个数
      */
     public Long listRem(String key, long count, Object value) {
-        return redisTemplate.opsForList().remove(key, count, value);
+        return customRedisTemplate.opsForList().remove(key, count, value);
     }
 
 
@@ -244,7 +244,7 @@ public class RedisService {
      * @param end   截取激素位置
      */
     public void listTrim(String key, long start, long end) {
-        redisTemplate.opsForList().trim(key, start, end);
+        customRedisTemplate.opsForList().trim(key, start, end);
     }
 
 
@@ -259,7 +259,7 @@ public class RedisService {
      * @param value
      */
     public void hashPut(String key, String hashKey, String value) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
+        customRedisTemplate.opsForHash().put(key, hashKey, value);
     }
 
 
@@ -270,7 +270,7 @@ public class RedisService {
      * @param map
      */
     public void hashPutAll(String key, Map map) {
-        redisTemplate.opsForHash().putAll(key, map);
+        customRedisTemplate.opsForHash().putAll(key, map);
     }
 
 
@@ -281,7 +281,7 @@ public class RedisService {
      * @param hashKey
      */
     public Object hashGet(String key, String hashKey) {
-        return redisTemplate.opsForHash().get(key, hashKey);
+        return customRedisTemplate.opsForHash().get(key, hashKey);
     }
 
 
@@ -292,7 +292,7 @@ public class RedisService {
      * @return
      */
     public Object hashGetAll(String key) {
-        return redisTemplate.opsForHash().entries(key);
+        return customRedisTemplate.opsForHash().entries(key);
     }
 
 
@@ -303,7 +303,7 @@ public class RedisService {
      * @param hashKey
      */
     public void hashDelete(String key, String hashKey) {
-        redisTemplate.opsForHash().delete(key, hashKey);
+        customRedisTemplate.opsForHash().delete(key, hashKey);
     }
 
 
@@ -315,7 +315,7 @@ public class RedisService {
      * @return
      */
     public boolean hashHasKey(String key, String hashKey) {
-        return redisTemplate.opsForHash().hasKey(key, hashKey);
+        return customRedisTemplate.opsForHash().hasKey(key, hashKey);
     }
 
 
@@ -326,7 +326,7 @@ public class RedisService {
      * @return
      */
     public Long hashSize(String key) {
-        return redisTemplate.opsForHash().size(key);
+        return customRedisTemplate.opsForHash().size(key);
     }
 
 
@@ -341,7 +341,7 @@ public class RedisService {
      * @return
      */
     public Long setAdd(String key, Object value) {
-        return redisTemplate.opsForSet().add(key, value);
+        return customRedisTemplate.opsForSet().add(key, value);
     }
 
 
@@ -353,7 +353,7 @@ public class RedisService {
      * @return
      */
     public Long setRemove(String key, Object value) {
-        return redisTemplate.opsForSet().remove(key, value);
+        return customRedisTemplate.opsForSet().remove(key, value);
     }
 
 
@@ -364,7 +364,7 @@ public class RedisService {
      * @param value
      */
     public void setContains(String key, String value) {
-        redisTemplate.opsForSet().isMember(key, value);
+        customRedisTemplate.opsForSet().isMember(key, value);
     }
 
 
@@ -375,7 +375,7 @@ public class RedisService {
      * @return
      */
     public Set<String> setValues(String key) {
-        return redisTemplate.opsForSet().members(key);
+        return customRedisTemplate.opsForSet().members(key);
     }
 
 
@@ -386,7 +386,7 @@ public class RedisService {
      * @return
      */
     public Long setSize(String key) {
-        return redisTemplate.opsForSet().size(key);
+        return customRedisTemplate.opsForSet().size(key);
     }
 
 
@@ -401,7 +401,7 @@ public class RedisService {
      * @return
      */
     public Long zSetAdd(String key, Set<Object> value) {
-        return redisTemplate.opsForZSet().add(key, value);
+        return customRedisTemplate.opsForZSet().add(key, value);
     }
 
 
@@ -412,7 +412,7 @@ public class RedisService {
      * @return
      */
     public Boolean zSetAdd(String key, Long currentTime, Long score) {
-        return redisTemplate.opsForZSet().add(key, currentTime, score);
+        return customRedisTemplate.opsForZSet().add(key, currentTime, score);
     }
 
 
@@ -424,7 +424,7 @@ public class RedisService {
      * @return
      */
     public Long zSetRemove(String key, Object value) {
-        return redisTemplate.opsForZSet().remove(key, value);
+        return customRedisTemplate.opsForZSet().remove(key, value);
     }
 
 
@@ -435,7 +435,7 @@ public class RedisService {
      * @return
      */
     public Long zSetSize(String key) {
-        return redisTemplate.opsForZSet().size(key);
+        return customRedisTemplate.opsForZSet().size(key);
     }
 
 
@@ -448,7 +448,7 @@ public class RedisService {
      * @return
      */
     public Long zSetCount(String key, Long min, Long max) {
-        return redisTemplate.opsForZSet().count(key, min, max);
+        return customRedisTemplate.opsForZSet().count(key, min, max);
     }
 
 
@@ -461,7 +461,7 @@ public class RedisService {
      * @return
      */
     public Long zSetRemoveRangeByScore(String key, Long min, Long max) {
-        return redisTemplate.opsForZSet().removeRangeByScore(key, min, max);
+        return customRedisTemplate.opsForZSet().removeRangeByScore(key, min, max);
     }
 
 
@@ -475,7 +475,7 @@ public class RedisService {
      * @param time 时间
      */
     public void setKeyTime(String key, long time, TimeUnit timeUnit) {
-        redisTemplate.expire(key, time, timeUnit);
+        customRedisTemplate.expire(key, time, timeUnit);
     }
 
 
@@ -486,7 +486,7 @@ public class RedisService {
      * @return 过期时间
      */
     public Long getKeyTime(String key) {
-        return redisTemplate.getExpire(key, TimeUnit.SECONDS);
+        return customRedisTemplate.getExpire(key, TimeUnit.SECONDS);
     }
 
 
@@ -497,7 +497,7 @@ public class RedisService {
      * @return 如果存在 key 则返回 true，否则返回 false
      */
     public Boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
+        return customRedisTemplate.hasKey(key);
     }
 
 
@@ -510,7 +510,7 @@ public class RedisService {
         if (ObjUtil.isEmpty(key)) {
             return 0L;
         }
-        return redisTemplate.delete(Collections.singletonList(key));
+        return customRedisTemplate.delete(Collections.singletonList(key));
     }
 
 
@@ -520,9 +520,9 @@ public class RedisService {
      * @param key
      */
     public void delAllByKey(String key) {
-        Set<String> keys = redisTemplate.keys(key + "*");
+        Set<String> keys = customRedisTemplate.keys(key + "*");
         if (CollUtil.isNotEmpty(keys)) {
-            redisTemplate.delete(keys);
+            customRedisTemplate.delete(keys);
         }
     }
 
@@ -535,9 +535,9 @@ public class RedisService {
     public void delAllByKeys(List<String> keys) {
         if (CollUtil.isNotEmpty(keys)) {
             Set<String> allKeys = new HashSet<>();
-            keys.forEach(key -> allKeys.addAll(redisTemplate.keys(key)));
+            keys.forEach(key -> allKeys.addAll(customRedisTemplate.keys(key)));
             if (CollUtil.isNotEmpty(allKeys)) {
-                redisTemplate.delete(allKeys);
+                customRedisTemplate.delete(allKeys);
             }
         }
     }
@@ -550,7 +550,7 @@ public class RedisService {
      * @return
      */
     public Object get(String key) {
-        return redisTemplate.opsForValue().get(key);
+        return customRedisTemplate.opsForValue().get(key);
     }
 
 
@@ -560,7 +560,7 @@ public class RedisService {
      * @param key 键
      */
     public String keyType(String key) {
-        DataType dataType = redisTemplate.type(key);
+        DataType dataType = customRedisTemplate.type(key);
         assert dataType != null;
         return dataType.code();
     }
@@ -572,7 +572,7 @@ public class RedisService {
      * @param map 要插入的 key value 集合
      */
     public void batchSet(Map<String, Object> map) {
-        redisTemplate.opsForValue().multiSet(map);
+        customRedisTemplate.opsForValue().multiSet(map);
     }
 
 
@@ -583,7 +583,7 @@ public class RedisService {
      * @return value 列表
      */
     public List<Object> batchGet(List<String> list) {
-        return redisTemplate.opsForValue().multiGet(list);
+        return customRedisTemplate.opsForValue().multiGet(list);
     }
 
 
