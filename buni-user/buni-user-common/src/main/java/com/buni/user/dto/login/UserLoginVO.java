@@ -3,6 +3,7 @@ package com.buni.user.dto.login;
 import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.SexEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -22,7 +23,9 @@ public class UserLoginVO implements Serializable {
      * id
      */
     @Schema(description = "id")
-    @JsonSerialize(using = StringSerializer.class)
+    // todo 后续研究一下怎么解决这个问题，主要是redis序列化影响
+//    @JsonSerialize(using = StringSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     /**

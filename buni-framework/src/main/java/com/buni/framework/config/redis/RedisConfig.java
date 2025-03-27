@@ -1,9 +1,12 @@
 package com.buni.framework.config.redis;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializer;
 
 /**
@@ -23,15 +26,14 @@ public class RedisConfig {
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory factory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
-        // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
+        ObjectMapper om = new ObjectMapper();
+        // 关键调整：使用更宽松的DefaultTyping级别
+        om.activateDefaultTyping(om.getPolymorphicTypeValidator(), ObjectMapper.DefaultTyping.EVERYTHING,JsonTypeInfo.As.PROPERTY);
+        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer(om);
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        // 设置value的序列化方式json，使用GenericJackson2JsonRedisSerializer替换默认序列化，RedisSerializer.json() 等价于 new GenericJackson2JsonRedisSerializer()
-        redisTemplate.setValueSerializer(RedisSerializer.json());
-        // 设置hash的key的序列化方式
+        redisTemplate.setValueSerializer(serializer);
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
-        // 设置hash的value的序列化方式
-        redisTemplate.setHashValueSerializer(RedisSerializer.json());
-        // 使配置生效
+        redisTemplate.setHashValueSerializer(serializer);
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
