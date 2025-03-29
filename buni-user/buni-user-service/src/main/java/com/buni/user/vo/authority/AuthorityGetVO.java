@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.AuthTypeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -26,7 +27,7 @@ public class AuthorityGetVO implements Serializable {
 	 * id
 	 */
 	@Schema(description = "id")
-	@JsonSerialize(using = StringSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private Long id;
 
 	/**

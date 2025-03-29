@@ -2,6 +2,7 @@ package com.buni.user.vo.dept;
 
 import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.AuthTypeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -25,7 +26,7 @@ public class DeptGetVO implements Serializable {
 	 * id
 	 */
 	@Schema(description = "id")
-	@JsonSerialize(using = StringSerializer.class)
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private Long id;
 
 	/**

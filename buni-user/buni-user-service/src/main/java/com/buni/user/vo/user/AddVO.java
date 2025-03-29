@@ -4,6 +4,7 @@ import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.SexEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -54,6 +55,7 @@ public class AddVO implements Serializable {
      */
     @Schema(description = "电话")
     @NotBlank(message = "电话不能为空")
+    @Pattern(regexp = "^1[3-9]\\d{9}$", message = "电话格式不正确")
     private String tel;
 
     /**

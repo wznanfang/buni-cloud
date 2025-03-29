@@ -26,7 +26,7 @@ public class UserGetVO implements Serializable {
      * id
      */
     @Schema(description = "id")
-    @JsonSerialize(using = StringSerializer.class)
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     /**

@@ -68,9 +68,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public boolean save(AddVO addVO) {
-        if (!Validator.isMobile(addVO.getTel())) {
-            throw new CustomException(ErrorEnum.PHONE_ERROR.getCode(), ErrorEnum.PHONE_ERROR.getMessage());
-        }
         SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, addVO.getUsername()).or().eq(SysUser::getTel, addVO.getTel()));
         if (ObjUtil.isNotEmpty(existSysUser)) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
