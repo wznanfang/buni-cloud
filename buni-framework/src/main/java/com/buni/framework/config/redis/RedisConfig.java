@@ -27,13 +27,17 @@ public class RedisConfig {
      */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory factory) {
-        RedisTemplate<String,Object> redisTemplate = new RedisTemplate<>();
+        RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(factory);
-        GenericJackson2JsonRedisSerializer serializer = new GenericJackson2JsonRedisSerializer();
+        // 设置key序列化方式string，RedisSerializer.string() 等价于 new StringRedisSerializer()
         redisTemplate.setKeySerializer(RedisSerializer.string());
-        redisTemplate.setValueSerializer(serializer);
+        // 设置value的序列化方式json，使用GenericJackson2JsonRedisSerializer替换默认序列化，RedisSerializer.json() 等价于 new GenericJackson2JsonRedisSerializer()
+        redisTemplate.setValueSerializer(RedisSerializer.json());
+        // 设置hash的key的序列化方式
         redisTemplate.setHashKeySerializer(RedisSerializer.string());
-        redisTemplate.setHashValueSerializer(serializer);
+        // 设置hash的value的序列化方式
+        redisTemplate.setHashValueSerializer(RedisSerializer.json());
+        // 使配置生效
         redisTemplate.afterPropertiesSet();
         return redisTemplate;
     }
