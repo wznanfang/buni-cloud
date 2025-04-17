@@ -1,10 +1,8 @@
 package com.buni.user.dto.login;
 
-import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.SexEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

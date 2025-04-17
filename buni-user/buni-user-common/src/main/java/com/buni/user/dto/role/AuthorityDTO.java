@@ -5,6 +5,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * 角色
  *
@@ -12,7 +14,7 @@ import lombok.Data;
  */
 @Schema(name = "权限DTO")
 @Data
-public class AuthorityDTO {
+public class AuthorityDTO implements Serializable {
 
     /**
      * id
@@ -50,7 +52,6 @@ public class AuthorityDTO {
      */
     @Schema(description = "序号")
     private Integer sort;
-
 
     /**
      * 接口url
