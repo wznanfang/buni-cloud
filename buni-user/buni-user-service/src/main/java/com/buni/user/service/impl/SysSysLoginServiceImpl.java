@@ -90,7 +90,7 @@ public class SysSysLoginServiceImpl implements SysLoginService {
             List<RoleAuthorityDTO> roleAuthList = sysRoleAuthorityService.findByRoleIds(roleIds);
             List<Long> authorityIds = roleAuthList.stream().map(RoleAuthorityDTO::getAuthorityId).toList();
             List<AuthorityDTO> authorityList = sysAuthorityService.findByIds(authorityIds);
-            redisService.setOneHour(SysAuthority.REDIS_KEY + userId, authorityList);
+            redisService.listRightPushAll(SysAuthority.REDIS_KEY + userId, authorityList);
         }
     }
 

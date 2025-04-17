@@ -3,6 +3,8 @@ package com.buni.framework.config.redis;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import com.buni.framework.constant.CommonConstant;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.DataType;
@@ -137,7 +139,7 @@ public class RedisService {
      * @param key   键
      * @param value 值
      */
-    public Long listLeftPushAll(String key, List<Object> value) {
+    public Long listLeftPushAll(String key, List<?> value) {
         return redisTemplate.opsForList().leftPushAll(key, value);
     }
 
@@ -148,7 +150,7 @@ public class RedisService {
      * @param key   键
      * @param value 值
      */
-    public Long listRightPushAll(String key, List<Object> value) {
+    public Long listRightPushAll(String key, List<?> value) {
         return redisTemplate.opsForList().rightPushAll(key, value);
     }
 
@@ -166,6 +168,14 @@ public class RedisService {
 
 
     /**
+     * 从 Redis 获取对象类型的 List
+     */
+    public List<Object> getList(String key) {
+        return listRange(key, 0, -1);
+    }
+
+
+    /**
      * 获取列表指定范围内的list元素，正数则表示正向查找，负数则倒叙查找
      *
      * @param key   键
@@ -173,7 +183,7 @@ public class RedisService {
      * @param end   结束
      * @return boolean
      */
-    public Object listRange(String key, long start, long end) {
+    public List<Object> listRange(String key, long start, long end) {
         return redisTemplate.opsForList().range(key, start, end);
     }
 
@@ -469,6 +479,16 @@ public class RedisService {
 
 
     /**
+     * 根据key从redis中获取数据
+     *
+     * @param key
+     * @return
+     */
+    public Object get(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
+    /**
      * 指定 key 的过期时间
      *
      * @param key  键
@@ -540,17 +560,6 @@ public class RedisService {
                 redisTemplate.delete(allKeys);
             }
         }
-    }
-
-
-    /**
-     * 根据key从redis中获取数据
-     *
-     * @param key
-     * @return
-     */
-    public Object get(String key) {
-        return redisTemplate.opsForValue().get(key);
     }
 
 
