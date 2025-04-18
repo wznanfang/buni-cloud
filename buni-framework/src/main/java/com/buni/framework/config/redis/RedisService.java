@@ -150,8 +150,9 @@ public class RedisService {
      * @param key   键
      * @param value 值
      */
-    public Long listRightPushAll(String key, List<?> value) {
-        return redisTemplate.opsForList().rightPushAll(key, value);
+    public void listRightPushAll(String key, List<?> value) {
+        redisTemplate.opsForList().rightPushAll(key, value);
+        setKeyTime(key, CommonConstant.THIRTY, TimeUnit.HOURS);
     }
 
 
