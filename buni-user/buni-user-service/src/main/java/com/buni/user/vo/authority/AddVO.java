@@ -29,7 +29,6 @@ public class AddVO implements Serializable {
 	 * 父级id
 	 */
 	@Schema(description = "父级id")
-	@NotNull(message = "父级id不能为空")
 	private Long parentId;
 
 	/**
