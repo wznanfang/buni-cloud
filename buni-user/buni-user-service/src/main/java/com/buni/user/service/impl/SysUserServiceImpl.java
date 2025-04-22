@@ -6,6 +6,7 @@ import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SmUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -228,10 +229,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public IPage<UserGetVO> findPage(PageVO pageVO) {
         IPage<SysUser> ipage = new Page<>(pageVO.getCurrent(), pageVO.getSize());
-        QueryWrapper<SysUser> queryWrapper = new QueryWrapper<>();
-        queryWrapper.lambda().ne(SysUser::getId, CommonConstant.ADMIN_ID);
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getUsername()), SysUser::getUsername, pageVO.getUsername());
-        queryWrapper.lambda().like(ObjectUtil.isNotEmpty(pageVO.getName()), SysUser::getName, pageVO.getName());
+        LambdaQueryWrapper<SysUser> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.ne(SysUser::getId, CommonConstant.ADMIN_ID);
+        if (ObjectUtil.isNotEmpty(pageVO.getInputSearch())) {
+            queryWrapper.like(SysUser::getUsername, pageVO.getInputSearch()).or().like(SysUser::getName, pageVO.getInputSearch());
+        }
         IPage<SysUser> infoPage = super.page(ipage, queryWrapper);
         IPage<UserGetVO> resultPage = new Page<>(infoPage.getCurrent(), infoPage.getSize(), infoPage.getTotal());
         List<UserGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(user -> {

@@ -17,14 +17,8 @@ public class PageVO extends Page<SysUser> {
     /**
      * 用户名
      */
-    @Schema(description = "用户名")
-    private String username;
-
-    /**
-     * 姓名
-     */
-    @Schema(description = "姓名")
-    private String name;
+    @Schema(description = "用户名-姓名")
+    private String inputSearch;
 
 
 }
