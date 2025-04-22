@@ -43,7 +43,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "新增权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增权限")
-    @PostMapping()
+    @PostMapping
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(sysAuthorityService.save(addVO));
     }
@@ -57,7 +57,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "修改权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "修改权限")
-    @PutMapping()
+    @PutMapping
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(sysAuthorityService.update(updateVO));
     }
@@ -85,7 +85,7 @@ public class SysAuthorityController {
      */
     @Operation(summary = "批量删除权限")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "批量删除权限")
-    @DeleteMapping()
+    @DeleteMapping("/batchDelete")
     public Result<Boolean> BatchDelete(@RequestBody @Validated IdVOs idVOs) {
         return Result.ok(sysAuthorityService.batchDelete(idVOs));
     }
@@ -111,7 +111,7 @@ public class SysAuthorityController {
      * @return 权限信息
      */
     @Operation(summary = "分页查询")
-    @GetMapping()
+    @GetMapping
     public Result<IPage<AuthorityGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(sysAuthorityService.findPage(pageVO));
     }

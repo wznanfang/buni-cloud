@@ -41,7 +41,7 @@ public class SysUserController {
      */
     @Operation(summary = "新增用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "新增用户")
-    @PostMapping()
+    @PostMapping
     public Result<Boolean> save(@RequestBody @Validated AddVO addVO) {
         return Result.ok(sysUserService.save(addVO));
     }
@@ -55,7 +55,7 @@ public class SysUserController {
      */
     @Operation(summary = "编辑用户")
     @SysLogRecord(description = CommonConstant.USER_MODEL + "编辑用户")
-    @PutMapping()
+    @PutMapping
     public Result<Boolean> update(@RequestBody @Validated UpdateVO updateVO) {
         return Result.ok(sysUserService.update(updateVO));
     }
@@ -137,7 +137,7 @@ public class SysUserController {
      * @return 用户信息
      */
     @Operation(summary = "分页查询用户信息")
-    @GetMapping()
+    @GetMapping
     public Result<IPage<UserGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(sysUserService.findPage(pageVO));
     }

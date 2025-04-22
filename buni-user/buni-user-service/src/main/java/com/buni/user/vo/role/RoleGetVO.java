@@ -1,8 +1,6 @@
 package com.buni.user.vo.role;
 
-import com.buni.framework.util.StringSerializer;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 

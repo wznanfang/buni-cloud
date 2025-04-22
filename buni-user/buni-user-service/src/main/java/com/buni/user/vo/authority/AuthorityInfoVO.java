@@ -1,9 +1,7 @@
 package com.buni.user.vo.authority;
 
-import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.AuthTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -34,6 +32,7 @@ public class AuthorityInfoVO implements Serializable {
 	 * 父级id
 	 */
 	@Schema(description = "父级id")
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private Long parentId;
 
 	/**

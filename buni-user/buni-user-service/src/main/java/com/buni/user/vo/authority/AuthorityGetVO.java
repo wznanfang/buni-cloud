@@ -1,8 +1,5 @@
 package com.buni.user.vo.authority;
 
-import com.baomidou.mybatisplus.annotation.FieldFill;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.AuthTypeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -47,6 +44,7 @@ public class AuthorityGetVO implements Serializable {
 	 * 父级id
 	 */
 	@Schema(description = "父级id")
+	@JsonFormat(shape = JsonFormat.Shape.STRING)
 	private Long parentId;
 
 	/**

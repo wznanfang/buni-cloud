@@ -1,6 +1,5 @@
 package com.buni.user.vo.user;
 
-import com.buni.framework.util.StringSerializer;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.SexEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
