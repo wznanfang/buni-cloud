@@ -32,23 +32,6 @@ public interface SysUserService extends IService<SysUser> {
     boolean update(UpdateVO updateVO);
 
     /**
-     * 根据id 禁用用户
-     *
-     * @param enableVO 启用/禁用信息
-     * @return true/false
-     */
-    boolean enable(EnableVO enableVO);
-
-
-    /**
-     * 批量启用-禁用用户
-     *
-     * @param batchEnableVO 批量启用-禁用信息
-     * @return true/false
-     */
-    boolean batchEnable(BatchEnableVO batchEnableVO);
-
-    /**
      * 根据id删除用户
      *
      * @param id 用户id
@@ -79,6 +62,23 @@ public interface SysUserService extends IService<SysUser> {
      * @return IPage<UserInfoVO>
      */
     IPage<UserGetVO> findPage(PageVO pageVO);
+
+    /**
+     * 根据id 禁用用户
+     *
+     * @param enableVO 启用/禁用信息
+     * @return true/false
+     */
+    boolean enable(EnableVO enableVO);
+
+
+    /**
+     * 批量启用-禁用用户
+     *
+     * @param batchEnableVO 批量启用-禁用信息
+     * @return true/false
+     */
+    boolean batchEnable(BatchEnableVO batchEnableVO);
 
     /**
      * 根据用户名查询用户

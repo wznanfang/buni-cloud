@@ -111,25 +111,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     }
 
 
-    /**
-     * 根据id 禁用用户
-     *
-     * @param enableVO 启用/禁用信息
-     * @return true/false
-     */
-    @Override
-    public boolean enable(EnableVO enableVO) {
-        getUser(enableVO.getId());
-        SysUser forbiddenSysUser = new SysUser();
-        BeanUtils.copyProperties(enableVO, forbiddenSysUser);
-        super.updateById(forbiddenSysUser);
-        redisService.deleteKey(SysUser.REDIS_KEY + enableVO.getId());
-        if (BooleanEnum.NO.equals(enableVO.getEnable())) {
-            deleteToken(Collections.singletonList(enableVO.getId()));
-        }
-        return true;
-    }
-
     private void deleteToken(List<Long> userIds) {
         List<String> tokens = sysAuthService.findByUserId(userIds);
         if (ObjUtil.isNotEmpty(tokens)) {
@@ -139,28 +120,6 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             });
             redisService.delAllByKeys(tokenKeys);
         }
-    }
-
-
-    /**
-     * 批量启用/禁用用户
-     *
-     * @param batchEnableVO 批量启用/禁用信息
-     * @return true/false
-     */
-    @Override
-    public boolean batchEnable(BatchEnableVO batchEnableVO) {
-        if (ObjUtil.isEmpty(batchEnableVO.getIdVOs().getIds())) {
-            return true;
-        }
-        List<Long> userIds = batchEnableVO.getIdVOs().getIds();
-        super.update(Wrappers.<SysUser>lambdaUpdate().in(SysUser::getId, userIds).set(SysUser::getEnable, batchEnableVO.getEnable()));
-        List<String> deleteKeys = userIds.stream().map(id -> SysUser.REDIS_KEY + id).toList();
-        redisService.delAllByKeys(deleteKeys);
-        if (BooleanEnum.NO.equals(batchEnableVO.getEnable())) {
-            deleteToken(batchEnableVO.getIdVOs().getIds());
-        }
-        return true;
     }
 
 
@@ -244,6 +203,48 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         }).toList();
         resultPage.setRecords(list);
         return resultPage;
+    }
+
+
+    /**
+     * 根据id 禁用用户
+     *
+     * @param enableVO 启用/禁用信息
+     * @return true/false
+     */
+    @Override
+    public boolean enable(EnableVO enableVO) {
+        getUser(enableVO.getId());
+        SysUser forbiddenSysUser = new SysUser();
+        BeanUtils.copyProperties(enableVO, forbiddenSysUser);
+        super.updateById(forbiddenSysUser);
+        redisService.deleteKey(SysUser.REDIS_KEY + enableVO.getId());
+        if (BooleanEnum.NO.equals(enableVO.getEnable())) {
+            deleteToken(Collections.singletonList(enableVO.getId()));
+        }
+        return true;
+    }
+
+
+    /**
+     * 批量启用/禁用用户
+     *
+     * @param batchEnableVO 批量启用/禁用信息
+     * @return true/false
+     */
+    @Override
+    public boolean batchEnable(BatchEnableVO batchEnableVO) {
+        if (ObjUtil.isEmpty(batchEnableVO.getIdVOs().getIds())) {
+            return true;
+        }
+        List<Long> userIds = batchEnableVO.getIdVOs().getIds();
+        super.update(Wrappers.<SysUser>lambdaUpdate().in(SysUser::getId, userIds).set(SysUser::getEnable, batchEnableVO.getEnable()));
+        List<String> deleteKeys = userIds.stream().map(id -> SysUser.REDIS_KEY + id).toList();
+        redisService.delAllByKeys(deleteKeys);
+        if (BooleanEnum.NO.equals(batchEnableVO.getEnable())) {
+            deleteToken(batchEnableVO.getIdVOs().getIds());
+        }
+        return true;
     }
 
 

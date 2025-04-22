@@ -62,34 +62,6 @@ public class SysUserController {
 
 
     /**
-     * 根据id 启用/禁用用户
-     *
-     * @param enableVO 启用/禁用信息
-     * @return true/false
-     */
-    @Operation(summary = "启用-禁用用户")
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "启用-禁用用户")
-    @PutMapping("/forbidden")
-    public Result<Boolean> forbidden(@RequestBody @Validated EnableVO enableVO) {
-        return Result.ok(sysUserService.enable(enableVO));
-    }
-
-
-    /**
-     * 根据id集合批量启用-禁用用户
-     *
-     * @param batchEnableVO 用户id
-     * @return true/false
-     */
-    @Operation(summary = "批量启用-禁用用户")
-    @SysLogRecord(description = CommonConstant.USER_MODEL + "批量启用-禁用用户")
-    @PutMapping("/batchEnable")
-    public Result<Boolean> batchEnable(@RequestBody @Validated BatchEnableVO batchEnableVO) {
-        return Result.ok(sysUserService.batchEnable(batchEnableVO));
-    }
-
-
-    /**
      * 根据id删除用户
      *
      * @param id 用户id
@@ -141,6 +113,35 @@ public class SysUserController {
     public Result<IPage<UserGetVO>> page(@ParameterObject PageVO pageVO) {
         return Result.ok(sysUserService.findPage(pageVO));
     }
+
+
+    /**
+     * 根据id 启用/禁用用户
+     *
+     * @param enableVO 启用/禁用信息
+     * @return true/false
+     */
+    @Operation(summary = "启用-禁用用户")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "启用-禁用用户")
+    @PutMapping("/forbidden")
+    public Result<Boolean> forbidden(@RequestBody @Validated EnableVO enableVO) {
+        return Result.ok(sysUserService.enable(enableVO));
+    }
+
+
+    /**
+     * 根据id集合批量启用-禁用用户
+     *
+     * @param batchEnableVO 用户id
+     * @return true/false
+     */
+    @Operation(summary = "批量启用-禁用用户")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "批量启用-禁用用户")
+    @PutMapping("/batchEnable")
+    public Result<Boolean> batchEnable(@RequestBody @Validated BatchEnableVO batchEnableVO) {
+        return Result.ok(sysUserService.batchEnable(batchEnableVO));
+    }
+
 
 
     /**
