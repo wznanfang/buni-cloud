@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
+ * Spring上下文获取
+ *
  * @author zp.wei
  * @date 2023/9/25 9:34
  */
@@ -16,7 +18,7 @@ public class SpringContextHolder implements ApplicationContextAware {
     /**
      * 上下文对象实例
      * -- GETTER --
-     *  获得spring上下文
+     * 获得spring上下文
      *
      * @return {@link ApplicationContext}
      */

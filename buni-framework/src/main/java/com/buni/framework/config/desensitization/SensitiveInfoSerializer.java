@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
+ * 脱敏
+ *
  * @author zp.wei
  * @date 2024/4/28 16:37
  */
