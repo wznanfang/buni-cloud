@@ -5,6 +5,9 @@ import cn.hutool.crypto.Padding;
 import cn.hutool.crypto.symmetric.AES;
 import com.buni.framework.constant.CommonConstant;
 
+/**
+ * 加密工具类
+ */
 public class EncryptUtil {
 
     public static String encrypt(String data) {
