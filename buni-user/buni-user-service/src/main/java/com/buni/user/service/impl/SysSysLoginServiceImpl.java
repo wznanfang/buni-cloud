@@ -3,12 +3,15 @@ package com.buni.user.service.impl;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.crypto.SmUtil;
+import cn.hutool.http.HttpUtil;
+import com.alibaba.fastjson2.JSON;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
 import com.buni.framework.util.EncryptUtil;
 import com.buni.framework.util.HeaderUtil;
 import com.buni.user.dto.auth.AuthDTO;
+import com.buni.user.dto.auth.WxDTO;
 import com.buni.user.dto.login.TokenVO;
 import com.buni.user.dto.login.UserLoginVO;
 import com.buni.user.dto.role.AuthorityDTO;
@@ -18,7 +21,8 @@ import com.buni.user.entity.SysAuthority;
 import com.buni.user.entity.SysUser;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
-import com.buni.user.properties.UserProperties;
+import com.buni.user.properties.PasswordProperties;
+import com.buni.user.properties.WxProperties;
 import com.buni.user.service.*;
 import com.buni.user.util.TokenUtil;
 import com.buni.user.vo.login.LoginVO;
@@ -36,7 +40,7 @@ import java.util.List;
 public class SysSysLoginServiceImpl implements SysLoginService {
 
     @Resource
-    private UserProperties userProperties;
+    private PasswordProperties passwordProperties;
     @Resource
     private RedisService redisService;
     @Resource
@@ -49,6 +53,8 @@ public class SysSysLoginServiceImpl implements SysLoginService {
     private SysAuthorityService sysAuthorityService;
     @Resource
     private SysUserService sysUserService;
+    @Resource
+    private WxProperties wxProperties;
 
 
     /**
@@ -61,12 +67,16 @@ public class SysSysLoginServiceImpl implements SysLoginService {
     public UserLoginVO login(LoginVO loginVO) {
         SysUser sysUser = sysUserService.findByUsername(loginVO.getUsername());
         String password = EncryptUtil.decrypt(loginVO.getPassword());
-        if (ObjUtil.isEmpty(sysUser) || sysUser.getDeleted().equals(BooleanEnum.YES) || !SmUtil.sm3(userProperties.getSalt() + password).equals(sysUser.getPassword())) {
+        if (ObjUtil.isEmpty(sysUser) || sysUser.getDeleted().equals(BooleanEnum.YES) || !SmUtil.sm3(passwordProperties.getSalt() + password).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.USER_PASSWORD_ERROR.getCode(), ErrorEnum.USER_PASSWORD_ERROR.getMessage());
         }
         if (sysUser.getEnable().equals(BooleanEnum.NO)) {
             throw new CustomException(ErrorEnum.USER_FORBIDDEN.getCode(), ErrorEnum.USER_FORBIDDEN.getMessage());
         }
+        return getUserLoginVO(sysUser);
+    }
+
+    private UserLoginVO getUserLoginVO(SysUser sysUser) {
         UserLoginVO userLoginVO = new UserLoginVO();
         BeanUtils.copyProperties(sysUser, userLoginVO);
         // 获取token
@@ -106,6 +116,31 @@ public class SysSysLoginServiceImpl implements SysLoginService {
         redisService.deleteKey(CommonConstant.TOKEN_REDIS_KEY + HeaderUtil.getToken());
         redisService.deleteKey(SysAuthority.REDIS_KEY + userId);
         return true;
+    }
+
+
+    /**
+     * 微信登录
+     *
+     * @param code
+     * @return
+     */
+    @Override
+    public UserLoginVO wxLogin(String code) {
+        String appId = EncryptUtil.decrypt(wxProperties.getAppId());
+        String appSecret = EncryptUtil.decrypt(wxProperties.getAppSecret());
+        String url = wxProperties.getUrl() + wxProperties.getAppIdParam() + appId + wxProperties.getAppSecretParam() + appSecret +
+                wxProperties.getJsCodeParam() + code + wxProperties.getGrantTypeParam();
+        String res = HttpUtil.get(url);
+        WxDTO wxDTO = JSON.parseObject(res, WxDTO.class);
+        UserLoginVO userLoginVO;
+        SysUser sysUser = sysUserService.findByOpenId(wxDTO.getOpenid());
+        if (ObjUtil.isNotEmpty(sysUser)) {
+            userLoginVO = getUserLoginVO(sysUser);
+        } else {
+            throw new CustomException(ErrorEnum.USER_NO_REGISTER.getCode(), ErrorEnum.USER_NO_REGISTER.getMessage());
+        }
+        return userLoginVO;
     }
 
 

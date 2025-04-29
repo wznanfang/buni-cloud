@@ -20,6 +20,7 @@ public enum ErrorEnum {
     PHONE_ERROR(300005, "电话号码不正确"),
     OLD_PASSWORD_ERROR(300006, "旧密码不正确"),
     EQUALS_OLD_PASSWORD(300007, "与旧密码一致，请重新修改"),
+    USER_NO_REGISTER(300008, "您暂未注册，请先注册"),
 
     /**
      * 权限相关提示

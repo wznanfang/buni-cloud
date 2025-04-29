@@ -60,6 +60,11 @@ public class SysUser implements Serializable {
     private String username;
 
     /**
+     * openId
+     */
+    private String openId;
+
+    /**
      * 密码
      */
     @Size(max = 255, message = "密码不能超过255")

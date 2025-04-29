@@ -27,3 +27,11 @@ springdoc:
 buni:
   salt: buni
   password: 123456
+  wx:
+    appId: dhg6Cdy97nDdseO5bC0nv00D672qBOk9R3GPAkj2M80=
+    appSecret: CvYinIB6uJs97azW0e2srTaE7jiLYtwYth9v6mewP3+thCqtv3LW/dY61TVkkoQE
+    url: "https://api.weixin.qq.com/sns/jscode2session?"
+    appIdParam: "appid="
+    appSecretParam: "&secret="
+    jsCodeParam: "&js_code="
+    grantTypeParam: "&grant_type=authorization_code"

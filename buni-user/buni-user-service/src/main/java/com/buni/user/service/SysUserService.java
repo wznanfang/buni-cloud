@@ -89,6 +89,14 @@ public interface SysUserService extends IService<SysUser> {
     SysUser findByUsername(String username);
 
     /**
+     * 根据openId查询用户
+     *
+     * @param openId
+     * @return
+     */
+    SysUser findByOpenId(String openId);
+
+    /**
      * 修改密码
      *
      * @param updatePasswordVO 修改密码信息
@@ -100,12 +108,13 @@ public interface SysUserService extends IService<SysUser> {
      * 重置密码
      *
      * @param id 用户id
-     * @return  true/false
+     * @return true/false
      */
     Boolean resetPassword(Long id);
 
     /**
      * 修改头像
+     *
      * @param updateAvatarVO 头像信息
      * @return true/false
      */

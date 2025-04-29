@@ -1,13 +1,11 @@
 package com.buni.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Validator;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.ObjUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.SmUtil;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -22,7 +20,7 @@ import com.buni.user.entity.SysUser;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
 import com.buni.user.mapper.SysUserMapper;
-import com.buni.user.properties.UserProperties;
+import com.buni.user.properties.PasswordProperties;
 import com.buni.user.service.SysAuthService;
 import com.buni.user.service.SysUserRoleService;
 import com.buni.user.service.SysUserService;
@@ -50,7 +48,7 @@ import java.util.*;
 public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> implements SysUserService {
 
     @Resource
-    private UserProperties userProperties;
+    private PasswordProperties passwordProperties;
     @Resource
     private RedisService redisService;
     @Resource
@@ -76,7 +74,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(addVO, sysUser);
         String password = EncryptUtil.decrypt(addVO.getPassword());
-        sysUser.setPassword(SmUtil.sm3(userProperties.getSalt() + password));
+        sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + password));
         return super.save(sysUser);
     }
 
@@ -256,7 +254,19 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public SysUser findByUsername(String username) {
-        return super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username).eq(SysUser::getDeleted, BooleanEnum.NO));
+        return super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, username));
+    }
+
+
+    /**
+     * 根据openId查询用户
+     *
+     * @param openId
+     * @return
+     */
+    @Override
+    public SysUser findByOpenId(String openId) {
+        return super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
     }
 
 
@@ -269,13 +279,13 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public Boolean updatePassword(UpdatePasswordVO updatePasswordVO) {
         SysUser sysUser = getUser(updatePasswordVO.getId());
-        if (!SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getOldPassword()).equals(sysUser.getPassword())) {
+        if (!SmUtil.sm3(passwordProperties.getSalt() + updatePasswordVO.getOldPassword()).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.OLD_PASSWORD_ERROR.getCode(), ErrorEnum.OLD_PASSWORD_ERROR.getMessage());
         }
-        if (SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()).equals(sysUser.getPassword())) {
+        if (SmUtil.sm3(passwordProperties.getSalt() + updatePasswordVO.getNewPassword()).equals(sysUser.getPassword())) {
             throw new CustomException(ErrorEnum.EQUALS_OLD_PASSWORD.getCode(), ErrorEnum.EQUALS_OLD_PASSWORD.getMessage());
         }
-        sysUser.setPassword(SmUtil.sm3(userProperties.getSalt() + updatePasswordVO.getNewPassword()));
+        sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + updatePasswordVO.getNewPassword()));
         super.updateById(sysUser);
         redisService.deleteKey(SysUser.REDIS_KEY + updatePasswordVO.getId());
         deleteToken(Collections.singletonList(updatePasswordVO.getId()));
@@ -287,12 +297,12 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      * 重置密码
      *
      * @param id id
-     * @return  true/false
+     * @return true/false
      */
     @Override
     public Boolean resetPassword(Long id) {
         SysUser sysUser = getUser(id);
-        sysUser.setPassword(SmUtil.sm3(userProperties.getSalt() + userProperties.getPassword()));
+        sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
         super.updateById(sysUser);
         redisService.deleteKey(SysUser.REDIS_KEY + id);
         deleteToken(Collections.singletonList(id));

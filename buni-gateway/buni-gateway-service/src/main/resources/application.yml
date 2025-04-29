@@ -102,7 +102,7 @@ buni:
   public-url:
     - /v3/api-docs/GET
     - /v1/login/POST
-    - /v1/loginOut/POST
+    - /v1/wxLogin/POST
     - /v1/getCode/GET
     - /v1/getQrCode/GET
     - /v1/spark/talk/GET

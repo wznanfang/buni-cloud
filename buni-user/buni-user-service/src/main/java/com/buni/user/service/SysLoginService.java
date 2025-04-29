@@ -2,6 +2,7 @@ package com.buni.user.service;
 
 import com.buni.user.vo.login.LoginVO;
 import com.buni.user.dto.login.UserLoginVO;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface SysLoginService {
 
@@ -19,6 +20,14 @@ public interface SysLoginService {
      * @return true/false
      */
     Boolean loginOut();
+
+    /**
+     * 微信登录
+     *
+     * @param code
+     * @return
+     */
+    UserLoginVO wxLogin(String code);
 
 
 }

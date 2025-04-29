@@ -12,11 +12,21 @@ import org.springframework.stereotype.Component;
 @Data
 @Order(1)
 @Component
-@ConfigurationProperties(prefix = "buni")
-public class UserProperties {
+@ConfigurationProperties(prefix = "buni.wx")
+public class WxProperties {
 
-    private String salt;
+    private String appId;
 
-    private String password;
+    private String appSecret;
+
+    private String url;
+
+    private String appIdParam;
+
+    private String appSecretParam;
+
+    private String jsCodeParam;
+
+    private String grantTypeParam;
 
 }

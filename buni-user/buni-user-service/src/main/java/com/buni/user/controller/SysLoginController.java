@@ -1,5 +1,6 @@
 package com.buni.user.controller;
 
+import com.buni.framework.util.EncryptUtil;
 import com.buni.framework.util.Result;
 import com.buni.user.constant.CommonConstant;
 import com.buni.user.log.SysLogRecord;
@@ -12,10 +13,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author zp.wei
@@ -56,6 +54,14 @@ public class SysLoginController {
     @PostMapping("/loginOut")
     public Result<Boolean> loginOut() {
         return Result.ok(sysLoginService.loginOut());
+    }
+
+
+    @Operation(summary = "微信登录")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "微信登录")
+    @PostMapping("/wxLogin")
+    public Result<UserLoginVO> wxLogin(@RequestParam("code") String code) {
+        return Result.ok(sysLoginService.wxLogin(code));
     }
 
 
