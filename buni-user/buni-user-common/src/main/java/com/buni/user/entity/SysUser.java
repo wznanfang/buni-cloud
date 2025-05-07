@@ -2,11 +2,12 @@ package com.buni.user.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 import com.buni.user.enums.BooleanEnum;
-import com.buni.user.enums.SexEnum;
+import com.buni.user.enums.GenderEnum;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.*;
@@ -62,7 +63,7 @@ public class SysUser implements Serializable {
     /**
      * openId
      */
-    private String openId;
+    private String wxOpenId;
 
     /**
      * 密码
@@ -82,14 +83,19 @@ public class SysUser implements Serializable {
     private Integer age;
 
     /**
+     * 生日
+     */
+    private String birthday;
+
+    /**
      * 性别
      */
-    private SexEnum sex;
+    private GenderEnum gender;
 
     /**
      * 电话
      */
-    private String tel;
+    private String phone;
 
     /**
      * 头像

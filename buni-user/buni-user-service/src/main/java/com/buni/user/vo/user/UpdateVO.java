@@ -1,8 +1,7 @@
 package com.buni.user.vo.user;
 
-import com.buni.user.enums.SexEnum;
+import com.buni.user.enums.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -33,7 +32,7 @@ public class UpdateVO implements Serializable {
      * 性别
      */
     @Schema(description = "性别（0：女；1：男）")
-    private SexEnum sex;
+    private GenderEnum gender;
 
     /**
      * 年龄
@@ -45,7 +44,7 @@ public class UpdateVO implements Serializable {
      * 电话
      */
     @Schema(description = "电话")
-    private String tel;
+    private String phone;
 
 
 }

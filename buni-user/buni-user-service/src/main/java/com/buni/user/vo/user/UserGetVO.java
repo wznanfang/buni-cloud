@@ -1,7 +1,7 @@
 package com.buni.user.vo.user;
 
 import com.buni.user.enums.BooleanEnum;
-import com.buni.user.enums.SexEnum;
+import com.buni.user.enums.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -68,13 +68,13 @@ public class UserGetVO implements Serializable {
      * 性别
      */
     @Schema(description = "性别（0：女；1：男）")
-    private SexEnum sex;
+    private GenderEnum gender;
 
     /**
      * 电话
      */
     @Schema(description = "电话")
-    private String tel;
+    private String phone;
 
     /**
      * 是否是超级管理员(0:否，1：是)

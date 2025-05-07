@@ -1,12 +1,12 @@
 package com.buni.user.controller;
 
-import com.buni.framework.util.EncryptUtil;
 import com.buni.framework.util.Result;
 import com.buni.user.constant.CommonConstant;
-import com.buni.user.log.SysLogRecord;
-import com.buni.user.vo.login.LoginVO;
 import com.buni.user.dto.login.UserLoginVO;
+import com.buni.user.log.SysLogRecord;
 import com.buni.user.service.SysLoginService;
+import com.buni.user.vo.login.RegisterVO;
+import com.buni.user.vo.login.LoginVO;
 import com.github.xiaoymin.knife4j.annotations.ApiSort;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -28,6 +28,19 @@ public class SysLoginController {
 
     @Resource
     private SysLoginService sysLoginService;
+
+    /**
+     * 注册用户
+     *
+     * @param registerVO 用户信息
+     * @return true/false
+     */
+    @Operation(summary = "注册用户")
+    @SysLogRecord(description = CommonConstant.USER_MODEL + "注册用户")
+    @PostMapping("/register")
+    public Result<UserLoginVO> register(@RequestBody @Validated RegisterVO registerVO) {
+        return Result.ok(sysLoginService.register(registerVO));
+    }
 
 
     /**

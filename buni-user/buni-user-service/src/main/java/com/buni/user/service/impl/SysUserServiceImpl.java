@@ -67,7 +67,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public boolean save(AddVO addVO) {
-        SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, addVO.getUsername()).or().eq(SysUser::getTel, addVO.getTel()));
+        SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getUsername, addVO.getUsername()).or().eq(SysUser::getPhone, addVO.getPhone()));
         if (ObjUtil.isNotEmpty(existSysUser)) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
@@ -97,7 +97,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Override
     public boolean update(UpdateVO updateVO) {
         SysUser sysUser = getUser(updateVO.getId());
-        SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getTel, updateVO.getTel()));
+        SysUser existSysUser = super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getPhone, updateVO.getPhone()));
         if (ObjUtil.isNotEmpty(existSysUser) && !existSysUser.getId().equals(sysUser.getId())) {
             throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
         }
@@ -196,7 +196,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<UserGetVO> list = Optional.ofNullable(infoPage.getRecords()).orElse(new ArrayList<>()).stream().map(user -> {
             UserGetVO getVO = new UserGetVO();
             BeanUtils.copyProperties(user, getVO);
-            getVO.setTel(DesensitizedUtil.mobilePhone(getVO.getTel()));
+            getVO.setPhone(DesensitizedUtil.mobilePhone(getVO.getPhone()));
             return getVO;
         }).toList();
         resultPage.setRecords(list);
@@ -266,7 +266,7 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
      */
     @Override
     public SysUser findByOpenId(String openId) {
-        return super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getOpenId, openId));
+        return super.getOne(Wrappers.<SysUser>lambdaQuery().eq(SysUser::getWxOpenId, openId));
     }
 
 

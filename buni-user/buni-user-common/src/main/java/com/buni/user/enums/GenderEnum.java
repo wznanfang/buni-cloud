@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public enum SexEnum implements BaseEnum {
+public enum GenderEnum implements BaseEnum {
 
     FEMALE(0, "女"),
     MALE(1, "男"),

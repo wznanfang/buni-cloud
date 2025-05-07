@@ -25,7 +25,9 @@ import com.buni.user.properties.PasswordProperties;
 import com.buni.user.properties.WxProperties;
 import com.buni.user.service.*;
 import com.buni.user.util.TokenUtil;
+import com.buni.user.vo.login.RegisterVO;
 import com.buni.user.vo.login.LoginVO;
+import com.buni.user.vo.user.AddVO;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +58,23 @@ public class SysSysLoginServiceImpl implements SysLoginService {
     @Resource
     private WxProperties wxProperties;
 
+
+    /**
+     * 注册
+     *
+     * @param registerVO
+     * @return
+     */
+    @Override
+    public UserLoginVO register(RegisterVO registerVO) {
+        SysUser sysUser = new SysUser();
+        BeanUtils.copyProperties(registerVO, sysUser);
+        sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
+        sysUser.setEnable(BooleanEnum.YES);
+        sysUserService.save(sysUser);
+        SysUser exist = sysUserService.findByUsername(registerVO.getUsername());
+        return getUserLoginVO(exist);
+    }
 
     /**
      * 登录
@@ -133,12 +152,12 @@ public class SysSysLoginServiceImpl implements SysLoginService {
                 wxProperties.getJsCodeParam() + code + wxProperties.getGrantTypeParam();
         String res = HttpUtil.get(url);
         WxDTO wxDTO = JSON.parseObject(res, WxDTO.class);
-        UserLoginVO userLoginVO;
+        UserLoginVO userLoginVO = new UserLoginVO();
         SysUser sysUser = sysUserService.findByOpenId(wxDTO.getOpenid());
         if (ObjUtil.isNotEmpty(sysUser)) {
             userLoginVO = getUserLoginVO(sysUser);
         } else {
-            throw new CustomException(ErrorEnum.USER_NO_REGISTER.getCode(), ErrorEnum.USER_NO_REGISTER.getMessage());
+            userLoginVO.setWxOpenId(wxDTO.getOpenid());
         }
         return userLoginVO;
     }

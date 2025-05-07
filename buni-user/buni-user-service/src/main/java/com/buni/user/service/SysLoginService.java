@@ -2,9 +2,19 @@ package com.buni.user.service;
 
 import com.buni.user.vo.login.LoginVO;
 import com.buni.user.dto.login.UserLoginVO;
-import org.springframework.web.bind.annotation.RequestParam;
+import com.buni.user.vo.login.RegisterVO;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.RequestBody;
 
 public interface SysLoginService {
+
+    /**
+     * 注册
+     *
+     * @param registerVO
+     * @return
+     */
+    UserLoginVO register(@RequestBody @Validated RegisterVO registerVO);
 
     /**
      * 登录

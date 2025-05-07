@@ -1,6 +1,5 @@
-package com.buni.user.vo.user;
+package com.buni.user.vo.login;
 
-import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.GenderEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -15,7 +14,14 @@ import java.io.Serializable;
  */
 @Schema(description = "新增用户VO")
 @Data
-public class AddVO implements Serializable {
+public class RegisterVO implements Serializable {
+
+    /**
+     * 微信openId
+     */
+    @Schema(description = "微信openId")
+    @NotBlank(message = "微信openId不能为空")
+    private String wxOpenId;
 
     /**
      * 用户名
@@ -23,13 +29,6 @@ public class AddVO implements Serializable {
     @Schema(description = "用户名")
     @NotBlank(message = "用户名不能为空")
     private String username;
-
-    /**
-     * 密码
-     */
-    @Schema(description = "密码")
-    @NotBlank(message = "密码不能为空")
-    private String password;
 
     /**
      * 姓名
@@ -51,13 +50,6 @@ public class AddVO implements Serializable {
     private Integer age;
 
     /**
-     * 生日
-     */
-    @Schema(description = "生日")
-    private String birthday;
-
-
-    /**
      * 电话
      */
     @Schema(description = "电话")
@@ -66,10 +58,11 @@ public class AddVO implements Serializable {
     private String phone;
 
     /**
-     * 是否启用(0:否，1：是)
+     * 生日
      */
-    @Schema(description = "是否启用(0:否，1：是)")
-    private BooleanEnum enable;
+    @Schema(description = "生日")
+    @Pattern(regexp = "^\\d{4}-\\d{2}-\\d{2}$", message = "生日格式不正确")
+    private String birthday;
 
 
 }

@@ -1,7 +1,7 @@
 package com.buni.user.dto.login;
 
 import com.buni.user.enums.BooleanEnum;
-import com.buni.user.enums.SexEnum;
+import com.buni.user.enums.GenderEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -32,6 +32,9 @@ public class UserLoginVO implements Serializable {
     @Schema(description = "用户名")
     private String username;
 
+    @Schema(description = "微信openId")
+    private String wxOpenId;
+
     /**
      * 姓名
      */
@@ -42,7 +45,7 @@ public class UserLoginVO implements Serializable {
      * 性别
      */
     @Schema(description = "性别")
-    private SexEnum sex;
+    private GenderEnum gender;
 
     /**
      * 年龄
