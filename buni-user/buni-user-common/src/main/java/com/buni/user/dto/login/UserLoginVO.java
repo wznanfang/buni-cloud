@@ -32,6 +32,9 @@ public class UserLoginVO implements Serializable {
     @Schema(description = "用户名")
     private String username;
 
+    @Schema(description = "头像")
+    private String avatar;
+
     @Schema(description = "微信openId")
     private String wxOpenId;
 
