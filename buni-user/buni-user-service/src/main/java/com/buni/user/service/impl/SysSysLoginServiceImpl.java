@@ -76,8 +76,7 @@ public class SysSysLoginServiceImpl implements SysLoginService {
         sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
         sysUser.setEnable(BooleanEnum.YES);
         sysUserService.save(sysUser);
-        SysUser loginUser = sysUserService.findByUsername(sysUser.getUsername());
-        return getUserLoginVO(loginUser);
+        return getUserLoginVO(sysUser);
     }
 
     /**
