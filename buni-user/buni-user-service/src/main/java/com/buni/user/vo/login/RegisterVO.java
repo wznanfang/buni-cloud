@@ -38,6 +38,13 @@ public class RegisterVO implements Serializable {
     private String name;
 
     /**
+     * 头像
+     */
+    @Schema(description = "头像")
+    @NotBlank(message = "头像不能为空")
+    private String avatar;
+
+    /**
      * 性别
      */
     @Schema(description = "性别（0：女；1：男）")

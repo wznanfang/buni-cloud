@@ -67,13 +67,17 @@ public class SysSysLoginServiceImpl implements SysLoginService {
      */
     @Override
     public UserLoginVO register(RegisterVO registerVO) {
+        SysUser exist = sysUserService.findByUsername(registerVO.getUsername());
+        if (ObjUtil.isNotEmpty(exist)) {
+            throw new CustomException(ErrorEnum.USER_EXISTS.getCode(), ErrorEnum.USER_EXISTS.getMessage());
+        }
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(registerVO, sysUser);
         sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
         sysUser.setEnable(BooleanEnum.YES);
         sysUserService.save(sysUser);
-        SysUser exist = sysUserService.findByUsername(registerVO.getUsername());
-        return getUserLoginVO(exist);
+        SysUser loginUser = sysUserService.findByUsername(sysUser.getUsername());
+        return getUserLoginVO(loginUser);
     }
 
     /**
