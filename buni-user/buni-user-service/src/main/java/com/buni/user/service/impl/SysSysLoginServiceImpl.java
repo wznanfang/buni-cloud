@@ -156,7 +156,6 @@ public class SysSysLoginServiceImpl implements SysLoginService {
                 wxProperties.getJsCodeParam() + code + wxProperties.getGrantTypeParam();
         String res = HttpUtil.get(url);
         WxDTO wxDTO = JSON.parseObject(res, WxDTO.class);
-        UserLoginVO userLoginVO = new UserLoginVO();
         SysUser sysUser = sysUserService.findByOpenId(wxDTO.getOpenid());
         if (ObjUtil.isEmpty(sysUser)) {
             sysUser = new SysUser();
@@ -167,8 +166,7 @@ public class SysSysLoginServiceImpl implements SysLoginService {
             sysUser.setGender(GenderEnum.UNKNOWN);
             sysUserService.save(sysUser);
         }
-        userLoginVO = getUserLoginVO(sysUser);
-        return userLoginVO;
+        return getUserLoginVO(sysUser);
     }
 
 
