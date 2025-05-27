@@ -2,6 +2,7 @@ package com.buni.user.service.impl;
 
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.ObjUtil;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SmUtil;
 import cn.hutool.http.HttpUtil;
 import com.alibaba.fastjson2.JSON;
@@ -21,6 +22,7 @@ import com.buni.user.entity.SysAuthority;
 import com.buni.user.entity.SysUser;
 import com.buni.user.enums.BooleanEnum;
 import com.buni.user.enums.ErrorEnum;
+import com.buni.user.enums.GenderEnum;
 import com.buni.user.properties.PasswordProperties;
 import com.buni.user.properties.WxProperties;
 import com.buni.user.service.*;
@@ -74,7 +76,6 @@ public class SysSysLoginServiceImpl implements SysLoginService {
         SysUser sysUser = new SysUser();
         BeanUtils.copyProperties(registerVO, sysUser);
         sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
-        sysUser.setEnable(BooleanEnum.YES);
         sysUserService.save(sysUser);
         return getUserLoginVO(sysUser);
     }
@@ -157,11 +158,16 @@ public class SysSysLoginServiceImpl implements SysLoginService {
         WxDTO wxDTO = JSON.parseObject(res, WxDTO.class);
         UserLoginVO userLoginVO = new UserLoginVO();
         SysUser sysUser = sysUserService.findByOpenId(wxDTO.getOpenid());
-        if (ObjUtil.isNotEmpty(sysUser)) {
-            userLoginVO = getUserLoginVO(sysUser);
-        } else {
-            userLoginVO.setWxOpenId(wxDTO.getOpenid());
+        if (ObjUtil.isEmpty(sysUser)) {
+            sysUser = new SysUser();
+            sysUser.setWxOpenId(wxDTO.getOpenid());
+            sysUser.setUsername(RandomUtil.randomString(10));
+            sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
+            sysUser.setName(RandomUtil.randomString(10));
+            sysUser.setGender(GenderEnum.UNKNOWN);
+            sysUserService.save(sysUser);
         }
+        userLoginVO = getUserLoginVO(sysUser);
         return userLoginVO;
     }
 
