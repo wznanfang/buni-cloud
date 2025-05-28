@@ -35,7 +35,7 @@ public class SysRoleController {
     /**
      * 新增角色
      *
-     * @param addVO 权限信息
+     * @param addVO 角色信息
      * @return true/false
      */
     @Operation(summary = "新增角色")
@@ -49,7 +49,7 @@ public class SysRoleController {
     /**
      * 修改角色
      *
-     * @param updateVO 权限信息
+     * @param updateVO 角色信息
      * @return true/false
      */
     @Operation(summary = "修改角色")
@@ -63,7 +63,7 @@ public class SysRoleController {
     /**
      * 删除角色
      *
-     * @param id 权限信息id
+     * @param id 角色信息id
      * @return true/false
      */
     @Operation(summary = "删除角色")
@@ -91,8 +91,8 @@ public class SysRoleController {
     /**
      * 根据id查询角色
      *
-     * @param id
-     * @return
+     * @param id 角色id
+     * @return 角色信息
      */
     @Operation(summary = "根据id查询角色")
     @GetMapping("/{id:\\d+}")
