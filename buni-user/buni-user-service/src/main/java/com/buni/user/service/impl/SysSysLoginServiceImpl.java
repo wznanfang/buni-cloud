@@ -9,6 +9,7 @@ import com.alibaba.fastjson2.JSON;
 import com.buni.framework.config.exception.CustomException;
 import com.buni.framework.config.redis.RedisService;
 import com.buni.framework.constant.CommonConstant;
+import com.buni.framework.util.ChineseNicknameUtil;
 import com.buni.framework.util.EncryptUtil;
 import com.buni.framework.util.HeaderUtil;
 import com.buni.user.dto.auth.AuthDTO;
@@ -162,7 +163,7 @@ public class SysSysLoginServiceImpl implements SysLoginService {
             sysUser.setWxOpenId(wxDTO.getOpenid());
             sysUser.setUsername(RandomUtil.randomString(10));
             sysUser.setPassword(SmUtil.sm3(passwordProperties.getSalt() + passwordProperties.getPassword()));
-            sysUser.setName(RandomUtil.randomString(10));
+            sysUser.setName(ChineseNicknameUtil.generateCuteNickname());
             sysUser.setGender(GenderEnum.UNKNOWN);
             sysUserService.save(sysUser);
         }
