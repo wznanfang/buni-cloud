@@ -1,28 +1,33 @@
 package com.buni.ai;
 
-import com.buni.ai.manager.QianFanManager;
-import com.buni.ai.service.SparkService;
-import com.buni.ai.vo.qianfan.TalkVO;
-import jakarta.annotation.Resource;
+import com.buni.ai.service.AiChatService;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Scanner;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * AI服务测试类
+ * 
+ * @author zp.wei
+ * @date 2024/12/19
+ */
 @SpringBootTest
 class AiServiceApplicationTests {
 
-    @Resource
-    private SparkService sparkService;
-    @Resource
-    private QianFanManager qianFanManager;
+    @Autowired
+    private AiChatService aiChatService;
 
     @Test
     void contextLoads() {
-        TalkVO talkVO = new TalkVO();
-        talkVO.setQuestion("1+1等于几？");
-        talkVO.setUid("1");
-        qianFanManager.talk(talkVO);
+        assertNotNull(aiChatService);
+        System.out.println("Spring上下文加载成功");
     }
 
+    @Test
+    void testServiceInjection() {
+        assertNotNull(aiChatService);
+        System.out.println("AI聊天服务注入成功");
+    }
 }

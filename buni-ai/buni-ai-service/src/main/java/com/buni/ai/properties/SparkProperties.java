@@ -16,7 +16,7 @@ public class SparkProperties {
     /**
      * id
      */
-    private String appid;
+    private String appId;
 
     /**
      * key
