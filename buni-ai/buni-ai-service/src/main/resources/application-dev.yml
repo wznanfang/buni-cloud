@@ -2,6 +2,11 @@ server:
   port: 10004
 
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/buni?useSSL=false&useUnicode=true&characterEncoding=UTF8&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
   data:
     redis:
       host: 127.0.0.1
@@ -13,6 +18,18 @@ spring:
       discovery:
         server-addr: 127.0.0.1:8848
         namespace: buni
+
+# Spring AI标准配置
+ai:
+  baidu:
+    qianfan:
+      api-key: Mu6l3kLYN7s6XFLD18homgZn
+      secret-key: vrZc68YFLXq6xJCSQTEc1QAcQZKxIYeA
+      chat:
+        options:
+          model: ERNIE-Bot-4
+          temperature: 0.7
+          max-tokens: 1000
 
 # 自定义配置
 buni:
