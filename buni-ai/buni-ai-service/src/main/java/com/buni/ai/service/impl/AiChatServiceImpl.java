@@ -11,6 +11,7 @@ import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -31,6 +32,7 @@ public class AiChatServiceImpl implements AiChatService {
     @Autowired(required = false)
     private SparkChatModelAdapter sparkChatModelAdapter;
 
+    // Spring AI QianFan ChatModel - 条件注入
     @Autowired(required = false)
     @Qualifier("qianFanChatModel")
     private ChatModel qianFanChatModel;
@@ -45,16 +47,13 @@ public class AiChatServiceImpl implements AiChatService {
 
     @Override
     public String chat(TalkVO talkVO) {
-        log.info("使用默认AI模型进行对话，问题: {}", talkVO.getQuestion());
         try {
             // 优先使用Spring AI千帆
             if (qianFanChatModel != null) {
                 return chatWithSpringAiQianfan(talkVO);
             } else if (isQianfanAvailable()) {
-                // 如果Spring AI不可用，使用自定义千帆API
                 return chatWithQianfan(talkVO);
             } else if (sparkChatModelAdapter != null && sparkChatModelAdapter.isAvailable()) {
-                // 如果千帆不可用，使用讯飞星火
                 return chatWithSpark(talkVO);
             } else {
                 return "所有AI服务都不可用，请检查配置";
