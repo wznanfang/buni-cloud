@@ -19,37 +19,6 @@ spring:
         server-addr: 127.0.0.1:8848
         namespace: buni
 
-  ai:
-    retry:
-      max-attempts: 3
-      backoff:
-        initial-interval: 5000ms
-        multiplier: 5
-        max-interval: 180000ms
-      on-client-errors: true
-    qianfan:
-      #base-url: api.qianfan.chat 这里使用默认的地址
-      api-key: Mu6l3kLYN7s6XFLD18homgZn
-      secret-key: vrZc68YFLXq6xJCSQTEc1QAcQZKxIYeA
-      chat:
-        enabled: true
-        options:
-          temperature: 0.7
-          top-p: 0.9
-
-# 自定义配置
-buni:
-  ai:
-    # 千帆配置（兼容旧配置）
-    qianfan:
-      apiKey: Mu6l3kLYN7s6XFLD18homgZn
-      secretKey: vrZc68YFLXq6xJCSQTEc1QAcQZKxIYeA
-    # 讯飞星火配置（兼容旧配置）
-    spark:
-      appId: ffa4749a
-      apiKey: b45fb240f420c5319b895c804cef32ad
-      apiSecret: YzI4YjU0YzIzMDhiNTFkM2MwYzI1NzNm
-
 # dubbo的配置
 dubbo:
   application:
@@ -63,3 +32,13 @@ dubbo:
     port: -1
   consumer:
     check: false
+
+buni:
+  ai:
+    qianfan:
+      apiKey: Mu6l3kLYN7s6XFLD18homgZn
+      secretKey: vrZc68YFLXq6xJCSQTEc1QAcQZKxIYeA
+    spark:
+      appId: ffa4749a
+      apiKey: b45fb240f420c5319b895c804cef32ad
+      apiSecret: YzI4YjU0YzIzMDhiNTFkM2MwYzI1NzNm

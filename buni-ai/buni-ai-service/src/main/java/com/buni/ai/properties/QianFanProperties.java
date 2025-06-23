@@ -23,4 +23,5 @@ public class QianFanProperties {
      */
     private String secretKey;
 
+
 }
