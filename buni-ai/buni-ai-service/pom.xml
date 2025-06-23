@@ -12,7 +12,8 @@
 
     <properties>
         <ai-common.version>0.0.1-SNAPSHOT</ai-common.version>
-        <spring-ai.version>1.0.3</spring-ai.version>
+        <ai-api.version>0.0.1-SNAPSHOT</ai-api.version>
+        <spring-ai.version>1.0.0</spring-ai.version>
         <spring-ai-qianfan.version>1.0.0-M6</spring-ai-qianfan.version>
         <spark4j.version>1.3.0</spark4j.version>
     </properties>
@@ -23,11 +24,10 @@
             <artifactId>buni-ai-common</artifactId>
             <version>${ai-common.version}</version>
         </dependency>
-
-        <!-- Spring Boot Starter -->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>com.buni</groupId>
+            <artifactId>buni-ai-api</artifactId>
+            <version>${ai-api.version}</version>
         </dependency>
 
         <!-- Spring AI BOM -->
@@ -51,13 +51,6 @@
             <groupId>io.github.briqt</groupId>
             <artifactId>xunfei-spark4j</artifactId>
             <version>${spark4j.version}</version>
-        </dependency>
-
-        <!-- Knife4j API文档 -->
-        <dependency>
-            <groupId>com.github.xiaoymin</groupId>
-            <artifactId>knife4j-openapi3-spring-boot-starter</artifactId>
-            <version>4.3.0</version>
         </dependency>
 
         <!-- SpringDoc OpenAPI -->
