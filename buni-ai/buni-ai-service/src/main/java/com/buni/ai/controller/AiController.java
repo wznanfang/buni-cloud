@@ -91,19 +91,4 @@ public class AiController {
         return result;
     }
 
-    @Operation(summary = "千帆对话（兼容旧接口）")
-    @GetMapping("/qianfan/talk")
-    public Map<String, Object> qianfanTalk(@ParameterObject TalkVO talkVO) {
-        Map<String, Object> result = new HashMap<>();
-        try {
-            String response = aiChatService.chatWithQianfan(talkVO);
-            result.put("code", 200);
-            result.put("message", "success");
-            result.put("data", response);
-        } catch (Exception e) {
-            result.put("code", 500);
-            result.put("message", e.getMessage());
-        }
-        return result;
-    }
 } 

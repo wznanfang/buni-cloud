@@ -1,8 +1,10 @@
 package com.buni.ai.service.impl;
 
 import com.buni.ai.adapter.SparkChatModelAdapter;
+import com.buni.ai.properties.QianFanProperties;
 import com.buni.ai.service.AiChatService;
 import com.buni.ai.vo.qianfan.TalkVO;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.messages.Message;
@@ -37,11 +39,8 @@ public class AiChatServiceImpl implements AiChatService {
     @Qualifier("qianFanChatModel")
     private ChatModel qianFanChatModel;
 
-    @Value("${buni.ai.qianfan.apiKey:}")
-    private String qianfanApiKey;
-
-    @Value("${buni.ai.qianfan.secretKey:}")
-    private String qianfanSecretKey;
+    @Resource
+    private QianFanProperties qianfanProperties;
 
     private final RestTemplate restTemplate = new RestTemplate();
 
@@ -177,8 +176,8 @@ public class AiChatServiceImpl implements AiChatService {
      * 检查千帆配置是否可用
      */
     private boolean isQianfanAvailable() {
-        return qianfanApiKey != null && !qianfanApiKey.isEmpty() &&
-               qianfanSecretKey != null && !qianfanSecretKey.isEmpty();
+        return qianfanProperties.getApiKey() != null && !qianfanProperties.getApiKey().isEmpty() &&
+                qianfanProperties.getSecretKey() != null && !qianfanProperties.getSecretKey() .isEmpty();
     }
 
     /**
@@ -186,10 +185,7 @@ public class AiChatServiceImpl implements AiChatService {
      */
     private String getQianfanAccessToken() {
         try {
-            String url = "https://aip.baidubce.com/oauth/2.0/token" +
-                    "?grant_type=client_credentials" +
-                    "&client_id=" + qianfanApiKey +
-                    "&client_secret=" + qianfanSecretKey;
+            String url = "https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials" + "&client_id=" + qianfanProperties.getApiKey() + "&client_secret=" + qianfanProperties.getSecretKey() ;
 
             ResponseEntity<Map> response = restTemplate.getForEntity(url, Map.class);
             

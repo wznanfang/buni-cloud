@@ -44,7 +44,7 @@ public class SparkChatModelAdapter {
             }
 
             // 构建讯飞星火API请求
-            String url = "https://spark-api.xf-yun.com/v3.1/chat";
+            String url = "https://spark-api-open.xf-yun.com/v1/chat/completions";
             
             // 构建请求头
             HttpHeaders headers = new HttpHeaders();
@@ -61,7 +61,7 @@ public class SparkChatModelAdapter {
             
             Map<String, Object> parameter = new HashMap<>();
             parameter.put("chat", Map.of(
-                "domain", "general",
+                "domain", "4.0Ultra",
                 "temperature", 0.7,
                 "max_tokens", 1000
             ));
