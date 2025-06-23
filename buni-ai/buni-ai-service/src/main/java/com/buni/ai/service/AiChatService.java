@@ -19,6 +19,14 @@ public interface AiChatService {
     String chat(TalkVO talkVO);
 
     /**
+     * 使用Spring AI千帆进行对话
+     * 
+     * @param talkVO 对话参数
+     * @return 对话结果
+     */
+    String chatWithSpringAiQianfan(TalkVO talkVO);
+
+    /**
      * 使用OpenAI进行对话
      * 
      * @param talkVO 对话参数

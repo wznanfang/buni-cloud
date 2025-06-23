@@ -4,7 +4,12 @@ import com.buni.ai.adapter.SparkChatModelAdapter;
 import com.buni.ai.service.AiChatService;
 import com.buni.ai.vo.qianfan.TalkVO;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.ai.chat.model.ChatModel;
+import org.springframework.ai.chat.messages.Message;
+import org.springframework.ai.chat.messages.UserMessage;
+import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,10 @@ public class AiChatServiceImpl implements AiChatService {
     @Autowired(required = false)
     private SparkChatModelAdapter sparkChatModelAdapter;
 
+    @Autowired(required = false)
+    @Qualifier("qianFanChatModel")
+    private ChatModel qianFanChatModel;
+
     @Value("${buni.ai.qianfan.apiKey:}")
     private String qianfanApiKey;
 
@@ -38,8 +47,11 @@ public class AiChatServiceImpl implements AiChatService {
     public String chat(TalkVO talkVO) {
         log.info("使用默认AI模型进行对话，问题: {}", talkVO.getQuestion());
         try {
-            // 优先使用千帆AI
-            if (isQianfanAvailable()) {
+            // 优先使用Spring AI千帆
+            if (qianFanChatModel != null) {
+                return chatWithSpringAiQianfan(talkVO);
+            } else if (isQianfanAvailable()) {
+                // 如果Spring AI不可用，使用自定义千帆API
                 return chatWithQianfan(talkVO);
             } else if (sparkChatModelAdapter != null && sparkChatModelAdapter.isAvailable()) {
                 // 如果千帆不可用，使用讯飞星火
@@ -61,7 +73,7 @@ public class AiChatServiceImpl implements AiChatService {
 
     @Override
     public String chatWithQianfan(TalkVO talkVO) {
-        log.info("使用千帆进行对话，问题: {}", talkVO.getQuestion());
+        log.info("使用自定义千帆API进行对话，问题: {}", talkVO.getQuestion());
         try {
             if (!isQianfanAvailable()) {
                 return "千帆AI配置不完整，请检查apiKey和secretKey配置";
@@ -111,6 +123,31 @@ public class AiChatServiceImpl implements AiChatService {
         } catch (Exception e) {
             log.error("千帆对话异常：", e);
             return "千帆对话失败: " + e.getMessage() + "，请稍后重试";
+        }
+    }
+
+    /**
+     * 使用Spring AI千帆进行对话
+     */
+    public String chatWithSpringAiQianfan(TalkVO talkVO) {
+        log.info("使用Spring AI千帆进行对话，问题: {}", talkVO.getQuestion());
+        try {
+            if (qianFanChatModel == null) {
+                return "Spring AI千帆模型未配置";
+            }
+
+            Message userMessage = new UserMessage(talkVO.getQuestion());
+            Prompt prompt = new Prompt(userMessage);
+            var response = qianFanChatModel.call(prompt);
+            
+            // 获取响应内容
+            String result = response.getResult().getOutput().getText();
+            log.info("Spring AI千帆回答: {}", result);
+            return result;
+            
+        } catch (Exception e) {
+            log.error("Spring AI千帆对话异常：", e);
+            return "Spring AI千帆对话失败: " + e.getMessage() + "，请稍后重试";
         }
     }
 

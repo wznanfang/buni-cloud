@@ -43,6 +43,22 @@ public class AiController {
         return result;
     }
 
+    @Operation(summary = "Spring AI千帆对话")
+    @PostMapping("/chat/spring-ai-qianfan")
+    public Map<String, Object> chatWithSpringAiQianfan(@RequestBody TalkVO talkVO) {
+        Map<String, Object> result = new HashMap<>();
+        try {
+            String response = aiChatService.chatWithSpringAiQianfan(talkVO);
+            result.put("code", 200);
+            result.put("message", "success");
+            result.put("data", response);
+        } catch (Exception e) {
+            result.put("code", 500);
+            result.put("message", e.getMessage());
+        }
+        return result;
+    }
+
     @Operation(summary = "千帆对话")
     @PostMapping("/chat/qianfan")
     public Map<String, Object> chatWithQianfan(@RequestBody TalkVO talkVO) {
