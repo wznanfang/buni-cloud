@@ -13,7 +13,7 @@ public class AiServiceApplication {
 
     public static void main(String[] args) {
         ConfigurableApplicationContext context = SpringApplication.run(AiServiceApplication.class, args);
-        System.out.println("---------------文件服务启动成功，端口号：" + context.getEnvironment().getProperty("server.port") + "---------------");
+        System.out.println("---------------AI服务启动成功，端口号：" + context.getEnvironment().getProperty("server.port") + "---------------");
     }
 
 }

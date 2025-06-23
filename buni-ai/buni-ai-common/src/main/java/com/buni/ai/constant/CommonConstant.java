@@ -13,7 +13,7 @@ public class CommonConstant {
      * 讯飞星火大模型相关配置
      */
     public static final Integer TOKENS = 4096;
-    public static final Double TEMPERATURE = 0.2;
+    public static final Double TEMPERATURE = 0.7;
 
 
     /**
