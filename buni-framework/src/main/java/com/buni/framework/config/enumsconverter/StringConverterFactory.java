@@ -12,17 +12,16 @@ import java.util.Map;
  */
 public class StringConverterFactory implements ConverterFactory<String, BaseEnum> {
 
-    private static final Map<Class, Converter> CONVERTERS = new HashMap<>();
+    private static final Map<Class<?>, Converter<?, ?>> CONVERTERS = new ConcurrentHashMap<>();
 
-    /**
-     * 获取一个从 Integer 转化为 T 的转换器
-     *
-     * @param targetType 转换后的类型
-     * @return 返回一个转化器
-     */
+    @SuppressWarnings("unchecked")
     @Override
     public <T extends BaseEnum> Converter<String, T> getConverter(Class<T> targetType) {
-        return CONVERTERS.computeIfAbsent(targetType, key -> new StringConverter<>(targetType));
-    }
+        // 强制类型检查，确保 targetType 是枚举
+        if (!Enum.class.isAssignableFrom(targetType)) {
+            throw new IllegalArgumentException("Target type " + targetType.getName() + " is not an enum");
+        }
 
+        return (Converter<String, T>) CONVERTERS.computeIfAbsent(targetType, key -> new StringConverter<>((Class<? extends Enum<?>>) targetType));
+    }
 }
