@@ -12,48 +12,31 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date 2024/7/3 14:00
  */
 @Slf4j
-public class StringConverter<T extends BaseEnum> implements Converter<String, T> {
+public class StringConverter<T extends Enum<T> & BaseEnum> implements Converter<String, T> {
 
-    private Map<String, T> enumMap = new ConcurrentHashMap<>();
+    private final Map<String, T> enumMap = new ConcurrentHashMap<>();
 
-
-    /**
-     * 建立映射
-     *
-     * @param enumType
-     */
-    public StringConverter(Class<T> enumType) {
-        T[] enums = enumType.getEnumConstants();
+    public StringConverter(Class<? extends Enum<?>> enumType) {
+        T[] enums = (T[]) enumType.getEnumConstants();
         for (T e : enums) {
-            // 按 code 建立映射
             enumMap.put(e.getCode().toString(), e);
-            // 按枚举名建立映射（忽略大小写）
-            enumMap.put(e.name().toLowerCase(), e);
+            enumMap.put(e.name(), e);
         }
     }
 
-
-    /**
-     * 转换
-     *
-     * @param source
-     * @return
-     */
     @Override
     public T convert(String source) {
-        if (ObjectUtil.isEmpty(source)) {
+        if (ObjUtil.isEmpty(source)) {
             return null;
         }
-        // 先尝试 code 匹配
+
         T t = enumMap.get(source);
-        if (ObjectUtil.isNull(t)) {
-            // 尝试枚举名匹配（忽略大小写）
+        if (t == null) {
             t = enumMap.get(source.toLowerCase());
         }
-        if (ObjectUtil.isNull(t)) {
+        if (t == null) {
             log.error("枚举转换失败: {}", source);
         }
         return t;
     }
-
 }
